@@ -45,7 +45,7 @@ return [
             'name' => 'home',
             'path' => '/',
             'middleware' => App\Action\HomePageAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
         
 		[
@@ -81,7 +81,7 @@ return [
             'name' => 'review_work',
 		    'path' => '/reviewwork',
             'middleware' => App\Action\ReviewWorkAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[

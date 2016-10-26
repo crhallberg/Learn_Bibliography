@@ -134,32 +134,20 @@
  <div class="app-content">
         <main class="container">
             <?php echo $this->content ?>
-			<?php echo strlen($this->layout()->instructions) ; ?>
-			<?php if (strlen($this->layout()->instructions) != 0): ?>
+			<?php echo strlen($this->layout()->instructions) ; echo $this->layout()->instructions;  ?>
+
 				<div style="float: right; width: 240px;">
 				<div class="tipbox">
 				<div>Instructions</div>
-				<form method="post">
+				<form method="post" name="ins_box">
 				<input type="hidden" name="action" value="{$action}">
 				<textarea name="instructions" rows="5" cols="22"><?php echo $this->layout()->instructions; ?></textarea><br>
 				<input type="submit" name="submit" value="Save">
 				</form>
 				</div>
 			   </div>
-			<?php endif; ?>
+			   <?php echo $this->url(); ?>
 			
-			<?php if (strlen($this->layout()->instructions) == 0): ?>
-				<div style="float: right; width: 240px;">
-				<div class="tipbox">
-				<div>Instructions</div>
-				<form method="post">
-				<input type="hidden" name="action" value="{$action}">
-				<textarea name="instructions" rows="5" cols="22"><?php $this->layout()->instructions = "ins"; ?></textarea><br>
-				<input type="submit" name="submit" value="Save">
-				</form>
-				</div>
-			   </div>
-			<?php endif; ?>
         </main>
 </div>
 
