@@ -132,21 +132,37 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
  <div class="app-content">
+ <?php
+			
+			// Page Instructions Content
+            include_once('instructions.inc');
+			
+            $page = basename($this->url);
+	      
+           if (isset($_POST['instructions'])) {
+            $instructions[basename($this->url)] = $_POST['instructions'];
+			 //echo $_POST['instructions'];
+           //$str = '$instructions['.'\''.$page.'\'] = "' . $instructions[basename($this->url)] . "\";\n";
+           //$fp = fopen('instructions.inc', 'w');
+          // fwrite($fp, $str);
+           //fclose($fp);
+           }
+
+	       //print_r($instructions[$page]);
+	        //$this->layout()->instructions = $instructions[$page]; 
+?>
         <main class="container">
             <?php echo $this->content ?>
-			<?php echo strlen($this->layout()->instructions) ; echo $this->layout()->instructions;  ?>
-
 				<div style="float: right; width: 240px;">
 				<div class="tipbox">
 				<div>Instructions</div>
 				<form method="post" name="ins_box">
 				<input type="hidden" name="action" value="{$action}">
-				<textarea name="instructions" rows="5" cols="22"><?php echo $this->layout()->instructions; ?></textarea><br>
+				<textarea name="instructions" rows="5" cols="22"><?php echo $instructions[$page]; ?></textarea><br>
 				<input type="submit" name="submit" value="Save">
 				</form>
 				</div>
 			   </div>
-			   <?php echo $this->url(); ?>
 			
         </main>
 </div>

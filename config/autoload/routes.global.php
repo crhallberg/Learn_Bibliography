@@ -102,7 +102,7 @@ return [
             'name' => 'manage_worktype',
 		    'path' => '/manageworktype',
             'middleware' => App\Action\ManageWorkTypeAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
@@ -123,7 +123,7 @@ return [
             'name' => 'manage_classification',
 		    'path' => '/manageclassification',
             'middleware' => App\Action\ManageClassificationAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET', 'POST'],
         ],
 		
 		[

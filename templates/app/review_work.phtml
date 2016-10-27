@@ -1,29 +1,6 @@
 <?php $this->headTitle('Review Work'); ?>
 <?php $this->viewModel()->setRoot(new \Zend\View\Model\ViewModel()) ?>
-<?php 
-$ins = "";
-if (isset($_POST["instructions"])) {                      
-                      $ins = $_POST["instructions"];
-                    }
-$this->layout()->instructions = $ins; 
-/*$str = "review_work:" . $ins . ":";
-echo $str;
-$pattern = "review_work:.*:";
- $fw = fopen('instructions.txt', 'a');
-       fwrite($fw, $str);
-       fclose($fw);
- $fr = fopen('instructions.txt', 'r');
- 
- $data = file_get_contents("instructions.txt");
-        if(strpos($data, $pattern) !== FALSE)
-            $matches[] = $buffer;
 
-
- //$this->layout()->instructions = fread($fh, 1);
- print_r($matches);
-    fclose($fr);*/
- ?>
-<?php echo $this->layout()->instructions; ?>
 <div class="row">
     <div class="col-md-4">
         <h2>
