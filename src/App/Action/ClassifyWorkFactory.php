@@ -7,6 +7,10 @@ use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\Driver\ConnectionInterface;
+use Zend\Expressive\Helper;
+use Zend\Expressive\Helper\ServerUrlHelper;
+use Zend\Expressive\Helper\ServerUrlMiddleware;
+use Zend\Expressive\Helper\ServerUrlMiddlewareFactory;
 
 class ClassifyWorkFactory
 {
@@ -17,6 +21,7 @@ class ClassifyWorkFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new ClassifyWorkAction($router, $template, $adapter);
+		$helper = $container->get(ServerUrlHelper::class);
+        return new ClassifyWorkAction($router, $template, $adapter, $helper);
     }
 }

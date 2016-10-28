@@ -1,11 +1,52 @@
-<?php $this->headTitle('New Language'); ?>
+<?php //$this->headTitle('New Language'); ?>
+{{$title}}Contact{{/title}}}
 <?php $this->viewModel()->setRoot(new \Zend\View\Model\ViewModel()) ?>
 <?php //$this->layout()->instructions = ""; ?>
+
 <div class="row">
     <div class="col-md-4">
-        <h2>
-                New Language Coming Soon
-        </h2>
-       
-    </div>
+<form class="form-horizontal" method="post" action="#">
+  <div class="form-group">
+	<label class="col-xs-2 control-label">de: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" name="de_newlang" id="de_newlang" />
+	</div>
+  </div>
+  <div class="form-group">
+	<label class="col-xs-2 control-label">en: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" id="en_newlang" />
+	</div>
+  </div> 
+  <div class="form-group">
+	<label class="col-xs-2 control-label">es: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" id="es_newlang" />
+	</div>
+  </div>
+  <div class="form-group">
+	<label class="col-xs-2 control-label">fr: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" id="fr_newlang" />
+	</div>
+  </div>
+  <div class="form-group">
+	<label class="col-xs-2 control-label">it: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" id="it_newlang" />
+	</div>
+  </div>
+   <div class="form-group">
+	<label class="col-xs-2 control-label">nl: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" id="nl_newlang" />
+	</div>
+  </div>
+  <div class="form-group">
+	<div class="col-sm-offset-2 col-sm-10">
+		<button type="submit" class="btn btn-default">Save</button>
+	</div>
+  </div>
+</form>
+</div>
 </div>

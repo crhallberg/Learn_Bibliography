@@ -2,8 +2,13 @@
 use Zend\Expressive\Application;
 use Zend\Expressive\Container\ApplicationFactory;
 use Zend\Expressive\Helper;
+use Zend\Expressive\Helper\ServerUrlHelper;
+use Zend\Expressive\Helper\ServerUrlMiddleware;
+use Zend\Expressive\Helper\ServerUrlMiddlewareFactory;
 
 return [
+         
+		 
     // Provides application-wide services.
     // We recommend using fully-qualified class names whenever possible as
     // service names.
@@ -22,6 +27,8 @@ return [
         'factories' => [
             Application::class => ApplicationFactory::class,
             Helper\UrlHelper::class => Helper\UrlHelperFactory::class,
+			//new
+			Helper\ServerUrlMiddleware::class => Helper\ServerUrlMiddlewareFactory::class,
 					
 		//new-adapter
 			Zend\Db\Adapter\Adapter::class => Zend\Db\Adapter\AdapterServiceFactory::class,

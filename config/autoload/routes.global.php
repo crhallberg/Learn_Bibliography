@@ -52,7 +52,7 @@ return [
             'name' => 'my-page',
             'path' => '/mypage',
             'middleware' => App\Action\MyPageAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
         [
@@ -60,21 +60,21 @@ return [
 		  // 'name' => 'my-page',
 		    'path' => '/newwork',
             'middleware' => App\Action\NewWorkAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 
         [
             'name' => 'search_work',
 		    'path' => '/searchwork',
             'middleware' => App\Action\SearchWorkAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'manage_work',
 		    'path' => '/managework',
             'middleware' => App\Action\ManageWorkAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
@@ -88,14 +88,14 @@ return [
             'name' => 'classify_work',
 		    'path' => '/classifywork',
             'middleware' => App\Action\ClassifyWorkAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'new_worktype',
 		    'path' => '/newworktype',
             'middleware' => App\Action\NewWorkTypeAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
@@ -109,14 +109,14 @@ return [
             'name' => 'attributes_worktype',
 		    'path' => '/attributesworktype',
             'middleware' => App\Action\AttributesWorkTypeAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'new_classification',
 		    'path' => '/newclassification',
             'middleware' => App\Action\NewClassificationAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
@@ -130,126 +130,126 @@ return [
             'name' => 'merge_classification',
 		    'path' => '/mergeclassification',
             'middleware' => App\Action\MergeClassificationAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'exportlist_classification',
 		    'path' => '/exportlistclassification',
             'middleware' => App\Action\ExportListClassificationAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'new_agent',
 		    'path' => '/newagent',
             'middleware' => App\Action\NewAgentAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'find_agent',
 		    'path' => '/findagent',
             'middleware' => App\Action\FindAgentAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'manage_agent',
 		    'path' => '/manageagent',
             'middleware' => App\Action\ManageAgentAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'merge_agent',
 		    'path' => '/mergeagent',
             'middleware' => App\Action\MergeAgentAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'new_agenttype',
 		    'path' => '/newagenttype',
             'middleware' => App\Action\NewAgentTypeAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'manage_agenttype',
 		    'path' => '/manageagenttype',
             'middleware' => App\Action\ManageAgentTypeAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'new_publisher',
 		    'path' => '/newpublisher',
             'middleware' => App\Action\NewPublisherAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'find_publisher',
 		    'path' => '/findpublisher',
             'middleware' => App\Action\FindPublisherAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'manage_publisher',
 		    'path' => '/managepublisher',
             'middleware' => App\Action\ManagePublisherAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'merge_publisher',
 		    'path' => '/mergepublisher',
             'middleware' => App\Action\MergePublisherAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'new_language',
 		    'path' => '/new_language',
             'middleware' => App\Action\NewLanguageAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'manage_language',
 		    'path' => '/manage_language',
             'middleware' => App\Action\ManageLanguageAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'new_users',
 		    'path' => '/newusers',
             'middleware' => App\Action\NewUsersAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'manage_users',
 		    'path' => '/manageusers',
             'middleware' => App\Action\ManageUsersAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'access_users',
 		    'path' => '/accessusers',
             'middleware' => App\Action\AccessUsersAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
 		
 		[
             'name' => 'changepassword_preferences',
 		    'path' => '/changepasswordpreferences',
             'middleware' => App\Action\ChangePasswordPreferencesAction::class,
-            'allowed_methods' => ['GET'],
+            'allowed_methods' => ['GET','POST'],
         ],
     ],
 ];

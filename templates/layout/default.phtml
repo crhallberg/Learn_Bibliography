@@ -137,19 +137,17 @@
 			// Page Instructions Content
             include_once('instructions.inc');
 			
-            $page = basename($this->url);
+            $page = basename($this->url());
+	
+			echo $instructions[basename($this->url())];
 	      
            if (isset($_POST['instructions'])) {
-            $instructions[basename($this->url)] = $_POST['instructions'];
-			 //echo $_POST['instructions'];
-           //$str = '$instructions['.'\''.$page.'\'] = "' . $instructions[basename($this->url)] . "\";\n";
-           //$fp = fopen('instructions.inc', 'w');
-          // fwrite($fp, $str);
-           //fclose($fp);
+			  // print_r($_POST['instructions']);
+            $instructions[basename($this->url())] = $_POST['instructions'];
            }
 
-	       //print_r($instructions[$page]);
-	        //$this->layout()->instructions = $instructions[$page]; 
+	      // print_r($instructions);
+	        $this->layout()->instructions = $instructions[$page]; 
 ?>
         <main class="container">
             <?php echo $this->content ?>
@@ -157,8 +155,8 @@
 				<div class="tipbox">
 				<div>Instructions</div>
 				<form method="post" name="ins_box">
-				<input type="hidden" name="action" value="{$action}">
-				<textarea name="instructions" rows="5" cols="22"><?php echo $instructions[$page]; ?></textarea><br>
+				<input type="hidden" name="action" value="ins">
+				<textarea name="instructions" rows="5" cols="22"><?php echo $this->layout()->instructions; ?></textarea><br>
 				<input type="submit" name="submit" value="Save">
 				</form>
 				</div>
