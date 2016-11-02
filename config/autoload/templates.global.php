@@ -29,9 +29,13 @@ return [
     ],
 
     'view_helpers' => [
-	    //new
-		 'basePath' => Blast\BaseUrl\BasePathViewHelperFactory::class,
-		
+        //new
+        'invokables' => [
+            Zend\View\Helper\BasePath::class => Blast\BaseUrl\BasePathViewHelperFactory::class,
+        ],
+        'factories' => [
+            Zend\View\Helper\ViewModel::class => App\View\Helper\ViewModelFactory::class,
+        ],
         // zend-servicemanager-style configuration for adding view helpers:
         // - 'aliases'
         // - 'invokables'
