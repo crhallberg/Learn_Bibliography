@@ -11,7 +11,7 @@ use Zend\Expressive\Template;
 use Zend\Expressive\Plates\PlatesRenderer;
 use Zend\Expressive\Twig\TwigRenderer;
 use Zend\Expressive\ZendView\ZendViewRenderer;
-use Zend\View\Model\ViewModel;
+
 // Page Instructions Content
 include_once('instructions.inc');
 
@@ -34,7 +34,7 @@ class HomePageAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         $data = [];
-		/* $this->viewModel()->setRoot(new \Zend\View\Model\ViewModel());
+        /* 
         $this->layout()->instructions = "PRODUCTION - Live since 21st, November 2005
 
                                    //      Running on NEW server September 2007"; 
