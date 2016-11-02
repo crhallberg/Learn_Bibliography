@@ -135,17 +135,17 @@
  <?php
 			
 			// Page Instructions Content
-            //include_once('instructions.inc');
+            include_once('instructions.inc');
 			
             $page = basename($this->url());
 	
             //echo $instructions[basename($this->url())];
 	      
-           if (isset($_POST['instructions'])) {
-			  // print_r($_POST['instructions']);
+           if (isset($_POST['instructions'])) {   
+			  //print_r($_POST['instructions']);
             $instructions[basename($this->url())] = $_POST['instructions'];
+			
            }
-
 	      // print_r($instructions);
 	        $this->layout()->instructions = isset($instructions[$page])
                     ? $instructions[$page] : ''; 

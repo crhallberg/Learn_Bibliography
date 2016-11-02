@@ -16,6 +16,8 @@ use Zend\Db\Adapter\Driver\ConnectionInterface;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Insert;
 use Zend\Db\ResultSet\ResultSet;
+use Zend\Paginator\Adapter\DbSelect;
+use Zend\Paginator\Paginator;
 
 class NewLanguageAction
 {
@@ -38,33 +40,16 @@ class NewLanguageAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
+		$rows = [];	
 		
-/*	$sth = $sql->insert('translate_language');
-	$newData = array(
-	'id'=>1,
-	'text_de'=> 'de1',
-    'text_en'=> 'en1',
-    'text_es'=> 'es1',
-	'text_fr'=> 'fr1',
-	'text_it'=> 'it1',
-	'text_nl'=> 'nl1',
-    );
-	$sth->values($newData);
-	$selectString = $sql->getSqlStringForSqlObject($sth);
-	$results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);*/
-	//
-	
+	$de1 = 'de1';
+	$en1 = 'en1';
+	$es1 = 'es1';
+	$fr1 = 'fr1';
+	$it1 = 'it1';
+	$nl1 = 'nl1';	
 	$table = new \App\Db\Table\TranslateLanguage($this->adapter);
-	$table->insert([
-		'text_de'=> 'de1',
-		'text_en'=> 'en1',
-		'text_es'=> 'es1',
-		'text_fr'=> 'fr1',
-		'text_it'=> 'it1',
-		'text_nl'=> 'nl1',
-	]);
-	
-	var_dump($table);
+	$rows = $table->updateRecord($de1, $en1, $es1, $fr1, $it1, $nl1);
 	
         return new HtmlResponse($this->template->render('app::new_language', ['rows' => $rows]));
     }
