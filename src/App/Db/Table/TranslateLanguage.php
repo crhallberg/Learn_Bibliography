@@ -48,16 +48,11 @@ class TranslateLanguage extends \Zend\Db\TableGateway\AbstractTableGateway
 {
     /**
      * Constructor
-     */
-	
+     */	
     public function __construct($adapter)
-    {
-		//parent::__construct('translate_language', $adapter);
-		
+    {			
 		$this->adapter = $adapter;
         $this->table = 'translate_language';
-		//$this->row = 'App\Db\Row\TranslateLanguage';
-		//$this->
     }
     
     /**
@@ -70,14 +65,14 @@ class TranslateLanguage extends \Zend\Db\TableGateway\AbstractTableGateway
      * @return Updated or newly added record
      */
     public function updateRecord($de1, $en1, $es1, $fr1, $it1, $nl1)
-    {      
+    {   	
 	   $this->insert([
-		'text_de'=> 'de1',
-		'text_en'=> 'en1',
-		'text_es'=> 'es1',
-		'text_fr'=> 'fr1',
-		'text_it'=> 'it1',
-		'text_nl'=> 'nl1',
+		'text_de'=> $de1,
+		'text_en'=> $en1,
+		'text_es'=> $es1,
+		'text_fr'=> $fr1,
+		'text_it'=> $it1,
+		'text_nl'=> $nl1,
 	    ]);
     }
     

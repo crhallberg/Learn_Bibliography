@@ -22,14 +22,8 @@ use Zend\Paginator\Paginator;
 class NewLanguageAction
 {
     private $router;
-
-    private $template;
-	
+    private $template;	
 	private $adapter; 
-	
-	
-	//private $dbh;
-	//private $qstmt;
 
     public function __construct(Router\RouterInterface $router, Template\TemplateRendererInterface $template = null, Adapter $adapter)
     {
@@ -41,16 +35,22 @@ class NewLanguageAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
 		$rows = [];	
-		
-	$de1 = 'de1';
-	$en1 = 'en1';
-	$es1 = 'es1';
-	$fr1 = 'fr1';
-	$it1 = 'it1';
-	$nl1 = 'nl1';	
-	$table = new \App\Db\Table\TranslateLanguage($this->adapter);
-	$rows = $table->updateRecord($de1, $en1, $es1, $fr1, $it1, $nl1);
-	
+		$de1 = 'de1';
+		$en1 = 'en1';
+		$es1 = 'es1';
+		$fr1 = 'fr1';
+		$it1 = 'it1';
+		$nl1 = 'nl1';
+        if ($request->getMethod() == "POST")
+        {
+			$post = $request->getParsedBody();
+			if(array_filter($post)) {
+                $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+                $rows = $table->updateRecord($_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], $_POST['fr_newlang'], 
+                                             $_POST['it_newlang'], $_POST['nl_newlang']);
+			
+			}
+		}
         return new HtmlResponse($this->template->render('app::new_language', ['rows' => $rows]));
     }
 	 
