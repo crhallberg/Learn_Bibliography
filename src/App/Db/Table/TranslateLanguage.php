@@ -72,12 +72,12 @@ class TranslateLanguage extends \Zend\Db\TableGateway\AbstractTableGateway
     public function updateRecord($de1, $en1, $es1, $fr1, $it1, $nl1)
     {      
 	   $this->insert([
-		'text_de'=> 'de1',
-		'text_en'=> 'en1',
-		'text_es'=> 'es1',
-		'text_fr'=> 'fr1',
-		'text_it'=> 'it1',
-		'text_nl'=> 'nl1',
+		'text_de'=> $de1,
+		'text_en'=> $en1,
+		'text_es'=> $es1,
+		'text_fr'=> $fr1,
+		'text_it'=> $it1,
+		'text_nl'=> $nl1,
 	    ]);
     }
     

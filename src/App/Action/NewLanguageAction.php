@@ -22,37 +22,28 @@ use Zend\Paginator\Paginator;
 class NewLanguageAction
 {
     private $router;
-
     private $template;
-	
-	private $adapter; 
-	
-	
-	//private $dbh;
-	//private $qstmt;
+    private $adapter;
 
     public function __construct(Router\RouterInterface $router, Template\TemplateRendererInterface $template = null, Adapter $adapter)
     {
         $this->router   = $router;
         $this->template = $template;
-		$this->adapter  = $adapter; 
+        $this->adapter  = $adapter;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-		$rows = [];	
-		
-	$de1 = 'de1';
-	$en1 = 'en1';
-	$es1 = 'es1';
-	$fr1 = 'fr1';
-	$it1 = 'it1';
-	$nl1 = 'nl1';	
-	$table = new \App\Db\Table\TranslateLanguage($this->adapter);
-	$rows = $table->updateRecord($de1, $en1, $es1, $fr1, $it1, $nl1);
-	
+        $rows = [];
+        if ($request->getMethod() == 'POST') {
+            $post = $request->getParsedBody();
+            $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+            $rows = $table->updateRecord(
+                $post['de'], $post['en'], $post['es'], $post['fr'], $post['it'],
+                $post['nl']
+            );
+        }
+
         return new HtmlResponse($this->template->render('app::new_language', ['rows' => $rows]));
     }
-	 
-	 
 }
