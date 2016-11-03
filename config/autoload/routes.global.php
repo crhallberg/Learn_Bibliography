@@ -1,4 +1,5 @@
 <?php
+use Zend\Expressive\Helper\BodyParams\BodyParamsMiddleware;
 
 return [
     'dependencies' => [
@@ -213,7 +214,10 @@ return [
 		[
             'name' => 'new_language',
 		    'path' => '/new_language',
-            'middleware' => App\Action\NewLanguageAction::class,
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\NewLanguageAction::class,
+            ],
             'allowed_methods' => ['GET','POST'],
         ],
 		
