@@ -1,10 +1,38 @@
 <?php $this->headTitle('Manage Language'); ?>
 <?php //$this->layout()->instructions = "The english words cannot be changed."; ?>
-<div class="row">
+
     <div class="col-md-4">
-        <h2>
+        <!--<h2>
                 Manage Language Coming Soon
-        </h2>
-       
+        </h2>-->
+        <table class='gridtable'>
+        <tr>
+          <th>Id</th>
+          <th>Text_De</th>
+		  <th>Text_En</th>
+		  <th>Text_Es</th>
+		  <th>Text_Fr</th>
+          <th>Text_It</th>
+          <th>Text_Nl</th>
+        </tr>
+		<?php $escaper = new Zend\Escaper\Escaper('UTF-8') ?>
+		<?php foreach($this->rows as $row) : ?>
+		<tr>
+		<td><?php echo $row['id']; ?></td>
+		<td><?php echo $escaper->escapeHtml($row['text_de']); ?></td>
+		<td><?php echo $escaper->escapeHtml($row['text_en']); ?></td>
+		<td><?php echo $escaper->escapeHtml($row['text_es']); ?></td>
+		<td><?php echo $escaper->escapeHtml($row['text_fr']); ?></td>
+        <td><?php echo $escaper->escapeHtml($row['text_it']); ?></td>
+        <td><?php echo $escaper->escapeHtml($row['text_nl']); ?></td>
+        </tr>
+		<?php endforeach; ?>
+		</table>
+      <!-- <form method="get" action="page">
+		<?php //echo $this->paginationControl($this->rows,
+                        //            'Sliding',
+                         //     'app::controls', ['route'  => 'agentdisplay']); ?>
+								   
+		</form>	-->
     </div>
-</div>
+

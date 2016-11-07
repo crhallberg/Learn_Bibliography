@@ -13,6 +13,10 @@ use Zend\Expressive\Twig\TwigRenderer;
 use Zend\Expressive\ZendView\ZendViewRenderer;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\Driver\ConnectionInterface;
+use Zend\Paginator\Adapter\DbSelect;
+use Zend\Paginator\Paginator;
+use Zend\Db\TableGateway\TableGateway;
+use Zend\Paginator\Adapter\DbTableGateway;
 
 class ManageLanguageAction
 {
@@ -35,11 +39,47 @@ class ManageLanguageAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-		//$displaystr = "Coming Soon";
-		$sth = $this->adapter->query("select * from agenttype");
-		$rows = $sth->execute();
-	//var_dump($this);
+		//$rows = [];
+        $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+        $rows = $table->selectRecords();
+    
+        //new for pagination
+   /*
+            $paginator = new Paginator();?
+
+		$paginator->setDefaultItemCountPerPage(8);
+        $allItems = $paginator->getTotalItemCount();
+        $countPages = $paginator->count();
+
+        $p = $request->getAttribute('page', '1');
+         		
+        if(isset($p))
+       {
+         $paginator->setCurrentPageNumber($p); 
+       } 
+      else {
+          $paginator->setCurrentPageNumber(1);
+        }
+
+      $currentPage = $paginator->getCurrentPageNumber();
+
+    if($currentPage == $countPages)
+   {
+      $this->next = $currentPage;
+      $this->previous = $currentPage-1;
+   }
+   else if($currentPage == 1)
+  {
+     $this->next = $currentPage+1;
+     $this->previous = 1; 
+  }
+  else 
+  {
+    $this->next = $currentPage+1;
+    $this->previous = $currentPage-1;
+  }*/
         return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $rows]));
+       // return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
     }
 	 
 	 
