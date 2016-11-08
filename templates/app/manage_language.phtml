@@ -6,11 +6,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-    <div class="col-md-4">
+   <div class="col-md-1">
         <!--<h2>
                 Manage Language Coming Soon
         </h2>-->
-        <table class='gridtable'>
+        <div class="container">
+        <table class="table table-striped">
+        <thead>
         <tr>
           <th>Id</th>
           <th>Text_De</th>
@@ -19,7 +21,10 @@
 		  <th>Text_Fr</th>
           <th>Text_It</th>
           <th>Text_Nl</th>
+          <th>Actions</th>
         </tr>
+        </thead>
+        <tbody>
 		<?php $escaper = new Zend\Escaper\Escaper('utf-8'); ?>
 		<?php foreach($this->rows as $row) : ?>
 		<tr>
@@ -30,8 +35,14 @@
 		<td><?php echo $escaper->escapeHtml($row['text_fr']); ?></td>
         <td><?php echo $escaper->escapeHtml($row['text_it']); ?></td>
         <td><?php echo $escaper->escapeHtml($row['text_nl']); ?></td>
+        <td>
+            <a href="#">Edit</a>
+            |
+            <a href="#">Delete</a>
+        </td>
         </tr>
 		<?php endforeach; ?>
+        </tbody>
 		</table>
       <form method="get" action="page">
 		<?php echo $this->paginationControl($this->rows,
@@ -39,6 +50,7 @@
                               'app::controls', ['route'  => 'manage_language']); ?>
 								   
 		</form>	
+    </div>
     </div>
 </body>
 </html>

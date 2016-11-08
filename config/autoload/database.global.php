@@ -11,8 +11,8 @@ return array(
         ),
     ),
     'db' => array(
-        'driver'    => 'pdo',
-        'dsn'       => 'mysql:dbname=panta_rhei;host=localhost',
+        'driver'    => 'mysqli',
+        'database'       => 'panta_rhei',
         'username'  => 'root',
         'password'  => '',
 		'charset'  => 'utf8',
