@@ -48,15 +48,14 @@ use Zend\Paginator\Paginator;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class TranslateLanguage extends \Zend\Db\TableGateway\AbstractTableGateway
+class TranslateLanguage extends \Zend\Db\TableGateway\TableGateway
 {
     /**
      * Constructor
      */	
     public function __construct($adapter)
-    {			
-		$this->adapter = $adapter;
-        $this->table = 'translate_language';
+    {
+        parent::__construct('translate_language', $adapter);
     }
     
     /**
