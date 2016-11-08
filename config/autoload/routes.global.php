@@ -295,7 +295,7 @@ return [
 		
 		[
             'name' => 'manage_language',
-		    'path' => '/manage_language',
+		    'path' => '/manage_language[/page/{page}]',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\ManageLanguageAction::class,

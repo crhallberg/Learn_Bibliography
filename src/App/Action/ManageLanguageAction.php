@@ -43,14 +43,11 @@ class ManageLanguageAction
         $table = new \App\Db\Table\TranslateLanguage($this->adapter);
         $rows = $table->selectRecords();
     
-        //new for pagination
-   /*
-            $paginator = new Paginator();?
-
-		$paginator->setDefaultItemCountPerPage(8);
+        $paginator = new Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($rows->toArray()));
+		$paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
-
+        
         $p = $request->getAttribute('page', '1');
          		
         if(isset($p))
@@ -61,25 +58,26 @@ class ManageLanguageAction
           $paginator->setCurrentPageNumber(1);
         }
 
-      $currentPage = $paginator->getCurrentPageNumber();
+       $currentPage = $paginator->getCurrentPageNumber();
 
-    if($currentPage == $countPages)
-   {
-      $this->next = $currentPage;
-      $this->previous = $currentPage-1;
-   }
-   else if($currentPage == 1)
-  {
-     $this->next = $currentPage+1;
-     $this->previous = 1; 
-  }
-  else 
-  {
-    $this->next = $currentPage+1;
-    $this->previous = $currentPage-1;
-  }*/
-        return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $rows]));
-       // return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
+        if($currentPage == $countPages)
+        {
+            $this->next = $currentPage;
+            $this->previous = $currentPage-1;
+        }
+        else if($currentPage == 1)
+        {
+            $this->next = $currentPage+1;
+            $this->previous = 1;           
+        }
+        else 
+        {
+            $this->next = $currentPage+1;
+            $this->previous = $currentPage-1;
+        } 
+
+       // return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $rows]));
+       return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
     }
 	 
 	 

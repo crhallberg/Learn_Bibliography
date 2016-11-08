@@ -34,6 +34,9 @@ use Zend\Db\Sql\Where;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\Driver\ConnectionInterface;
 use Zend\Db\RowGateway\RowGateway;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Paginator\Adapter\DbTableGateway;
+use Zend\Paginator\Paginator;
 
 /**
  * Table Definition for record
@@ -79,20 +82,8 @@ class TranslateLanguage extends \Zend\Db\TableGateway\AbstractTableGateway
     
     public function selectRecords()
     {   	
-	   $result = $this->select();
-     //  $resultrow = $result->current();
-       echo count($result);
-     /*  foreach ($result as $resultrow) {
-         $row['id'] = $resultrow['id'];
-         $row['de'] = $resultrow['text_de'];
-         $row['en'] = $resultrow['text_en'];
-         $row['es'] = $resultrow['text_es'];
-         $row['fr'] = $resultrow['text_fr'];
-         $row['it'] = $resultrow['text_it'];
-         $row['nl'] = $resultrow['text_nl'];
-        }
-       print_r($row);*/
-       return $result;
+	  $result = $this->select();
+      return $result; 
     }
     
 }

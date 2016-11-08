@@ -1,6 +1,11 @@
+<?php header('Content-Type: text/html; charset=UTF-8'); ?>
 <?php $this->headTitle('Manage Language'); ?>
 <?php //$this->layout()->instructions = "The english words cannot be changed."; ?>
-
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
     <div class="col-md-4">
         <!--<h2>
                 Manage Language Coming Soon
@@ -15,7 +20,7 @@
           <th>Text_It</th>
           <th>Text_Nl</th>
         </tr>
-		<?php $escaper = new Zend\Escaper\Escaper('UTF-8') ?>
+		<?php $escaper = new Zend\Escaper\Escaper('utf-8'); ?>
 		<?php foreach($this->rows as $row) : ?>
 		<tr>
 		<td><?php echo $row['id']; ?></td>
@@ -28,11 +33,12 @@
         </tr>
 		<?php endforeach; ?>
 		</table>
-      <!-- <form method="get" action="page">
-		<?php //echo $this->paginationControl($this->rows,
-                        //            'Sliding',
-                         //     'app::controls', ['route'  => 'agentdisplay']); ?>
+      <form method="get" action="page">
+		<?php echo $this->paginationControl($this->rows,
+                                   'Sliding',
+                              'app::controls', ['route'  => 'manage_language']); ?>
 								   
-		</form>	-->
+		</form>	
     </div>
-
+</body>
+</html>
