@@ -41,10 +41,8 @@ class ManageLanguageAction
     {
 		//$rows = [];
         $table = new \App\Db\Table\TranslateLanguage($this->adapter);
-        $rows = $table->selectRecords();
-    
-        $paginator = new Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($rows->toArray()));
-		$paginator->setDefaultItemCountPerPage(7);
+        $paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+        $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
         
