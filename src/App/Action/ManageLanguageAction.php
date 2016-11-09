@@ -40,6 +40,7 @@ class ManageLanguageAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
 		//$rows = [];
+         //echo $_POST['delid'];
         $table = new \App\Db\Table\TranslateLanguage($this->adapter);
         $paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
         $paginator->setDefaultItemCountPerPage(7);
@@ -76,6 +77,7 @@ class ManageLanguageAction
 
        // return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $rows]));
        return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
+      
     }
 	 
 	 

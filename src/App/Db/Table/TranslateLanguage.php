@@ -79,10 +79,16 @@ class TranslateLanguage extends \Zend\Db\TableGateway\TableGateway
 	    ]);
     }
     
-    public function selectRecords()
+  /*  public function selectRecords()
     {   	
 	  $result = $this->select();
       return $result; 
-    }
+    } */
     
+    public function deleteRecord($id) 
+    {
+        //echo $id;
+        $this->delete(['id'=>$id]);
+       //$this->tableGateway->delete(['id' => $id]);
+    }
 }

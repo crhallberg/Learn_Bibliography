@@ -34,6 +34,7 @@ return [
 			App\Action\MergePublisherAction::class => App\Action\MergePublisherFactory::class,
 			App\Action\NewLanguageAction::class => App\Action\NewLanguageFactory::class,
 			App\Action\ManageLanguageAction::class => App\Action\ManageLanguageFactory::class,
+            App\Action\DeleteLanguageAction::class => App\Action\DeleteLanguageFactory::class,
 			App\Action\NewUsersAction::class => App\Action\NewUsersFactory::class,
 			App\Action\ManageUsersAction::class => App\Action\ManageUsersFactory::class,
 			App\Action\AccessUsersAction::class => App\Action\AccessUsersFactory::class,
@@ -302,7 +303,17 @@ return [
             ],                
             'allowed_methods' => ['GET','POST'],
         ],
-		
+        
+		[
+            'name' => 'delete_language',
+		    'path' => '/delete_language',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\DeleteLanguageAction::class,
+            ],                
+            'allowed_methods' => ['GET','POST'],
+        ],
+        
 		[
             'name' => 'new_users',
 		    'path' => '/newusers',
