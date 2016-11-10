@@ -10,10 +10,17 @@
        <form method="post" action="<?=$this->url('delete_language')?>">
         <p>Are you sure you want to delete this?</p>
         <ul>
-        <li><?php $id;
-                if (isset($_GET['term'])) {   
-                  echo $_GET['term']; 
-                  $id = $_GET['id']; } ?></li>
+        <li><?php                                       
+                $id;
+                if ($request->getqueryParams('term') !== null) 
+                {   
+                    $params = $request->getqueryParams();
+                    echo $params['term']; 
+                    $id = $params['id'];
+                } 
+               // if (isset($_GET['term'])) {   
+               //   echo $_GET['term']; 
+               //   $id = $_GET['id']; } ?></li>
         <input type="hidden" name="id" value="<?php echo $id; ?>">
         </ul>
         <input type="submit" name="submitt" value="Delete"> 

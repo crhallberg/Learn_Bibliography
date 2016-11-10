@@ -40,7 +40,8 @@ class NewLanguageAction
 			$post = $request->getParsedBody();
 			if(array_filter($post)) {
                 $table = new \App\Db\Table\TranslateLanguage($this->adapter);
-                $rows = $table->updateRecord($_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], $_POST['fr_newlang'], 
+                //$rows =
+                $table->updateRecord($_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], $_POST['fr_newlang'], 
                                              $_POST['it_newlang'], $_POST['nl_newlang']);
 			
 			}

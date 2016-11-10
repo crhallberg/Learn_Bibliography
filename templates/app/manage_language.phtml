@@ -35,8 +35,8 @@
 		<td><?php echo $escaper->escapeHtml($row['text_fr']); ?></td>
         <td><?php echo $escaper->escapeHtml($row['text_it']); ?></td>
         <td><?php echo $escaper->escapeHtml($row['text_nl']); ?></td>
-        <td>
-            <a href="#">Edit</a>
+        <td>                   
+            <a href="<?=$this->url('new_language')?><?php echo '?id='. $row['id'].'&term='. $row['text_en'];  ?>">Edit</a>        
             |
             <a href="<?=$this->url('delete_language')?><?php echo '?id='. $row['id'].'&term='. $row['text_en'];  ?>">Delete</a>
         </td>
