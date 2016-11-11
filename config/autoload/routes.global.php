@@ -34,6 +34,7 @@ return [
 			App\Action\MergePublisherAction::class => App\Action\MergePublisherFactory::class,
 			App\Action\NewLanguageAction::class => App\Action\NewLanguageFactory::class,
 			App\Action\ManageLanguageAction::class => App\Action\ManageLanguageFactory::class,
+            App\Action\EditLanguageAction::class => App\Action\EditLanguageFactory::class,
             App\Action\DeleteLanguageAction::class => App\Action\DeleteLanguageFactory::class,
 			App\Action\NewUsersAction::class => App\Action\NewUsersFactory::class,
 			App\Action\ManageUsersAction::class => App\Action\ManageUsersFactory::class,
@@ -300,6 +301,16 @@ return [
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\ManageLanguageAction::class,
+            ],                
+            'allowed_methods' => ['GET','POST'],
+        ],
+        
+        [
+            'name' => 'edit_language',
+		    'path' => '/edit_language',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\EditLanguageAction::class,
             ],                
             'allowed_methods' => ['GET','POST'],
         ],

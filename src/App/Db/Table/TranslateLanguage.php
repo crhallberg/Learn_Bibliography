@@ -67,7 +67,7 @@ class TranslateLanguage extends \Zend\Db\TableGateway\TableGateway
      *
      * @return Updated or newly added record
      */
-    public function updateRecord($de1, $en1, $es1, $fr1, $it1, $nl1)
+    public function selectRecords($de1, $en1, $es1, $fr1, $it1, $nl1)
     {   	
 	   $this->insert([
 		'text_de'=> $de1,
@@ -79,11 +79,18 @@ class TranslateLanguage extends \Zend\Db\TableGateway\TableGateway
 	    ]);
     }
     
-  /*  public function selectRecords()
+    public function updateRecord($id, $de1, $en1, $es1, $fr1, $it1, $nl1)
     {   	
-	  $result = $this->select();
-      return $result; 
-    } */
+	  $this->update(array(
+                'text_de'=> $de1,
+                'text_en'=> $en1,
+                'text_es'=> $es1,
+                'text_fr'=> $fr1,
+                'text_it'=> $it1,
+                'text_nl'=> $nl1,),
+                array('id' => $id)
+                ); 
+    } 
     
     public function deleteRecord($id) 
     {

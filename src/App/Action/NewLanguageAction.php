@@ -41,11 +41,11 @@ class NewLanguageAction
 			if(array_filter($post)) {
                 $table = new \App\Db\Table\TranslateLanguage($this->adapter);
                 //$rows =
-                $table->updateRecord($_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], $_POST['fr_newlang'], 
+                $table->selectRecords($_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], $_POST['fr_newlang'], 
                                              $_POST['it_newlang'], $_POST['nl_newlang']);
 			
 			}
 		}
-        return new HtmlResponse($this->template->render('app::new_language', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::new_language', ['rows' => $rows, 'request' => $request]));
     }
 }
