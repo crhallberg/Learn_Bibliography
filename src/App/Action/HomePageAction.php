@@ -5,15 +5,11 @@ namespace App\Action;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
-use Zend\Diactoros\Response\JsonResponse;
 use Zend\Expressive\Router;
 use Zend\Expressive\Template;
-use Zend\Expressive\Plates\PlatesRenderer;
-use Zend\Expressive\Twig\TwigRenderer;
-use Zend\Expressive\ZendView\ZendViewRenderer;
 
 // Page Instructions Content
-include_once('instructions.inc');
+require_once 'instructions.inc';
 
 global $instructions;
 
@@ -22,8 +18,8 @@ class HomePageAction
     private $router;
 
     private $template;
-	
-	//private $instructions;
+    
+    //private $instructions;
 
     public function __construct(Router\RouterInterface $router, Template\TemplateRendererInterface $template = null)
     {
@@ -38,16 +34,16 @@ class HomePageAction
         $this->layout()->instructions = "PRODUCTION - Live since 21st, November 2005
 
                                    //      Running on NEW server September 2007"; 
-		$viewData = array(
+        $viewData = array(
         "layout" => "app::home-page.phtml", 
         "title" => "Hello World Title", 
         "instructions" => "PRODUCTION - Live since 21st, November 2005
 
                                          Running on NEW server September 2007"
                          );
-       $html = $this->template->render("app::home-page.phtml", $viewData);
-       return new HtmlResponse($html);								 
-		$data = ['instructions' => 'foo']; */
-      return new HtmlResponse($this->template->render('app::home-page', $this));
+        $html = $this->template->render("app::home-page.phtml", $viewData);
+        return new HtmlResponse($html);								 
+        $data = ['instructions' => 'foo']; */
+        return new HtmlResponse($this->template->render('app::home-page', $this));
     }
 }

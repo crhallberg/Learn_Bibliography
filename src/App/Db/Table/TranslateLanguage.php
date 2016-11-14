@@ -29,14 +29,6 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
-use Zend\Db\Sql\Predicate\Expression;
-use Zend\Db\Sql\Where;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Adapter\Driver\ConnectionInterface;
-use Zend\Db\RowGateway\RowGateway;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Paginator\Adapter\DbTableGateway;
-use Zend\Paginator\Paginator;
 
 /**
  * Table Definition for record
@@ -52,7 +44,7 @@ class TranslateLanguage extends \Zend\Db\TableGateway\TableGateway
 {
     /**
      * Constructor
-     */	
+     */
     public function __construct($adapter)
     {
         parent::__construct('translate_language', $adapter);
@@ -68,34 +60,37 @@ class TranslateLanguage extends \Zend\Db\TableGateway\TableGateway
      * @return Updated or newly added record
      */
     public function selectRecords($de1, $en1, $es1, $fr1, $it1, $nl1)
-    {   	
-	   $this->insert([
-		'text_de'=> $de1,
-		'text_en'=> $en1,
-		'text_es'=> $es1,
-		'text_fr'=> $fr1,
-		'text_it'=> $it1,
-		'text_nl'=> $nl1,
-	    ]);
+    {
+        $this->insert(
+            [
+            'text_de' => $de1,
+            'text_en' => $en1,
+            'text_es' => $es1,
+            'text_fr' => $fr1,
+            'text_it' => $it1,
+            'text_nl' => $nl1,
+            ]
+        );
     }
     
     public function updateRecord($id, $de1, $en1, $es1, $fr1, $it1, $nl1)
-    {   	
-	  $this->update(array(
-                'text_de'=> $de1,
-                'text_en'=> $en1,
-                'text_es'=> $es1,
-                'text_fr'=> $fr1,
-                'text_it'=> $it1,
-                'text_nl'=> $nl1,),
-                array('id' => $id)
-                ); 
-    } 
+    {
+        $this->update(
+            [
+                'text_de' => $de1,
+                'text_en' => $en1,
+                'text_es' => $es1,
+                'text_fr' => $fr1,
+                'text_it' => $it1,
+                'text_nl' => $nl1,],
+            ['id' => $id]
+        );
+    }
     
-    public function deleteRecord($id) 
+    public function deleteRecord($id)
     {
         //echo $id;
-        $this->delete(['id'=>$id]);
-       //$this->tableGateway->delete(['id' => $id]);
+        $this->delete(['id' => $id]);
+        //$this->tableGateway->delete(['id' => $id]);
     }
 }
