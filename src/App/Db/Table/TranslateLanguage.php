@@ -59,7 +59,7 @@ class TranslateLanguage extends \Zend\Db\TableGateway\TableGateway
      *
      * @return Updated or newly added record
      */
-    public function selectRecords($de1, $en1, $es1, $fr1, $it1, $nl1)
+    public function insertRecords($de1, $en1, $es1, $fr1, $it1, $nl1)
     {
         $this->insert(
             [

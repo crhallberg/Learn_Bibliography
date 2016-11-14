@@ -10,6 +10,7 @@ return [
 		
             Helper\ServerUrlMiddleware::class => Helper\ServerUrlMiddlewareFactory::class,
             Helper\UrlHelperMiddleware::class => Helper\UrlHelperMiddlewareFactory::class,
+            'App\SlimFlashMiddleware' => App\SlimFlashMiddlewareFactory::class,
         ],
     ],
     // This can be used to seed pre- and/or post-routing middleware
@@ -45,6 +46,7 @@ return [
                 Helper\ServerUrlMiddleware::class,
 				//new
 				Blast\BaseUrl\BaseUrlMiddleware::class,
+                'App\SlimFlashMiddleware',
             ],
             'priority' => 10000,
         ],
