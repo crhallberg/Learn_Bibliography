@@ -30,6 +30,7 @@ return [
 			App\Action\Publisher\NewPublisherAction::class => App\Action\Publisher\NewPublisherFactory::class,
 			App\Action\Publisher\FindPublisherAction::class => App\Action\Publisher\FindPublisherFactory::class,
 			App\Action\Publisher\ManagePublisherAction::class => App\Action\Publisher\ManagePublisherFactory::class,
+            App\Action\Publisher\ManagePublisherLocationAction::class => App\Action\Publisher\ManagePublisherLocationFactory::class,
 			App\Action\Publisher\MergePublisherAction::class => App\Action\Publisher\MergePublisherFactory::class,
 			App\Action\Language\NewLanguageAction::class => App\Action\Language\NewLanguageFactory::class,
 			App\Action\Language\ManageLanguageAction::class => App\Action\Language\ManageLanguageFactory::class,
@@ -255,14 +256,24 @@ return [
 		
 		[
             'name' => 'manage_publisher',
-		    'path' => '/managepublisher',
+		    'path' => '/managepublisher[/page/{page}]',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Publisher\ManagePublisherAction::class,
             ],
             'allowed_methods' => ['GET','POST'],
         ],
-		
+        
+		[
+            'name' => 'manage_PublisherLocation',
+		    'path' => '/manage_publisherlocation',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\Publisher\ManagePublisherLocationAction::class,
+            ],                
+            'allowed_methods' => ['GET','POST'],
+        ],
+        
 		[
             'name' => 'merge_publisher',
 		    'path' => '/mergepublisher',

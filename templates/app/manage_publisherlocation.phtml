@@ -1,0 +1,17 @@
+<?php $this->headTitle('Manage Publisher Locations'); ?>
+<?php //$this->layout()->instructions = ""; ?>
+
+<?php                                       
+        $id;
+        if ($request->getqueryParams() !== null) 
+        {   
+            $queryString = implode('',$request->getqueryParams());
+            $params = explode(',',$queryString);              
+        } 
+        if ($params[0] !== null) 
+        {   
+            echo $params[1]; 
+        } 
+        
+ ?>
+
