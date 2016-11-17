@@ -33,17 +33,22 @@ class FindPublisherAction
         $rows = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
-            //echo $post['name_publisher'];
             if(array_filter($post)) {
-                $table = new \App\Db\Table\Publisher($this->adapter);
-                $paginator = $table->findRecords($post['name_publisher']);
-
-                //$paginator = new Paginator(new \Zend\Paginator\Adapter\ArrayAdapter((array)$rows));
-               // var_dump($paginator);
+                if(!empty($post['name_publisher'])) {
+                    $table = new \App\Db\Table\Publisher($this->adapter);
+                    $paginator = $table->findRecords($post['name_publisher']);
+                }
+                if(!empty($post['location_publisher'])) {
+                    $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                    $paginator = $table->findRecords($post['location_publisher']);
+                }
+                
                 $paginator->setDefaultItemCountPerPage(7);
                 $allItems = $paginator->getTotalItemCount();
                 $countPages = $paginator->count();
-        
+                //var_dump($paginator);
+                echo "total count".$allItems;
+                echo "total pages".$countPages;
                 $p = $request->getAttribute('page', '1');
                  
                 if(isset($p)) {
@@ -68,9 +73,9 @@ class FindPublisherAction
                     $this->next = $currentPage + 1;
                     $this->previous = $currentPage - 1;
                 }
-
-                return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
-            }
+                   
+                return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'countp' => $countPages]));
+            }    
         }
         return new HtmlResponse($this->template->render('app::find_publisher', ['rows' => $rows]));
     } 

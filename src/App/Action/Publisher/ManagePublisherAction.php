@@ -61,8 +61,7 @@ class ManagePublisherAction
             $this->previous = $currentPage - 1;
         }
 
-        // return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $rows]));
-        return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
+        return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'countp' => $countPages]));
     }
      
      
