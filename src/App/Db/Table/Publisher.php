@@ -74,21 +74,9 @@ class Publisher extends \Zend\Db\TableGateway\TableGateway
     
     public function findRecords($name)
     {
-        /*$records = $this->select(array('publisher.name' => $name));
-        $publisherRow = $records->current();
-        
-        return $publisherRow; */
-        
-        $select = new Select($this->tableGateway->getTable());
-
-        $paginatorAdapter = new DbSelect(
-            $select,
-            $this->tableGateway->getAdapter(),
-            $this->select(array('publisher.name' => $name))
-        );
-        $paginator = new Paginator($paginatorAdapter);
-            var_dump($paginator);
-        return $paginator;
+        $select = $this->sql->select()->where(['name' => $name]);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
     }
     
     /*public function findRecords($name)
