@@ -16,10 +16,6 @@ class FindPublisherAction
     private $template;
     
     private $adapter;
-    
-    
-    //private $dbh;
-    //private $qstmt;
 
     public function __construct(Router\RouterInterface $router, Template\TemplateRendererInterface $template = null, Adapter $adapter)
     {
@@ -46,7 +42,6 @@ class FindPublisherAction
                 $paginator->setDefaultItemCountPerPage(7);
                 $allItems = $paginator->getTotalItemCount();
                 $countPages = $paginator->count();
-                //var_dump($paginator);
                 echo "total count".$allItems;
                 echo "total pages".$countPages;
                 $p = $request->getAttribute('page', '1');
@@ -60,6 +55,7 @@ class FindPublisherAction
 
                 $currentPage = $paginator->getCurrentPageNumber();
 
+                
                 if($currentPage == $countPages) {
                     $this->next = $currentPage;
                     $this->previous = $currentPage - 1;
@@ -73,10 +69,11 @@ class FindPublisherAction
                     $this->next = $currentPage + 1;
                     $this->previous = $currentPage - 1;
                 }
-                   
-                return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'countp' => $countPages]));
+                   //var_dump($paginator);
+                return new HtmlResponse($this->template->render('app::find_publisher_results', ['rows' => $paginator,'previous' => $this->previous,
+                'next' => $this->next,'countp' => $countPages,'request' => $request, 'findpub' => 'findpub']));
             }    
         }
-        return new HtmlResponse($this->template->render('app::find_publisher', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::find_publisher', ['rows' => $rows,'request' => $request]));
     } 
 }

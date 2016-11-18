@@ -105,7 +105,8 @@ class DeleteLanguageAction
                             $this->next = $currentPage + 1;
                             $this->previous = $currentPage - 1;
                         }
-                        return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'request' => $request]));
+                        return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $paginator,
+                        'previous' => $this->previous,'next' => $this->next,'request' => $request]));
                     }
                     // echo $_POST['id'];
                 }

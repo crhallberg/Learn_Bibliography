@@ -1,5 +1,5 @@
 <?php header('Content-Type: text/html; charset=UTF-8'); ?>
-<?php $this->headTitle('Manage Publisher'); ?>
+<?php $this->headTitle('Find Publisher'); ?>
 <?php //$this->layout()->instructions = ""; ?>
 <html>
 <head>
@@ -17,8 +17,6 @@
         </thead>
         <tbody>
 		<?php $escaper = new Zend\Escaper\Escaper('utf-8'); ?>
-        <?php //var_dump($this->rows); ?>
-        <?php echo "count is".count($this->rows); ?>
         <?php foreach($this->rows as $row) : ?>
         <tr>
         <td><?php echo $escaper->escapeHtml($row['name']); ?></td>
@@ -36,11 +34,11 @@
         <form method="get" action="page">
 		<?php echo $this->paginationControl($this->rows,
                                    'Sliding',
-                                   'app::controls', ['route'  => 'manage_publisher']); ?>
+                                   'app::controls', ['route'  => 'find_publisher_results']); ?>
 								   
 		</form>	
         <?php } ?>
         </div>
-    </div>
+    </div>  
 </body>
 </html>
