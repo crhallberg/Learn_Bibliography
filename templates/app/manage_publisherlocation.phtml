@@ -10,8 +10,9 @@
         } 
         if ($params[0] !== null) 
         {   
-            echo $params[1]; 
-        } 
+            echo '<b>Publisher: </b>'.$params[1].'<br/>'; ?>
+            <a href="<?=$this->url('edit_language')?><?php echo '?id=' . $params[0]. '&pub_name='. $params[1];  ?>">Add Location</a> 
+       <?php } 
         
  ?>
 

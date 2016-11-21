@@ -56,3 +56,8 @@ div.tipbox p {
 table.form th {
     text-align: right;
 }
+
+.nopadding {
+    padding: 0;
+   margin: 0;
+}

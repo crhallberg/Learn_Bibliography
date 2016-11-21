@@ -30,14 +30,36 @@ class ManagePublisherAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
+        //$params['search'] = "";
+        if($request->getqueryParams() != null) {
+            $params = $request->getqueryParams();
+        //} 
+        if ($params['search'] == "true") {
+            $post = $request->getParsedBody();
+            if(array_filter($post)) {
+                if(!empty($post['name_publisher'])) {
+                    $table = new \App\Db\Table\Publisher($this->adapter);
+                    $paginator = $table->findRecords($post['name_publisher']);
+                }
+                if(!empty($post['location_publisher'])) {
+                    $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                    $paginator = $table->findRecords($post['location_publisher']);
+                }  
+            }    
+        } 
+        }
+        else {
         $table = new \App\Db\Table\Publisher($this->adapter);
         $paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+        }
+        
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
         
         $p = $request->getAttribute('page', '1');
-                 
+        //echo 'total items is '.$allItems;
+        //echo 'total no of pages is '.$countPages;    
         if(isset($p)) {
             $paginator->setCurrentPageNumber($p);
         }
@@ -61,7 +83,7 @@ class ManagePublisherAction
             $this->previous = $currentPage - 1;
         }
 
-        return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'countp' => $countPages]));
+        return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'countp' => $countPages, 'request' => $request]));   
     }
      
      
