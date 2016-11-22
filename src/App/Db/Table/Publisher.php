@@ -79,6 +79,15 @@ class Publisher extends \Zend\Db\TableGateway\TableGateway
         return new Paginator($paginatorAdapter);
     }
     
+    public function findRecord()
+    {
+        //$select = $this->sql->select()->columns(array('name'));
+        //$result = $select->execute();
+        
+        $stmt = $this->sql->select()->where(['name' => 'trp']);
+        //$stmt->execute();    
+    }
+    
     /*public function findRecords($name)
     {
         if (!empty($name)) {
@@ -93,24 +102,19 @@ class Publisher extends \Zend\Db\TableGateway\TableGateway
         }
     } */
     
- /*   public function updateRecord($id, $de1, $en1, $es1, $fr1, $it1, $nl1)
+    public function updateRecord($id, $name)
     {
         $this->update(
             [
-                'text_de' => $de1,
-                'text_en' => $en1,
-                'text_es' => $es1,
-                'text_fr' => $fr1,
-                'text_it' => $it1,
-                'text_nl' => $nl1,],
+                'name' => $name
+            ],
             ['id' => $id]
         );
     }
     
     public function deleteRecord($id)
     {
-        //echo $id;
         $this->delete(['id' => $id]);
         //$this->tableGateway->delete(['id' => $id]);
-    } */
+    }
 }

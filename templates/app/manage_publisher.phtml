@@ -7,6 +7,12 @@
 </head>
 <body>
 <div class="col-md-9">
+<p>
+<?php foreach (range('A', 'Z') as $char) { 
+        //for ($char = 'A'; $char <= 'Z'; $char++) { ?>
+    <a href="#"><?php echo ' '.$char.' '.'|'  ?></a>    
+<?php } ?>
+</p>
         <table class="table table-striped table-condensed" style="font-size:10pt;">
         <thead>
         <tr>
@@ -30,9 +36,9 @@
             <?php $output = (array)$row;
                   $params = implode(', ', $output);        
             ?>        
-            <a href="<?=$this->url('edit_language')?><?php echo '?row='. urlencode($params);  ?>">Edit</a>        
+            <a href="<?=$this->url('edit_publisher')?><?php echo '?row='. urlencode($params);  ?>">Edit</a>        
             |
-            <a href="<?=$this->url('delete_language')?><?php echo '?id='. $row['id'].'&term='. $row['name'];  ?>">Delete</a>
+            <a href="<?=$this->url('delete_publisher')?><?php echo '?id='. $row['id'].'&term='. $row['name'];  ?>">Delete</a>
         </td>
         </tr>
         <?php endforeach; ?>

@@ -8,6 +8,8 @@ use Zend\Expressive\Router;
 use Zend\Expressive\Template;
 use Zend\Db\Adapter\Adapter;
 use Zend\Paginator\Paginator;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Select;
 
 class ManagePublisherAction
 {
@@ -30,7 +32,9 @@ class ManagePublisherAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        //$params['search'] = "";
+        $table = new \App\Db\Table\Publisher($this->adapter);
+        $table->findRecord();
+        
         if($request->getqueryParams() != null) {
             $params = $request->getqueryParams();
         //} 

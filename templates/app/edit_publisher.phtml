@@ -1,0 +1,29 @@
+<?php $this->headTitle('Edit Publisher'); ?>
+<?php //$this->layout()->instructions = ""; ?>
+
+<?php                                       
+        $id;
+        if ($request->getqueryParams() !== null) 
+        {   
+            $queryString = implode('',$request->getqueryParams());
+            $params = explode(',',$queryString);            
+        } 
+        
+ ?>
+<div class="col-md-4">
+<form class="form-horizontal" method="post" action="<?=$this->url('edit_publisher')?>">
+<input type="hidden" name="id" value="<?php echo $params[0]; ?>">
+  <div class="form-group">   
+	<label class="col-xs-2 control-label">Name: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" name="publisher_newname" id="newpublishername" value="<?php echo $params[1]; ?>" />
+	</div>
+  </div>
+  <div class="form-group">
+	<div class="col-sm-offset-2 col-sm-10">
+		<button type="submit" class="btn btn-default">Save</button>
+	</div>
+  </div>
+</form>
+</div>
+

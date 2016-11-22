@@ -31,6 +31,8 @@ return [
 			App\Action\Publisher\FindPublisherAction::class => App\Action\Publisher\FindPublisherFactory::class,
 			App\Action\Publisher\ManagePublisherAction::class => App\Action\Publisher\ManagePublisherFactory::class,
             App\Action\Publisher\ManagePublisherLocationAction::class => App\Action\Publisher\ManagePublisherLocationFactory::class,
+            App\Action\Publisher\EditPublisherAction::class => App\Action\Publisher\EditPublisherFactory::class,
+            App\Action\Publisher\DeletePublisherAction::class => App\Action\Publisher\DeletePublisherFactory::class,
 			App\Action\Publisher\MergePublisherAction::class => App\Action\Publisher\MergePublisherFactory::class,
 			App\Action\Language\NewLanguageAction::class => App\Action\Language\NewLanguageFactory::class,
 			App\Action\Language\ManageLanguageAction::class => App\Action\Language\ManageLanguageFactory::class,
@@ -270,6 +272,26 @@ return [
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Publisher\ManagePublisherLocationAction::class,
+            ],                
+            'allowed_methods' => ['GET','POST'],
+        ],
+        
+        [
+            'name' => 'edit_publisher',
+		    'path' => '/edit_publisher',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\Publisher\EditPublisherAction::class,
+            ],                
+            'allowed_methods' => ['GET','POST'],
+        ],
+        
+        [
+            'name' => 'delete_publisher',
+		    'path' => '/delete_publisher',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\Publisher\DeletePublisherAction::class,
             ],                
             'allowed_methods' => ['GET','POST'],
         ],

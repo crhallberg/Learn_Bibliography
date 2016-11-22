@@ -81,4 +81,10 @@ class PublisherLocation extends \Zend\Db\TableGateway\TableGateway
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
     }
+    
+    public function deletePublisherRecord($id)
+    {
+        $this->delete(['publisher_id' => $id]);
+        //$this->tableGateway->delete(['id' => $id]);
+    }
 }
