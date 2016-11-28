@@ -30,7 +30,7 @@ class ManagePublisherAction
         $this->adapter  = $adapter;
     }
 
-    protected function getPaginator($params)
+    protected function getPaginator($params,$post)
     {
         // search by name
         if (!empty($params['name'])) {
@@ -42,6 +42,29 @@ class ManagePublisherAction
             $table = new \App\Db\Table\PublisherLocation($this->adapter);
             return $table->findRecords($params['location']);
         }
+        if(!empty($params['action'])){
+            //delete a publisher
+            if($params['action'] == "delete"){
+                echo "params of action is delete";
+                if(array_filter($post)) {
+                    echo "post is not empty";
+                    if ($post['submitt'] == "Delete") {
+                        echo "delete clicked";
+                        if(!is_null($post['id'])) {
+                            $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                            $table->deletePublisherRecord($post['id']);
+                            $table = new \App\Db\Table\Publisher($this->adapter);
+                            $table->deleteRecord($post['id']);
+                        }
+                    } 
+                    //click cancel on delete publisher page
+                    else if ($post['submitt'] == "Cancel") {
+                        $table = new \App\Db\Table\Publisher($this->adapter);
+                        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));        
+                    } 
+                }
+            }
+        }
         // default: blank/missing search
         $table = new \App\Db\Table\Publisher($this->adapter);
         return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
@@ -50,7 +73,12 @@ class ManagePublisherAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         $query = $request->getqueryParams();
-        $paginator = $this->getPaginator($query);
+        var_dump($query);
+        $post = [];
+        if ($request->getMethod() == "POST") {
+            $post = $request->getParsedBody();
+        }
+        $paginator = $this->getPaginator($query,$post);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
@@ -82,6 +110,7 @@ class ManagePublisherAction
         if (!empty($query['location'])) {
             $searchParams[] = 'location=' . urlencode($query['location']);
         }
+        
         return new HtmlResponse(
             $this->template->render(
                 'app::manage_publisher',

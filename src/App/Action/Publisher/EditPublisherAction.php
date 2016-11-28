@@ -32,38 +32,46 @@ class EditPublisherAction
                 $table->updateRecord($_POST['id'], $_POST['publisher_newname']);
             
             }
+            
             $table = new \App\Db\Table\Publisher($this->adapter);
             $paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
             $paginator->setDefaultItemCountPerPage(7);
             $allItems = $paginator->getTotalItemCount();
             $countPages = $paginator->count();
         
-            $p = $request->getAttribute('page', '1');
-                 
-            if(isset($p)) {
-                $paginator->setCurrentPageNumber($p);
+            $currentPage = isset($query['page']) ? $query['page'] : 1;
+            if ($currentPage < 1) {
+                $currentPage = 1;
             }
-            else
-            {
-                $paginator->setCurrentPageNumber(1);
-            }
-
-            $currentPage = $paginator->getCurrentPageNumber();
+            $paginator->setCurrentPageNumber($currentPage);
 
             if($currentPage == $countPages) {
-                $this->next = $currentPage;
-                $this->previous = $currentPage - 1;
+                $next = $currentPage;
+                $previous = $currentPage - 1;
             }
             else if($currentPage == 1) {
-                $this->next = $currentPage + 1;
-                $this->previous = 1;
+                $next = $currentPage + 1;
+                $previous = 1;
             }
             else
             {
-                $this->next = $currentPage + 1;
-                $this->previous = $currentPage - 1;
+                $next = $currentPage + 1;
+                $previous = $currentPage - 1;
             }
-            return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next, ,'countp' => $countPages, 'request' => $request]));
+            $searchParams = [];
+            
+            return new HtmlResponse(
+            $this->template->render(
+                'app::manage_publisher',
+                [
+                    'rows' => $paginator,
+                    'previous' => $previous,
+                    'next' => $next,
+                    'countp' => $countPages,
+                    'searchParams' => implode('&', $searchParams),
+                ]
+            )
+            );         
         }
         return new HtmlResponse($this->template->render('app::edit_publisher', ['rows' => $rows, 'request' => $request]));
     }

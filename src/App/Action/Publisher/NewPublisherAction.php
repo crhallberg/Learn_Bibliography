@@ -33,45 +33,51 @@ class NewPublisherAction
        $rows = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
+            $query = $request->getqueryParams();
             if(array_filter($post)) {
                 $table = new \App\Db\Table\Publisher($this->adapter);
                 $table->insertRecords($post['name_publisher']);
-                
-                $table = new \App\Db\Table\Publisher($this->adapter);
-                $paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
-                $paginator->setDefaultItemCountPerPage(7);
-                $allItems = $paginator->getTotalItemCount();
-                $countPages = $paginator->count();
+            }    
+            $paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+            $paginator->setDefaultItemCountPerPage(7);
+            $allItems = $paginator->getTotalItemCount();
+            $countPages = $paginator->count();
         
-                $p = $request->getAttribute('page', '1');
-                 
-                if(isset($p)) {
-                    $paginator->setCurrentPageNumber($p);
-                }
-                else {
-                    $paginator->setCurrentPageNumber(1);
-                }
-
-                $currentPage = $paginator->getCurrentPageNumber();
-
-                if($currentPage == $countPages) {
-                    $this->next = $currentPage;
-                    $this->previous = $currentPage - 1;
-                }
-                else if($currentPage == 1) {
-                    $this->next = $currentPage + 1;
-                    $this->previous = 1;
-                }
-                else
-                {
-                    $this->next = $currentPage + 1;
-                    $this->previous = $currentPage - 1;
-                }
-
-                return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
+            $currentPage = isset($query['page']) ? $query['page'] : 1;
+            if ($currentPage < 1) {
+                $currentPage = 1;
             }
-        }
-        return new HtmlResponse($this->template->render('app::new_publisher', ['rows' => $rows]));
+            $paginator->setCurrentPageNumber($currentPage);
+
+            if($currentPage == $countPages) {
+                $next = $currentPage;
+                $previous = $currentPage - 1;
+            }
+            else if($currentPage == 1) {
+                $next = $currentPage + 1;
+                $previous = 1;
+            }
+            else
+            {
+                $next = $currentPage + 1;
+                $previous = $currentPage - 1;
+            }
+            $searchParams = [];
+            
+            return new HtmlResponse(
+            $this->template->render(
+                'app::manage_publisher',
+                [
+                    'rows' => $paginator,
+                    'previous' => $previous,
+                    'next' => $next,
+                    'countp' => $countPages,
+                    'searchParams' => implode('&', $searchParams),
+                ]
+            )
+            );                
+        }       
+        return new HtmlResponse($this->template->render('app::new_publisher'));
     }
      
      
