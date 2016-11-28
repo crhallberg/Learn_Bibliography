@@ -1,7 +1,9 @@
+<? $extraParams = empty($this->extraParams) ? '' : $this->escapeHtml('&' . $this->extraParams); ?>
+
 <?php if ($this->pageCount): ?>
 <!-- First page link -->
 <?php if (isset($this->previous)): ?>
-  <a href="<?php echo $this->url($this->route, array('page' => $this->first)); ?>">
+  <a href="<?php echo $this->url($this->route) . '?page=' . urlencode($this->first) . $extraParams ?>">
     First
   </a> |
 <?php else: ?>
@@ -10,7 +12,7 @@
  
 <!-- Previous page link -->
 <?php if (isset($this->previous)): ?>
-  <a href="<?php echo $this->url($this->route, array('page' => $this->previous)); ?>">
+  <a href="<?php echo $this->url($this->route) . '?page=' . urlencode($this->previous) . $extraParams ?>">
     &lt; Previous
   </a> |
 <?php else: ?>
@@ -19,7 +21,7 @@
  
 <!-- Next page link -->
 <?php if (isset($this->next)): ?>
-  <a href="<?php echo $this->url($this->route, array('page' => $this->next)); ?>">
+  <a href="<?php echo $this->url($this->route) . '?page=' . urlencode($this->next) . $extraParams ?>">
     Next &gt;
   </a> |
 <?php else: ?>
@@ -28,7 +30,7 @@
  
 <!-- Last page link -->
 <?php if (isset($this->next)): ?>
-  <a href="<?php echo $this->url($this->route, array('page' => $this->last)); ?>">
+  <a href="<?php echo $this->url($this->route) . '?page=' . urlencode($this->last) . $extraParams ?>">
     Last
   </a>
 <?php else: ?>
