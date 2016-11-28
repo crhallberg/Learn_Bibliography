@@ -30,65 +30,69 @@ class ManagePublisherAction
         $this->adapter  = $adapter;
     }
 
+    protected function getPaginator($params)
+    {
+        // search by name
+        if (!empty($params['name'])) {
+            $table = new \App\Db\Table\Publisher($this->adapter);
+            return $table->findRecords($params['name']);
+        }
+        // search by location
+        if (!empty($params['location'])) {
+            $table = new \App\Db\Table\PublisherLocation($this->adapter);
+            return $table->findRecords($params['location']);
+        }
+        // default: blank/missing search
+        $table = new \App\Db\Table\Publisher($this->adapter);
+        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+    }
+
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        $table = new \App\Db\Table\Publisher($this->adapter);
-        $table->findRecord();
-        
-        if($request->getqueryParams() != null) {
-            $params = $request->getqueryParams();
-        //} 
-        if ($params['search'] == "true") {
-            $post = $request->getParsedBody();
-            if(array_filter($post)) {
-                if(!empty($post['name_publisher'])) {
-                    $table = new \App\Db\Table\Publisher($this->adapter);
-                    $paginator = $table->findRecords($post['name_publisher']);
-                }
-                if(!empty($post['location_publisher'])) {
-                    $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                    $paginator = $table->findRecords($post['location_publisher']);
-                }  
-            }    
-        } 
-        }
-        else {
-        $table = new \App\Db\Table\Publisher($this->adapter);
-        $paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
-        }
-        
+        $query = $request->getqueryParams();
+        $paginator = $this->getPaginator($query);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
         
-        $p = $request->getAttribute('page', '1');
-        //echo 'total items is '.$allItems;
-        //echo 'total no of pages is '.$countPages;    
-        if(isset($p)) {
-            $paginator->setCurrentPageNumber($p);
+        $currentPage = isset($query['page']) ? $query['page'] : 1;
+        if ($currentPage < 1) {
+            $currentPage = 1;
         }
-        else {
-            $paginator->setCurrentPageNumber(1);
-        }
-
-        $currentPage = $paginator->getCurrentPageNumber();
+        $paginator->setCurrentPageNumber($currentPage);
 
         if($currentPage == $countPages) {
-            $this->next = $currentPage;
-            $this->previous = $currentPage - 1;
+            $next = $currentPage;
+            $previous = $currentPage - 1;
         }
         else if($currentPage == 1) {
-            $this->next = $currentPage + 1;
-            $this->previous = 1;
+            $next = $currentPage + 1;
+            $previous = 1;
         }
         else
         {
-            $this->next = $currentPage + 1;
-            $this->previous = $currentPage - 1;
+            $next = $currentPage + 1;
+            $previous = $currentPage - 1;
         }
 
-        return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'countp' => $countPages, 'request' => $request]));   
+        $searchParams = [];
+        if (!empty($query['name'])) {
+            $searchParams[] = 'name=' . urlencode($query['name']);
+        }
+        if (!empty($query['location'])) {
+            $searchParams[] = 'location=' . urlencode($query['location']);
+        }
+        return new HtmlResponse(
+            $this->template->render(
+                'app::manage_publisher',
+                [
+                    'rows' => $paginator,
+                    'previous' => $previous,
+                    'next' => $next,
+                    'countp' => $countPages,
+                    'searchParams' => implode('&', $searchParams),
+                ]
+            )
+        );
     }
-     
-     
 }

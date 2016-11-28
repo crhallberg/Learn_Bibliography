@@ -1,11 +1,4 @@
-<?php header('Content-Type: text/html; charset=UTF-8'); ?>
 <?php $this->headTitle('Manage Publisher'); ?>
-<?php //$this->layout()->instructions = ""; ?>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-</head>
-<body>
 <div class="col-md-9">
 <p>
 <?php foreach (range('A', 'Z') as $char) { 
@@ -46,13 +39,15 @@
 		</table>
         <?php if($this->countp > 1) { ?>
         <form method="get" action="page">
-		<?php echo $this->paginationControl($this->rows,
-                                   'Sliding',
-                                   'app::controls', ['route'  => 'manage_publisher']); ?>
-								   
-		</form>	
+            <?=$this->paginationControl($this->rows,
+                'Sliding',
+                'app::controls',
+                [
+                    'route'  => 'manage_publisher',
+                    'extraParams' => $searchParams,
+                ]
+            );?>
+        </form>
         <?php } ?>
         </div>
 </div>
-</body>
-</html>
