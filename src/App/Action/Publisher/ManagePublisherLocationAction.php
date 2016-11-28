@@ -25,7 +25,7 @@ class ManagePublisherLocationAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         $rows = [];
-        if ($request->getMethod() == "POST") {
+       /* if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
             if(array_filter($post)) {
                 $table = new \App\Db\Table\TranslateLanguage($this->adapter);
@@ -67,7 +67,51 @@ class ManagePublisherLocationAction
                 $this->previous = $currentPage - 1;
             }
             return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'request' => $request]));
+        } */
+        /*$params = $request->getqueryParams();
+        var_dump($params);
+        $id; */
+        if ($request->getqueryParams() !== null) 
+        {   
+            $queryString = implode('',$request->getqueryParams());
+            $params = explode(',',$queryString);            
+         //var_dump($params);
+        
+        if(array_filter($params)) {
+            //var_dump($params);
+            $table = new \App\Db\Table\PublisherLocation($this->adapter);
+            $paginator = $table->findPublisherLocations($params[0]);
+        } 
+        $paginator->setDefaultItemCountPerPage(7);
+        $allItems = $paginator->getTotalItemCount();
+        $countPages = $paginator->count();
+        
+        $p = $request->getAttribute('page', '1');
+        //echo 'total items is '.$allItems;
+        //echo 'total no of pages is '.$countPages;    
+        if(isset($p)) {
+            $paginator->setCurrentPageNumber($p);
         }
-        return new HtmlResponse($this->template->render('app::manage_PublisherLocation', ['rows' => $rows, 'request' => $request]));
+        else {
+            $paginator->setCurrentPageNumber(1);
+        }
+
+        $currentPage = $paginator->getCurrentPageNumber();
+
+        if($currentPage == $countPages) {
+            $this->next = $currentPage;
+            $this->previous = $currentPage - 1;
+        }
+        else if($currentPage == 1) {
+            $this->next = $currentPage + 1;
+            $this->previous = 1;
+        }
+        else
+        {
+            $this->next = $currentPage + 1;
+            $this->previous = $currentPage - 1;
+        }    
+        }    
+        return new HtmlResponse($this->template->render('app::manage_publisherlocation', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'countp' => $countPages, 'request' => $request]));
     }
 }

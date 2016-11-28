@@ -1,6 +1,7 @@
 <?php $this->headTitle('Manage Publisher Locations'); ?>
 <?php //$this->layout()->instructions = ""; ?>
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+<div class="col-md-9">
 <?php                                       
         $id;
         if ($request->getqueryParams() !== null) 
@@ -10,9 +11,55 @@
         } 
         if ($params[0] !== null) 
         {   
-            echo '<b>Publisher: </b>'.$params[1].'<br/>'; ?>
-            <a href="<?=$this->url('edit_language')?><?php echo '?id=' . $params[0]. '&pub_name='. $params[1];  ?>">Add Location</a> 
-       <?php } 
-        
- ?>
-
+            echo '<b>Publisher: </b>'.$params[1].'<br/>'; 
+?>
+            <a href="<?=$this->url('add_publisher_location')?><?php echo '?id=' . $params[0]. '&pub_name='. $params[1];  ?>">Add Location</a> 
+<?php   } 
+        $escaper = new Zend\Escaper\Escaper('utf-8');
+        foreach($this->rows as $row) :
+        echo $escaper->escapeHtml($row['location']);
+        endforeach;
+?>
+<form class="form-horizontal">
+<table class="table table-striped table-condensed" style="font-size:10pt;">
+     <thead>
+         <tr>
+             <th>Select</th>
+             <th>Location</th>
+             <th>Source</th>
+             <th>Destination</th>
+         </tr>
+     </thead>
+     <tbody>
+     <form>
+         <tr>
+             <td>
+                 <div class="checkbox">
+                     <label><input type="checkbox" id='select' name="selectchk1"></label>
+                 </div>
+             </td>
+             <td>
+                 Location
+             </td>     
+             <td>
+                 <div class="checkbox">
+                     <label><input type="checkbox" id='select' name="selectchk2"></label>
+                 </div>
+             </td> 
+             <td>
+                 <div class="radio">
+                     <label><input type="radio" id='select' name="selectradio"></label>
+                 </div>
+             </td>
+         </tr>
+         
+         </tbody>
+</table>
+<div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default" name="delete">Delete</button>
+                <button type="submit" class="btn btn-default" name="merge">Merge</button>
+            </div>
+</div>
+</form>
+</div>

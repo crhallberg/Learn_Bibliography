@@ -1,0 +1,26 @@
+<?php $this->headTitle('Add Publisher Location'); ?>
+<?php //$this->layout()->instructions = ""; ?>
+<div class="col-md-4">
+<?php                                       
+                $id;
+                if ($request->getqueryParams('id') !== null) 
+                {   
+                    $params = $request->getqueryParams();
+                    echo '<b>Publisher: </b>' . $params['pub_name']; 
+                    $id = $params['id'];
+                } 
+?>
+    <form class="form-horizontal" method="post" action="<?=$this->url('add_publisher_location')?><?php echo '?id=' . $params['id'];  ?>">
+        <div class="form-group">
+            <label class="col-xs-3 control-label">Location: </label>
+            <div class="col-xs-7">
+                <input type="text" class="form-control" name="add_publisherloc" id="addpublisherloc" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Save</button>
+            </div>
+        </div>
+    </form>   
+</div>

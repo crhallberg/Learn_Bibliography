@@ -30,6 +30,7 @@ return [
 			App\Action\Publisher\NewPublisherAction::class => App\Action\Publisher\NewPublisherFactory::class,
 			App\Action\Publisher\FindPublisherAction::class => App\Action\Publisher\FindPublisherFactory::class,
 			App\Action\Publisher\ManagePublisherAction::class => App\Action\Publisher\ManagePublisherFactory::class,
+            App\Action\Publisher\AddPublisherLocationAction::class => App\Action\Publisher\AddPublisherLocationFactory::class,
             App\Action\Publisher\ManagePublisherLocationAction::class => App\Action\Publisher\ManagePublisherLocationFactory::class,
             App\Action\Publisher\EditPublisherAction::class => App\Action\Publisher\EditPublisherFactory::class,
             App\Action\Publisher\DeletePublisherAction::class => App\Action\Publisher\DeletePublisherFactory::class,
@@ -266,8 +267,18 @@ return [
             'allowed_methods' => ['GET','POST'],
         ],
         
+        [
+            'name' => 'add_publisher_location',
+		    'path' => '/add_publisher_location',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\Publisher\AddPublisherLocationAction::class,
+            ],                
+            'allowed_methods' => ['GET','POST'],
+        ],
+        
 		[
-            'name' => 'manage_PublisherLocation',
+            'name' => 'manage_publisherlocation',
 		    'path' => '/manage_publisherlocation',
             'middleware' => [
                 BodyParamsMiddleware::class,

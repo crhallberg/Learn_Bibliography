@@ -87,4 +87,16 @@ class PublisherLocation extends \Zend\Db\TableGateway\TableGateway
         $this->delete(['publisher_id' => $id]);
         //$this->tableGateway->delete(['id' => $id]);
     }
+    
+    public function addPublisherLocation($id,$loc)
+    {
+        
+    }
+    
+    public function findPublisherLocations($id)
+    {
+        $select = $this->sql->select()->where(['publisher_id' => $id]);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    }
 }
