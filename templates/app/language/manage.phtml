@@ -35,9 +35,9 @@
             <?php $output = (array)$row;
                   $params = implode(', ', $output);        
             ?>        
-            <a href="<?=$this->url('edit_language')?><?php echo '?row='. urlencode($params);  ?>">Edit</a>        
+            <a href="<?=$this->url('edit_language')?><?php echo '?row='. urlencode($params).'&action=, edit'; /*echo '?id='. $row['id'].'&term='. $row['text_en'].'&action=edit';*/  ?>">Edit</a>        
             |
-            <a href="<?=$this->url('delete_language')?><?php echo '?id='. $row['id'].'&term='. $row['text_en'];  ?>">Delete</a>
+            <a href="<?=$this->url('delete_language')?><?php echo '?id='. $row['id'].'&term='. $row['text_en'].'&action=delete';  ?>">Delete</a>
         </td>
         </tr>
 		<?php endforeach; ?>

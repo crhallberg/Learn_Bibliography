@@ -26,6 +26,6 @@ class FindPublisherAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        return new HtmlResponse($this->template->render('app::find_publisher'));
+        return new HtmlResponse($this->template->render('app::publisher::find_publisher'));
     } 
 }

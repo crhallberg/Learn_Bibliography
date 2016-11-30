@@ -25,11 +25,8 @@
         ?>        
         <a href="<?=$this->url('manage_publisherlocation')?><?php echo '?row='. urlencode($params);  ?>">Manage Locations</a>              
         </td>
-        <td>            
-            <?php $output = (array)$row;
-                  $params = implode(', ', $output);        
-            ?>        
-            <a href="<?=$this->url('edit_publisher')?><?php echo '?row='. urlencode($params) . '&action=edit';  ?>">Edit</a>        
+        <td>                   
+            <a href="<?=$this->url('edit_publisher')?><?php echo '?id='. $row['id'].'&term='. $row['name'] . '&action=edit';  ?>">Edit</a>        
             |
             <a href="<?=$this->url('delete_publisher')?><?php echo '?id='. $row['id'].'&term='. $row['name'] . '&action=delete';  ?>">Delete</a>
         </td>

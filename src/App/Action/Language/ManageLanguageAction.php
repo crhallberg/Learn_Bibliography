@@ -27,46 +27,102 @@ class ManageLanguageAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
+     
+    protected function getPaginator($post)
+    {        
+        //edit, delete actions on language
+        if(!empty($post['action'])){
+            //add a new language term
+            if($post['action'] == "new"){
+                    if ($post['submitt'] == "Save") {
+                        $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+                        $table->insertRecords($_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], $_POST['fr_newlang'],
+                                              $_POST['it_newlang'], $_POST['nl_newlang']
+                                              );
+                    }                     
+            }  
+            //edit a language term
+            if($post['action'] == "edit"){
+                    if ($post['submitt'] == "Save") {
+                        if(!is_null($post['id'])) {
+                            $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+                            $table->updateRecord($_POST['id'], $_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], 
+                                                    $_POST['fr_newlang'], $_POST['it_newlang'], $_POST['nl_newlang']
+                                                );
+                        }
+                    }                     
+            }               
+            //delete a language term 
+            if($post['action'] == "delete"){
+                    if ($post['submitt'] == "Delete") {
+                        if(!is_null($post['id'])) {
+                            $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+                            $table->deleteRecord($post['id']);
+                        }
+                    }                    
+            }
+            //Cancel edit\delete
+            if ($post['submitt'] == "Cancel") {
+                        $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+                        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));        
+            } 
+        }
+        // default: blank for listing in manage
+        $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+    }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        //$rows = [];
-         //echo $_POST['delid'];
-        $table = new \App\Db\Table\TranslateLanguage($this->adapter);
-        $paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+        $query = $request->getqueryParams();
+        $post = [];
+        if ($request->getMethod() == "POST") {
+            $post = $request->getParsedBody();
+        }
+        $paginator = $this->getPaginator($post);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
         
-        $p = $request->getAttribute('page', '1');
-                 
-        if(isset($p)) {
-            $paginator->setCurrentPageNumber($p);
+        $currentPage = isset($query['page']) ? $query['page'] : 1;
+        if ($currentPage < 1) {
+            $currentPage = 1;
         }
-        else {
-            $paginator->setCurrentPageNumber(1);
-        }
-
-        $currentPage = $paginator->getCurrentPageNumber();
+        $paginator->setCurrentPageNumber($currentPage);
 
         if($currentPage == $countPages) {
-            $this->next = $currentPage;
-            $this->previous = $currentPage - 1;
+            $next = $currentPage;
+            $previous = $currentPage - 1;
         }
         else if($currentPage == 1) {
-            $this->next = $currentPage + 1;
-            $this->previous = 1;
+            $next = $currentPage + 1;
+            $previous = 1;
         }
         else
         {
-            $this->next = $currentPage + 1;
-            $this->previous = $currentPage - 1;
+            $next = $currentPage + 1;
+            $previous = $currentPage - 1;
         }
 
-        // return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $rows]));
-        return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
-      
+       /* $searchParams = [];
+        if (!empty($query['name'])) {
+            $searchParams[] = 'name=' . urlencode($query['name']);
+        }
+        if (!empty($query['location'])) {
+            $searchParams[] = 'location=' . urlencode($query['location']);
+        } */
+        
+        return new HtmlResponse(
+            $this->template->render(
+                'app::language::manage_language',
+                [
+                    'rows' => $paginator,
+                    'previous' => $previous,
+                    'next' => $next,
+                    'countp' => $countPages,
+                    //'searchParams' => implode('&', $searchParams),
+                ]
+            )
+        );
     }
-     
-     
 }

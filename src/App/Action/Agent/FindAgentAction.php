@@ -33,7 +33,7 @@ class FindAgentAction
         $sth = $this->adapter->query("select * from agenttype");
         $rows = $sth->execute();
         //var_dump($this);
-        return new HtmlResponse($this->template->render('app::find_agent', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::agent::find_agent', ['rows' => $rows]));
     }
      
      

@@ -33,7 +33,7 @@ class ManageWorkTypeAction
         $sth = $this->adapter->query("select * from agenttype");
         $rows = $sth->execute();
         //var_dump($this);
-        return new HtmlResponse($this->template->render('app::manage_worktype', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::worktype::manage_worktype', ['rows' => $rows]));
     }
      
      

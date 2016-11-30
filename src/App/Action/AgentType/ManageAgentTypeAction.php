@@ -33,7 +33,7 @@ class ManageAgentTypeAction
         $sth = $this->adapter->query("select * from agenttype");
         $rows = $sth->execute();
         //var_dump($this);
-        return new HtmlResponse($this->template->render('app::manage_agenttype', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::agenttype::manage_agenttype', ['rows' => $rows]));
     }
      
      

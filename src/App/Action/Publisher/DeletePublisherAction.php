@@ -30,7 +30,7 @@ class DeletePublisherAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        return new HtmlResponse($this->template->render('app::delete_publisher', ['request' => $request]));
+        return new HtmlResponse($this->template->render('app::publisher::delete_publisher', ['request' => $request]));
     }
           
 }

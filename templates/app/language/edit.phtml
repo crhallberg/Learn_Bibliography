@@ -1,0 +1,72 @@
+<?php $this->headTitle('Edit Language'); ?>
+<?php //$this->layout()->instructions = ""; ?>
+
+<?php                                       
+        $id;
+        if ($request->getqueryParams() !== null) 
+        {   
+            $queryString = implode('',$request->getqueryParams());
+           // var_dump($queryString);
+            $params = explode(',',$queryString); 
+           // var_dump($params);
+            //echo trim($params[1]);
+        } 
+       /* $id;
+                if ($request->getqueryParams('id') !== null) 
+                {   
+                    $params = $request->getqueryParams();
+                    $action = $params['action'];
+                    $id = $params['id'];
+                } */
+        
+        
+ ?>
+<div class="col-md-4">
+<form class="form-horizontal" method="post" action="<?=$this->url('manage_language')?>">
+<input type="hidden" name="action" value="<?php echo trim($params[7]); ?>">
+<input type="hidden" name="id" value="<?php echo trim($params[0]); ?>">
+  <div class="form-group">   
+	<label class="col-xs-2 control-label">de: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" name="de_newlang" id="denewlang" value="<?php echo trim($params[1]); ?>" />
+	</div>
+  </div>
+  <div class="form-group">
+	<label class="col-xs-2 control-label">en: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" name="en_newlang" id="ennewlang" value="<?php echo trim($params[2]); ?>" />
+	</div>
+  </div> 
+  <div class="form-group">
+	<label class="col-xs-2 control-label">es: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" name="es_newlang" id="esnewlang" value="<?php echo trim($params[3]); ?>" />
+	</div>
+  </div>
+  <div class="form-group">
+	<label class="col-xs-2 control-label">fr: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" name="fr_newlang" id="frnewlang" value="<?php echo trim($params[4]); ?>" />
+	</div>
+  </div>
+  <div class="form-group">
+	<label class="col-xs-2 control-label">it: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" name="it_newlang" id="itnewlang" value="<?php echo trim($params[5]); ?>" />
+	</div>
+  </div>
+   <div class="form-group">
+	<label class="col-xs-2 control-label">nl: </label>
+	<div class="col-xs-7">
+		<input type="text" class="form-control" name="nl_newlang" id="nlnewlang" value="<?php echo trim($params[6]); ?>" />
+	</div>
+  </div>
+  <div class="form-group">
+	<div class="col-sm-offset-2 col-sm-10">
+		<button type="submit" class="btn btn-default" name="submitt" value="Save">Save</button> 
+        <button type="submit" class="btn btn-default" name="submitt" value="Cancel">Cancel</button>
+	</div>
+  </div>
+</form>
+</div>
+

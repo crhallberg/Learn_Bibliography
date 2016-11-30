@@ -59,7 +59,7 @@ return [
 		
         [
            'name' => 'new_work',
-		    'path' => '/newwork',
+		    'path' => '/Work/new',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Work\NewWorkAction::class,
@@ -69,7 +69,7 @@ return [
 
         [
             'name' => 'search_work',
-		    'path' => '/searchwork',
+		    'path' => '/Work/search',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Work\SearchWorkAction::class,
@@ -79,7 +79,7 @@ return [
 		
 		[
             'name' => 'manage_work',
-		    'path' => '/managework',
+		    'path' => '/Work/manage',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Work\ManageWorkAction::class,
@@ -89,7 +89,7 @@ return [
 		
 		[
             'name' => 'review_work',
-		    'path' => '/reviewwork',
+		    'path' => '/Work/review',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Work\ReviewWorkAction::class,
@@ -99,7 +99,7 @@ return [
 		
 		[
             'name' => 'classify_work',
-		    'path' => '/classifywork',
+		    'path' => '/Work/classify',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Work\ClassifyWorkAction::class,
@@ -109,7 +109,7 @@ return [
 		
 		[
             'name' => 'new_worktype',
-		    'path' => '/newworktype',
+		    'path' => '/WorkType/new',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\WorkType\NewWorkTypeAction::class,
@@ -119,7 +119,7 @@ return [
 		
 		[
             'name' => 'manage_worktype',
-		    'path' => '/manageworktype',
+		    'path' => '/WorkType/manage',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\WorkType\ManageWorkTypeAction::class,
@@ -129,7 +129,7 @@ return [
 		
 		[
             'name' => 'attributes_worktype',
-		    'path' => '/attributesworktype',
+		    'path' => '/WorkType/attributes',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\WorkType\AttributesWorkTypeAction::class,
@@ -139,7 +139,7 @@ return [
 		
 		[
             'name' => 'new_classification',
-		    'path' => '/newclassification',
+		    'path' => '/Classification/new',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Classification\NewClassificationAction::class,
@@ -149,7 +149,7 @@ return [
 		
 		[
             'name' => 'manage_classification',
-		    'path' => '/manageclassification',
+		    'path' => '/Classification/manage',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Classification\ManageClassificationAction::class,
@@ -159,7 +159,7 @@ return [
 		
 		[
             'name' => 'merge_classification',
-		    'path' => '/mergeclassification',
+		    'path' => '/Classification/merge',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Classification\MergeClassificationAction::class,
@@ -169,7 +169,7 @@ return [
 		
 		[
             'name' => 'exportlist_classification',
-		    'path' => '/exportlistclassification',
+		    'path' => '/Classification/export',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Classification\ExportListClassificationAction::class,
@@ -179,7 +179,7 @@ return [
 		
 		[
             'name' => 'new_agent',
-		    'path' => '/newagent',
+		    'path' => '/Agent/new',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Agent\NewAgentAction::class,
@@ -189,7 +189,7 @@ return [
 		
 		[
             'name' => 'find_agent',
-		    'path' => '/findagent',
+		    'path' => '/Agent/find',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Agent\FindAgentAction::class,
@@ -199,7 +199,7 @@ return [
 		
 		[
             'name' => 'manage_agent',
-		    'path' => '/manageagent',
+		    'path' => '/Agent/manage',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Agent\ManageAgentAction::class,
@@ -209,7 +209,7 @@ return [
 		
 		[
             'name' => 'merge_agent',
-		    'path' => '/mergeagent',
+		    'path' => '/Agent/merge',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Agent\MergeAgentAction::class,
@@ -219,7 +219,7 @@ return [
 		
 		[
             'name' => 'new_agenttype',
-		    'path' => '/newagenttype',
+		    'path' => '/AgentType/new',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\AgentType\NewAgentTypeAction::class,
@@ -229,7 +229,7 @@ return [
 		
 		[
             'name' => 'manage_agenttype',
-		    'path' => '/manageagenttype',
+		    'path' => '/AgentType/manage',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\AgentType\ManageAgentTypeAction::class,
@@ -239,7 +239,7 @@ return [
 		
 		[
             'name' => 'new_publisher',
-		    'path' => '/newpublisher',
+		    'path' => '/Publisher/newpublisher',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Publisher\NewPublisherAction::class,
@@ -249,7 +249,7 @@ return [
 		
 		[
             'name' => 'find_publisher',
-		    'path' => '/findpublisher',
+		    'path' => '/Publisher/findpublisher',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Publisher\FindPublisherAction::class,
@@ -259,7 +259,7 @@ return [
 		
 		[
             'name' => 'manage_publisher',
-		    'path' => '/managepublisher[/page/{page}]',
+		    'path' => '/Publisher/managepublisher[/page/{page}]',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Publisher\ManagePublisherAction::class,
@@ -269,7 +269,7 @@ return [
         
         [
             'name' => 'add_publisher_location',
-		    'path' => '/add_publisher_location',
+		    'path' => '/Publisher/new_location',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Publisher\AddPublisherLocationAction::class,
@@ -279,7 +279,7 @@ return [
         
 		[
             'name' => 'manage_publisherlocation',
-		    'path' => '/manage_publisherlocation',
+		    'path' => '/Publisher/manage_location',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Publisher\ManagePublisherLocationAction::class,
@@ -289,7 +289,7 @@ return [
         
         [
             'name' => 'edit_publisher',
-		    'path' => '/edit_publisher',
+		    'path' => '/Publisher/edit_publisher',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Publisher\EditPublisherAction::class,
@@ -299,7 +299,7 @@ return [
         
         [
             'name' => 'delete_publisher',
-		    'path' => '/delete_publisher',
+		    'path' => '/Publisher/delete_publisher',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Publisher\DeletePublisherAction::class,
@@ -309,7 +309,7 @@ return [
         
 		[
             'name' => 'merge_publisher',
-		    'path' => '/mergepublisher',
+		    'path' => '/Publisher/merge',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Publisher\MergePublisherAction::class,
@@ -319,7 +319,7 @@ return [
 		
 		[
             'name' => 'new_language',
-		    'path' => '/new_language',
+		    'path' => '/Language/new',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Language\NewLanguageAction::class,
@@ -329,7 +329,7 @@ return [
 		
 		[
             'name' => 'manage_language',
-		    'path' => '/manage_language[/page/{page}]',
+		    'path' => '/Language/manage[/page/{page}]',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Language\ManageLanguageAction::class,
@@ -339,7 +339,7 @@ return [
         
         [
             'name' => 'edit_language',
-		    'path' => '/edit_language',
+		    'path' => '/Language/edit',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Language\EditLanguageAction::class,
@@ -349,7 +349,7 @@ return [
         
 		[
             'name' => 'delete_language',
-		    'path' => '/delete_language',
+		    'path' => '/Language/delete',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Language\DeleteLanguageAction::class,
@@ -359,7 +359,7 @@ return [
         
 		[
             'name' => 'new_users',
-		    'path' => '/newusers',
+		    'path' => '/Users/new',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Users\NewUsersAction::class,
@@ -369,7 +369,7 @@ return [
 		
 		[
             'name' => 'manage_users',
-		    'path' => '/manageusers',
+		    'path' => '/Users/manage',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Users\ManageUsersAction::class,
@@ -379,7 +379,7 @@ return [
 		
 		[
             'name' => 'access_users',
-		    'path' => '/accessusers',
+		    'path' => '/Users/access',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Users\AccessUsersAction::class,
@@ -389,7 +389,7 @@ return [
 		
 		[
             'name' => 'changepassword_preferences',
-		    'path' => '/changepasswordpreferences',
+		    'path' => '/Preferences/changepassword',
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Preferences\ChangePasswordPreferencesAction::class,

@@ -16,10 +16,12 @@
                 {   
                     $params = $request->getqueryParams();
                     echo $params['term']; 
+                    $action = $params['action'];
                     $id = $params['id'];
                 } ?>
         </li>
         <input type="hidden" name="id" value="<?php echo $id; ?>">
+        <input type="hidden" name="action" value="<?php echo $action; ?>">
         </ul>
         <input type="submit" name="submitt" value="Delete"> 
         <input type="submit" name="submitt" value="Cancel">

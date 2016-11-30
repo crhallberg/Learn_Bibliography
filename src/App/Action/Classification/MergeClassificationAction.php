@@ -33,7 +33,7 @@ class MergeClassificationAction
         $sth = $this->adapter->query("select * from agenttype");
         $rows = $sth->execute();
         //var_dump($this);
-        return new HtmlResponse($this->template->render('app::merge_classification', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::classification::merge_classification', ['rows' => $rows]));
     }
      
      

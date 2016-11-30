@@ -71,10 +71,10 @@ class AddPublisherLocationAction
                     $this->previous = $currentPage - 1;
                 }
 
-                return new HtmlResponse($this->template->render('app::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
+                return new HtmlResponse($this->template->render('app::publisher::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
             /*}*/
         }
-        return new HtmlResponse($this->template->render('app::add_publisher_location', ['rows' => $rows, 'request' => $request]));
+        return new HtmlResponse($this->template->render('app::publisher::add_publisher_location', ['rows' => $rows, 'request' => $request]));
     }
      
      

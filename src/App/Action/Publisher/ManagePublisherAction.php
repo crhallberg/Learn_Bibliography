@@ -42,28 +42,40 @@ class ManagePublisherAction
             $table = new \App\Db\Table\PublisherLocation($this->adapter);
             return $table->findRecords($params['location']);
         }
-        if(!empty($params['action'])){
-            //delete a publisher
-            if($params['action'] == "delete"){
-                echo "params of action is delete";
-                if(array_filter($post)) {
-                    echo "post is not empty";
+        //edit, delete actions on publisher
+        if(!empty($post['action'])){
+            //add a new publisher
+            if($post['action'] == "new"){
+                    if ($post['submitt'] == "Save") {
+                        $table = new \App\Db\Table\Publisher($this->adapter);
+                        $table->insertRecords($post['name_publisher']);
+                    }                     
+            }  
+            //edit a publisher
+            if($post['action'] == "edit"){
+                    if ($post['submitt'] == "Save") {
+                        if(!is_null($post['id'])) {
+                            $table = new \App\Db\Table\Publisher($this->adapter);
+                            $table->updateRecord($_POST['id'], $_POST['publisher_newname']);
+                        }
+                    }                     
+            }               
+            //delete a publisher */
+            if($post['action'] == "delete"){
                     if ($post['submitt'] == "Delete") {
-                        echo "delete clicked";
                         if(!is_null($post['id'])) {
                             $table = new \App\Db\Table\PublisherLocation($this->adapter);
                             $table->deletePublisherRecord($post['id']);
                             $table = new \App\Db\Table\Publisher($this->adapter);
                             $table->deleteRecord($post['id']);
                         }
-                    } 
-                    //click cancel on delete publisher page
-                    else if ($post['submitt'] == "Cancel") {
+                    }                    
+            }
+            //Cancel edit\delete
+            if ($post['submitt'] == "Cancel") {
                         $table = new \App\Db\Table\Publisher($this->adapter);
                         return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));        
-                    } 
-                }
-            }
+            } 
         }
         // default: blank/missing search
         $table = new \App\Db\Table\Publisher($this->adapter);
@@ -73,7 +85,6 @@ class ManagePublisherAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         $query = $request->getqueryParams();
-        var_dump($query);
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
@@ -113,7 +124,7 @@ class ManagePublisherAction
         
         return new HtmlResponse(
             $this->template->render(
-                'app::manage_publisher',
+                'app::publisher::manage_publisher',
                 [
                     'rows' => $paginator,
                     'previous' => $previous,

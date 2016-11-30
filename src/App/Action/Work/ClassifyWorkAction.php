@@ -43,7 +43,7 @@ class ClassifyWorkAction
 
         // var_dump($uri);
         // var_dump($path);
-        return new HtmlResponse($this->template->render('app::classify_work', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::work::classify_work', ['rows' => $rows]));
     }
      
      

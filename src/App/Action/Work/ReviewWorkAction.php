@@ -33,7 +33,7 @@ class ReviewWorkAction
         $sth = $this->adapter->query("select * from agenttype");
         $rows = $sth->execute();
         //var_dump($this);
-        return new HtmlResponse($this->template->render('app::review_work', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::work::review_work', ['rows' => $rows]));
     }
      
      

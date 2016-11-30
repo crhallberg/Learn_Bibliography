@@ -28,7 +28,7 @@ class ManageAgentAction
         $sth = $this->adapter->query("select * from agenttype");
         $rows = $sth->execute();
 
-        return new HtmlResponse($this->template->render('app::manage_agent', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::agent::manage_agent', ['rows' => $rows]));
     }
      
      

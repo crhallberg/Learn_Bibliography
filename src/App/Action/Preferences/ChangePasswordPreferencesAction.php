@@ -33,7 +33,7 @@ class ChangePasswordPreferencesAction
         $sth = $this->adapter->query("select * from agenttype");
         $rows = $sth->execute();
         //var_dump($this);
-        return new HtmlResponse($this->template->render('app::changepassword_preferences', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::preferences::changepassword_preferences', ['rows' => $rows]));
     }
      
      
