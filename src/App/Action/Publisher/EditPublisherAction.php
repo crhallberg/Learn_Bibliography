@@ -24,6 +24,6 @@ class EditPublisherAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        return new HtmlResponse($this->template->render('app::publisher::edit_publisher', ['request' => $request]));
+        return new HtmlResponse($this->template->render('app::publisher::edit_publisher', ['request' => $request, 'adapter' => $this->adapter]));
     }
 }

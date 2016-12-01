@@ -8,6 +8,10 @@
                     $params = $request->getqueryParams();
                     $action = $params['action'];
                     $id = $params['id'];
+                    //fetch name based on id
+                    $table = new \App\Db\Table\Publisher($adapter);
+                    $row = $table->findRecordById($id);
+                    $name = $row['name'];
                 } 
         
  ?>
@@ -18,7 +22,7 @@
   <div class="form-group">   
 	<label class="col-xs-2 control-label">Name: </label>
 	<div class="col-xs-7">    
-		<input type="text" class="form-control" name="publisher_newname" id="newpublishername" value="<?php echo $params['term']; ?>" />
+		<input type="text" class="form-control" name="publisher_newname" id="newpublishername" value="<?=$name?>" />
 	</div>
   </div>
   <div class="form-group">

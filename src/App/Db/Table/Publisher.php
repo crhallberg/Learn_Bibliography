@@ -34,6 +34,7 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Db\Adapter\Adapter;
 use Zend\Paginator\Paginator;
+use Zend\Db\Sql\Sql;
 /**
  * Table Definition for record
  *
@@ -79,13 +80,11 @@ class Publisher extends \Zend\Db\TableGateway\TableGateway
         return new Paginator($paginatorAdapter);
     }
     
-    public function findRecord()
+    public function findRecordById($id)
     {
-        //$select = $this->sql->select()->columns(array('name'));
-        //$result = $select->execute();
-        
-        $stmt = $this->sql->select()->where(['name' => 'trp']);
-        //$stmt->execute();    
+        $rowset = $this->select(array('id' => $id));
+        $row = $rowset->current();
+        return($row);
     }
     
     /*public function findRecords($name)

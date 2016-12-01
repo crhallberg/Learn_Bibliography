@@ -27,55 +27,9 @@ class AddPublisherLocationAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
-
+     
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-       $rows = [];
-        if ($request->getMethod() == "POST") {
-            $post = $request->getParsedBody();
-            $params = $request->getqueryParams();
-            if(array_filter($post)) {
-                //var_dump($post);
-                //var_dump($params);
-                $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                $table->addPublisherLocation($params['id'],$post['add_publisherloc']);
-            }    
-                $table = new \App\Db\Table\Publisher($this->adapter);
-                $paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
-                $paginator->setDefaultItemCountPerPage(7);
-                $allItems = $paginator->getTotalItemCount();
-                $countPages = $paginator->count();
-        
-                $p = $request->getAttribute('page', '1');
-                 
-                if(isset($p)) {
-                    $paginator->setCurrentPageNumber($p);
-                }
-                else {
-                    $paginator->setCurrentPageNumber(1);
-                }
-
-                $currentPage = $paginator->getCurrentPageNumber();
-
-                if($currentPage == $countPages) {
-                    $this->next = $currentPage;
-                    $this->previous = $currentPage - 1;
-                }
-                else if($currentPage == 1) {
-                    $this->next = $currentPage + 1;
-                    $this->previous = 1;
-                }
-                else
-                {
-                    $this->next = $currentPage + 1;
-                    $this->previous = $currentPage - 1;
-                }
-
-                return new HtmlResponse($this->template->render('app::publisher::manage_publisher', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next]));
-            /*}*/
-        }
-        return new HtmlResponse($this->template->render('app::publisher::add_publisher_location', ['rows' => $rows, 'request' => $request]));
-    }
-     
-     
+        return new HtmlResponse($this->template->render('app::publisher::add_publisher_location', ['request' => $request, 'adapter' => $this->adapter]));
+    } 
 }

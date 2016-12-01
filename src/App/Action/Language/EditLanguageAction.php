@@ -24,6 +24,6 @@ class EditLanguageAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        return new HtmlResponse($this->template->render('app::language::edit_language', ['request' => $request]));
+        return new HtmlResponse($this->template->render('app::language::edit_language', ['request' => $request, 'adapter' => $this->adapter]));
     }
 }

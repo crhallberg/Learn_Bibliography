@@ -21,97 +21,79 @@ class ManagePublisherLocationAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
+    
+    protected function getPaginator($query)
+    {   
+        //add location based on action query parameter
+        if(!empty($post['action'])){
+            //add a new publisher
+            if($post['action'] == "new"){
+                    if ($post['submitt'] == "Save") {
+                        $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                        $table->addPublisherLocation($query['id'],$query['add_publisherloc']);
+                    }                     
+            }  
+            //Cancel
+            if ($post['submitt'] == "Cancel") {
+                        $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                        $paginator = $table->findPublisherLocations($query['id']);      
+            } 
+        }
+        // default: blank/missing search
+        $table = new \App\Db\Table\PublisherLocation($this->adapter);
+        $paginator = $table->findPublisherLocations($query['id']);        
+        return $paginator;
+    }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        $rows = [];
-       /* if ($request->getMethod() == "POST") {
-            $post = $request->getParsedBody();
-            if(array_filter($post)) {
-                $table = new \App\Db\Table\TranslateLanguage($this->adapter);
-                $table->updateRecord(
-                    $_POST['id'], $_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], $_POST['fr_newlang'],
-                    $_POST['it_newlang'], $_POST['nl_newlang']
-                );
-            
-            }
-            $table = new \App\Db\Table\TranslateLanguage($this->adapter);
-            $paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
-            $paginator->setDefaultItemCountPerPage(7);
-            $allItems = $paginator->getTotalItemCount();
-            $countPages = $paginator->count();
-        
-            $p = $request->getAttribute('page', '1');
-                 
-            if(isset($p)) {
-                $paginator->setCurrentPageNumber($p);
-            }
-            else
-            {
-                $paginator->setCurrentPageNumber(1);
-            }
-
-            $currentPage = $paginator->getCurrentPageNumber();
-
-            if($currentPage == $countPages) {
-                $this->next = $currentPage;
-                $this->previous = $currentPage - 1;
-            }
-            else if($currentPage == 1) {
-                $this->next = $currentPage + 1;
-                $this->previous = 1;
-            }
-            else
-            {
-                $this->next = $currentPage + 1;
-                $this->previous = $currentPage - 1;
-            }
-            return new HtmlResponse($this->template->render('app::manage_language', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'request' => $request]));
-        } */
-        /*$params = $request->getqueryParams();
-        var_dump($params);
-        $id; */
-        if ($request->getqueryParams() !== null) 
-        {   
-            $queryString = implode('',$request->getqueryParams());
-            $params = explode(',',$queryString);            
-         //var_dump($params);
-        
-        if(array_filter($params)) {
-            //var_dump($params);
-            $table = new \App\Db\Table\PublisherLocation($this->adapter);
-            $paginator = $table->findPublisherLocations($params[0]);
-        } 
+        $query = $request->getqueryParams();
+        $paginator = $this->getPaginator($query);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
         
-        $p = $request->getAttribute('page', '1');
-        //echo 'total items is '.$allItems;
-        //echo 'total no of pages is '.$countPages;    
-        if(isset($p)) {
-            $paginator->setCurrentPageNumber($p);
+        $currentPage = isset($query['page']) ? $query['page'] : 1;
+        if ($currentPage < 1) {
+            $currentPage = 1;
         }
-        else {
-            $paginator->setCurrentPageNumber(1);
-        }
-
-        $currentPage = $paginator->getCurrentPageNumber();
+        $paginator->setCurrentPageNumber($currentPage);
 
         if($currentPage == $countPages) {
-            $this->next = $currentPage;
-            $this->previous = $currentPage - 1;
+            $next = $currentPage;
+            $previous = $currentPage - 1;
         }
         else if($currentPage == 1) {
-            $this->next = $currentPage + 1;
-            $this->previous = 1;
+            $next = $currentPage + 1;
+            $previous = 1;
         }
         else
         {
-            $this->next = $currentPage + 1;
-            $this->previous = $currentPage - 1;
-        }    
-        }    
-        return new HtmlResponse($this->template->render('app::publisher::manage_publisherlocation', ['rows' => $paginator,'previous' => $this->previous,'next' => $this->next,'countp' => $countPages, 'request' => $request]));
+            $next = $currentPage + 1;
+            $previous = $currentPage - 1;
+        }
+
+        /*$searchParams = [];
+        if (!empty($query['name'])) {
+            $searchParams[] = 'name=' . urlencode($query['name']);
+        }
+        if (!empty($query['location'])) {
+            $searchParams[] = 'location=' . urlencode($query['location']);
+        } */
+        
+        return new HtmlResponse(
+            $this->template->render(
+                'app::publisher::manage_publisherlocation',
+                [
+                    'rows' => $paginator,
+                    'previous' => $previous,
+                    'next' => $next,
+                    'countp' => $countPages,
+                    //'searchParams' => implode('&', $searchParams),
+                    'request' => $request,
+                    'adapter' => $this->adapter
+                ]
+            )
+        );
     }
 }

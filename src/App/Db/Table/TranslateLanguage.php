@@ -93,4 +93,11 @@ class TranslateLanguage extends \Zend\Db\TableGateway\TableGateway
         $this->delete(['id' => $id]);
         //$this->tableGateway->delete(['id' => $id]);
     }
+    
+    public function findRecordById($id)
+    {
+        $rowset = $this->select(array('id' => $id));
+        $row = $rowset->current();
+        return($row);
+    }
 }

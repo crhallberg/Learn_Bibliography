@@ -6,14 +6,21 @@
         $id;
         if ($request->getqueryParams() !== null) 
         {   
-            $queryString = implode('',$request->getqueryParams());
-            $params = explode(',',$queryString);              
+            /*$queryString = implode('',$request->getqueryParams());
+            $params = explode(',',$queryString); */
+            $params = $request->getqueryParams();
+            //$action = $params['action'];
+            $id = $params['id'];           
         } 
-        if ($params[0] !== null) 
+        if ($id !== null) 
         {   
-            echo '<b>Publisher: </b>'.$params[1].'<br/>'; 
+             //fetch name based on id
+            $table = new \App\Db\Table\Publisher($adapter);
+            $row = $table->findRecordById($id);
+            $name = $row['name'];
+            echo '<b>Publisher: </b>'.$name.'<br/>'; 
 ?>
-            <a href="<?=$this->url('add_publisher_location')?><?php echo '?id=' . $params[0]. '&pub_name='. $params[1];  ?>">Add Location</a> 
+            <a href="<?=$this->url('add_publisher_location')?><?='?id=' . $id. '&action=new'?>">Add Location</a> 
 <?php   } 
         $escaper = new Zend\Escaper\Escaper('utf-8');
         foreach($this->rows as $row) :

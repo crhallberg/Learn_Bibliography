@@ -1,31 +1,30 @@
 <?php header('Content-Type: text/html; charset=UTF-8'); ?>
 <?php $this->headTitle('Delete Publisher'); ?>
 <?php //$this->layout()->instructions = "The english words cannot be changed."; ?>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-</head>
-<body>
+
    <div class="col-xs-4">
        <form method="post" action="<?=$this->url('manage_publisher')?>">
         <p>Are you sure you want to delete this?</p>
         <ul>
         <li><?php                                       
                 $id;
-                if ($request->getqueryParams('term') !== null) 
+                if ($request->getqueryParams('id') !== null) 
                 {   
                     $params = $request->getqueryParams();
-                    echo $params['term']; 
                     $action = $params['action'];
                     $id = $params['id'];
+                    //fetch name based on id
+                    $table = new \App\Db\Table\Publisher($adapter);
+                    $row = $table->findRecordById($id);
+                    $name = $row['name'];
+                    echo $name;
                 } ?>
         </li>
-        <input type="hidden" name="id" value="<?php echo $id; ?>">
-        <input type="hidden" name="action" value="<?php echo $action; ?>">
+        <input type="hidden" name="id" value="<?=$id?>">
+        <input type="hidden" name="action" value="<?=$action?>">
         </ul>
         <input type="submit" name="submitt" value="Delete"> 
         <input type="submit" name="submitt" value="Cancel">
        </form>
    </div>
-</body>
-</html>
+
