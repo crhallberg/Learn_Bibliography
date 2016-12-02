@@ -7,8 +7,9 @@ use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Router;
 use Zend\Expressive\Template;
 use Zend\Db\Adapter\Adapter;
+use Zend\Paginator\Paginator;
 
-class NewAgentTypeAction
+class DeleteAgentTypeAction
 {
     private $router;
 
@@ -29,7 +30,7 @@ class NewAgentTypeAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        return new HtmlResponse($this->template->render('app::agenttype::new_agenttype', ['request' => $request]));
+        return new HtmlResponse($this->template->render('app::agenttype::delete_agenttype', ['request' => $request, 'adapter' => $this->adapter]));
     }
      
      

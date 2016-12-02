@@ -1,23 +1,16 @@
-<html>
-<head>
-  <title>Panta Rhei - Administration</title>
-  <link rel="stylesheet" href="<?=$this->url('home')?>vendor/bootstrap-3.3.7-dist/css/bootstrap.min.css" >
-  <link rel="stylesheet" href="<?=$this->url('home')?>css/main.css" media="screen" />
-  <link rel="stylesheet" href="<?=$this->url('home')?>css/main_admin.css" media="screen" />
-  <script type="text/javascript" src="<?=$this->url('home')?>js/menu.js"></script>
-  <!-- <script src="<?=$this->url('home')?>js/dynamic-crumbs.js"></script> -->
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-</head>
-<body>
-<div class="banner">
-  <h1>Bibliography</h1>
-</div>
-<br />
+<?php $this->headTitle('New Agent Type'); ?>
+<?php //$this->layout()->instructions = ""; ?>
+<?php                                       
+               /* if ($request->getqueryParams('action') !== null) 
+                {   
+                    $params = $request->getqueryParams();
+                    $action = $params['action'];
+                } */
+        
+        
+ ?>
 <div class="col-md-4">
-<br /> <br />
-<?php echo $this->content ?>
-    <form class="form-horizontal" method="post" action="<?=$this->url('default')?><?='?action=new'.'&role=user'?>">
- <?php echo $this->url('new_work') ?>
+    <form class="form-horizontal" method="post" action="<?=$this->url('login')?><?='?action=new'?>">
         <div class="form-group">
             <label class="col-xs-3 control-label">User Name: </label>
             <div class="col-xs-7">
@@ -44,5 +37,3 @@
         </div>
     </form>   
 </div>
-</body>
-</html>

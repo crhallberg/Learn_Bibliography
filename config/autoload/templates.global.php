@@ -21,6 +21,9 @@ return [
             'error/error'    => 'templates/error/error.phtml',
             'error/404'      => 'templates/error/404.phtml',
             //html templates
+            //for login
+            'app::default' => 'templates/app/default_latest.phtml',
+            //'app::login' => 'templates/app/login-page.phtml',
             //work
             'app::work::new_work' => 'templates/app/work/new.phtml',
             'app::work::manage_work' => 'templates/app/work/manage.phtml',
@@ -44,6 +47,8 @@ return [
             //agent type
             'app::agenttype::new_agenttype' => 'templates/app/agenttype/new.phtml',
             'app::agenttype::manage_agenttype' => 'templates/app/agenttype/manage.phtml',
+            'app::agenttype::edit_agenttype' => 'templates/app/agenttype/edit.phtml',
+            'app::agenttype::delete_agenttype' => 'templates/app/agenttype/delete.phtml',     
              //publisher
             'app::publisher::new_publisher' => 'templates/app/publisher/new.phtml',
             'app::publisher::manage_publisher' => 'templates/app/publisher/manage.phtml',

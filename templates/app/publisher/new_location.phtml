@@ -6,7 +6,7 @@
                 if ($request->getqueryParams('id') !== null) 
                 {   
                     $params = $request->getqueryParams();
-                    //echo '<b>Publisher: </b>' . $params['pub_name']; 
+                    $action = $params['action'];
                     $id = $params['id'];
                     //fetch name based on id
                     $table = new \App\Db\Table\Publisher($adapter);
@@ -16,6 +16,7 @@
                 } 
 ?>
     <form class="form-horizontal" method="post" action="<?=$this->url('manage_publisherlocation')?><?='?id=' . $params['id']?>">
+        <input type="hidden" name="action" value="<?php echo $action; ?>">
         <div class="form-group">
             <label class="col-xs-3 control-label">Location: </label>
             <div class="col-xs-7">

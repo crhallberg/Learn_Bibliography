@@ -7,18 +7,13 @@ use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Router;
 use Zend\Expressive\Template;
 use Zend\Db\Adapter\Adapter;
+use Zend\Paginator\Paginator;
 
-class NewAgentTypeAction
+class EditAgentTypeAction
 {
     private $router;
-
     private $template;
-    
     private $adapter;
-    
-    
-    //private $dbh;
-    //private $qstmt;
 
     public function __construct(Router\RouterInterface $router, Template\TemplateRendererInterface $template = null, Adapter $adapter)
     {
@@ -29,8 +24,6 @@ class NewAgentTypeAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        return new HtmlResponse($this->template->render('app::agenttype::new_agenttype', ['request' => $request]));
+        return new HtmlResponse($this->template->render('app::agenttype::edit_agenttype', ['request' => $request, 'adapter' => $this->adapter]));
     }
-     
-     
 }

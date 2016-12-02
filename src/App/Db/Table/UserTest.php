@@ -29,11 +29,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
-use Zend\Db\Sql\Select;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Paginator\Adapter\DbSelect;
-use Zend\Db\Adapter\Adapter;
-use Zend\Paginator\Paginator;
+
 /**
  * Table Definition for record
  *
@@ -44,14 +40,14 @@ use Zend\Paginator\Paginator;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class PublisherLocation extends \Zend\Db\TableGateway\TableGateway
+class UserTest extends \Zend\Db\TableGateway\TableGateway
 {
     /**
      * Constructor
      */
     public function __construct($adapter)
     {
-        parent::__construct('publisher_location', $adapter);
+        parent::__construct('user_test', $adapter);
     }
     
     /**
@@ -63,45 +59,21 @@ class PublisherLocation extends \Zend\Db\TableGateway\TableGateway
      *
      * @return Updated or newly added record
      */
-    public function insertRecords($name)
+    public function insertRecords($user, $pwd, $role)
     {
         $this->insert(
             [
-            'name' => $name
+            'user' => $user,
+            'pwd' => $pwd,
+            'role' => $role,
             ]
         );
     }
     
-    public function findRecords($location)
+    public function findRecordByUser($user)
     {
-        $select = $this->sql->select();
-       // $select->columns(array('location'));
-       $select->join('publisher', 'publisher_location.publisher_id = publisher.id', array('name'), 'inner');
-       $select->where(['location' => $location]);
-        $paginatorAdapter = new DbSelect($select, $this->adapter);
-        return new Paginator($paginatorAdapter);
-    }
-    
-    public function deletePublisherRecord($id)
-    {
-        $this->delete(['publisher_id' => $id]);
-        //$this->tableGateway->delete(['id' => $id]);
-    }
-    
-    public function addPublisherLocation($id,$loc)
-    {
-       $this->insert(
-            [
-            'publisher_id' => $id,
-            'location' => $loc
-            ]
-        ); 
-    }
-    
-    public function findPublisherLocations($id)
-    {
-        $select = $this->sql->select()->where(['publisher_id' => $id]);
-        $paginatorAdapter = new DbSelect($select, $this->adapter);
-        return new Paginator($paginatorAdapter);
+        $rowset = $this->select(array('user' => $user));
+        $row = $rowset->current();
+        return($row);
     }
 }

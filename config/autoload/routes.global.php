@@ -9,24 +9,34 @@ return [
         ],
         'factories' => [	
             App\Action\HomePageAction::class => App\Action\HomePageFactory::class,
+            //App\Action\LoginPageAction::class => App\Action\LoginPageFactory::class,
+            App\Action\DefaultPageAction::class => App\Action\DefaultPageFactory::class,
+            
 			App\Action\Work\NewWorkAction::class => App\Action\Work\NewWorkFactory::class,
 			App\Action\Work\SearchWorkAction::class => App\Action\Work\SearchWorkFactory::class,
 			App\Action\Work\ManageWorkAction::class => App\Action\Work\ManageWorkFactory::class,
 			App\Action\Work\ReviewWorkAction::class => App\Action\Work\ReviewWorkFactory::class,
 			App\Action\Work\ClassifyWorkAction::class => App\Action\Work\ClassifyWorkFactory::class,
+            
 			App\Action\WorkType\NewWorkTypeAction::class => App\Action\WorkType\NewWorkTypeFactory::class,
 			App\Action\WorkType\ManageWorkTypeAction::class => App\Action\WorkType\ManageWorkTypeFactory::class,
 			App\Action\WorkType\AttributesWorkTypeAction::class => App\Action\WorkType\AttributesWorkTypeFactory::class,
+            
 			App\Action\Classification\NewClassificationAction::class => App\Action\Classification\NewClassificationFactory::class,
 			App\Action\Classification\ManageClassificationAction::class => App\Action\Classification\ManageClassificationFactory::class,
 			App\Action\Classification\MergeClassificationAction::class => App\Action\Classification\MergeClassificationFactory::class,
 			App\Action\Classification\ExportListClassificationAction::class => App\Action\Classification\ExportListClassificationFactory::class,
+            
 			App\Action\Agent\NewAgentAction::class => App\Action\Agent\NewAgentFactory::class,
 			App\Action\Agent\FindAgentAction::class => App\Action\Agent\FindAgentFactory::class,
 			App\Action\Agent\ManageAgentAction::class => App\Action\Agent\ManageAgentFactory::class,
 			App\Action\Agent\MergeAgentAction::class => App\Action\Agent\MergeAgentFactory::class,
+            
 			App\Action\AgentType\NewAgentTypeAction::class => App\Action\AgentType\NewAgentTypeFactory::class,
 			App\Action\AgentType\ManageAgentTypeAction::class => App\Action\AgentType\ManageAgentTypeFactory::class,
+            App\Action\AgentType\EditAgentTypeAction::class => App\Action\AgentType\EditAgentTypeFactory::class,
+            App\Action\AgentType\DeleteAgentTypeAction::class => App\Action\AgentType\DeleteAgentTypeFactory::class,
+            
 			App\Action\Publisher\NewPublisherAction::class => App\Action\Publisher\NewPublisherFactory::class,
 			App\Action\Publisher\FindPublisherAction::class => App\Action\Publisher\FindPublisherFactory::class,
 			App\Action\Publisher\ManagePublisherAction::class => App\Action\Publisher\ManagePublisherFactory::class,
@@ -35,13 +45,16 @@ return [
             App\Action\Publisher\EditPublisherAction::class => App\Action\Publisher\EditPublisherFactory::class,
             App\Action\Publisher\DeletePublisherAction::class => App\Action\Publisher\DeletePublisherFactory::class,
 			App\Action\Publisher\MergePublisherAction::class => App\Action\Publisher\MergePublisherFactory::class,
+            
 			App\Action\Language\NewLanguageAction::class => App\Action\Language\NewLanguageFactory::class,
 			App\Action\Language\ManageLanguageAction::class => App\Action\Language\ManageLanguageFactory::class,
             App\Action\Language\EditLanguageAction::class => App\Action\Language\EditLanguageFactory::class,
             App\Action\Language\DeleteLanguageAction::class => App\Action\Language\DeleteLanguageFactory::class,
+            
 			App\Action\Users\NewUsersAction::class => App\Action\Users\NewUsersFactory::class,
 			App\Action\Users\ManageUsersAction::class => App\Action\Users\ManageUsersFactory::class,
 			App\Action\Users\AccessUsersAction::class => App\Action\Users\AccessUsersFactory::class,
+            
 			App\Action\Preferences\ChangePasswordPreferencesAction::class => App\Action\Preferences\ChangePasswordPreferencesFactory::class,
         ],
     ],
@@ -55,8 +68,18 @@ return [
                 App\Action\HomePageAction::class,
             ],
             'allowed_methods' => ['GET','POST'],
-        ],
+        ],     
 		
+        [
+            'name' => 'default',
+            'path' => '/default_latest',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\DefaultPageAction::class,
+            ],
+            'allowed_methods' => ['GET','POST'],
+        ],
+        
         [
            'name' => 'new_work',
 		    'path' => '/Work/new',
@@ -237,6 +260,26 @@ return [
             'allowed_methods' => ['GET','POST'],
         ],
 		
+        [
+            'name' => 'edit_agenttype',
+		    'path' => '/AgentType/edit',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\AgentType\EditAgentTypeAction::class,
+            ],                
+            'allowed_methods' => ['GET','POST'],
+        ],
+        
+		[
+            'name' => 'delete_agenttype',
+		    'path' => '/AgentType/delete',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\AgentType\DeleteAgentTypeAction::class,
+            ],                
+            'allowed_methods' => ['GET','POST'],
+        ],
+        
 		[
             'name' => 'new_publisher',
 		    'path' => '/Publisher/newpublisher',

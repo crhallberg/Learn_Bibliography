@@ -22,7 +22,7 @@ class ManagePublisherLocationAction
         $this->adapter  = $adapter;
     }
     
-    protected function getPaginator($query)
+    protected function getPaginator($query,$post)
     {   
         //add location based on action query parameter
         if(!empty($post['action'])){
@@ -30,7 +30,7 @@ class ManagePublisherLocationAction
             if($post['action'] == "new"){
                     if ($post['submitt'] == "Save") {
                         $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                        $table->addPublisherLocation($query['id'],$query['add_publisherloc']);
+                        $table->addPublisherLocation($query['id'],$post['add_publisherloc']);
                     }                     
             }  
             //Cancel
@@ -48,7 +48,11 @@ class ManagePublisherLocationAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         $query = $request->getqueryParams();
-        $paginator = $this->getPaginator($query);
+        $post = [];
+        if ($request->getMethod() == "POST") {
+            $post = $request->getParsedBody();
+        }
+        $paginator = $this->getPaginator($query,$post);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
