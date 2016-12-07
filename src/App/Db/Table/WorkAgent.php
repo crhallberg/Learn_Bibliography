@@ -44,71 +44,31 @@ use Zend\Paginator\Paginator;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class PublisherLocation extends \Zend\Db\TableGateway\TableGateway
+class WorkAgent extends \Zend\Db\TableGateway\TableGateway
 {
     /**
      * Constructor
      */
     public function __construct($adapter)
     {
-        parent::__construct('publisher_location', $adapter);
+        parent::__construct('work_agent', $adapter);
     }
     
-    /**
-     * Update an existing entry in the record table or create a new one
-     *
-     * @param string $id      Record ID
-     * @param string $source  Data source
-     * @param string $rawData Raw data from source
-     *
-     * @return Updated or newly added record
-     */
-    public function insertRecords($name)
+    public function deleteRecordByAgentTypeId($id)
     {
-        $this->insert(
-            [
-            'name' => $name
-            ]
-        );
-    }
-    
-    public function findRecords($location)
-    {
-        $select = $this->sql->select();
-       // $select->columns(array('location'));
-       $select->join('publisher', 'publisher_location.publisher_id = publisher.id', array('name'), 'inner');
-       $select->where(['location' => $location]);
-        $paginatorAdapter = new DbSelect($select, $this->adapter);
-        return new Paginator($paginatorAdapter);
-    }
-    
-    public function deletePublisherRecord($id)
-    {
-        $this->delete(['publisher_id' => $id]);
+        $this->delete(['agenttype_id' => $id]);
         //$this->tableGateway->delete(['id' => $id]);
-    }
+    }   
     
-    public function addPublisherLocation($id,$loc)
+    public function countRecords($id)
     {
-       $this->insert(
-            [
-            'publisher_id' => $id,
-            'location' => $loc
-            ]
-        ); 
-    }
-    
-    public function findPublisherLocations($id)
-    {
-        $select = $this->sql->select()->where(['publisher_id' => $id]);
+      /* $rowset = $this->select(array('agenttype_id' => $id));
+       
+       $row = $rowset->current();
+       $cnt = count($row);
+       echo 'count is ' . $cnt; */
+      $select = $this->sql->select()->where(['agenttype_id' => $id]);
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
-    }
-    
-    public function findPublisherId($id)
-    {
-       $rowset = $this->select(array('id' => $id));
-       $row = $rowset->current();
-       return($row);
-    }
+    } 
 }

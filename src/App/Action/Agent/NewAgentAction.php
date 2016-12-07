@@ -29,11 +29,7 @@ class NewAgentAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        //$displaystr = "Coming Soon";
-        $sth = $this->adapter->query("select * from agenttype");
-        $rows = $sth->execute();
-        //var_dump($this);
-        return new HtmlResponse($this->template->render('app::agent::new_agent', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::agent::new_agent', ['request' => $request]));
     }
      
      

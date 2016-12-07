@@ -67,7 +67,7 @@ class ManagePublisherAction
                             $table = new \App\Db\Table\PublisherLocation($this->adapter);
                             $table->deletePublisherRecord($post['id']);
                             $table = new \App\Db\Table\Publisher($this->adapter);
-                            $table->deleteRecord($post['id']);
+                            $table->deleteRecord($post['id']);    
                         }
                     }                    
             }

@@ -3,9 +3,8 @@
 
    <div class="col-xs-4">
        <form method="post" action="<?=$this->url('manage_agenttype')?>">
-        <p>Are you sure you want to delete this?</p>
-        <ul>
-        <li><?php                                       
+        <p>Are you sure you want to delete this?</p>        
+        <?php                                       
                 $id;
                 if ($request->getqueryParams('id') !== null) 
                 {   
@@ -16,10 +15,15 @@
                     $table = new \App\Db\Table\AgentType($adapter);
                     $row = $table->findRecordById($id);
                     $type = $row['type'];
-                    echo $type;
+                    echo "<p>$type</p>";
+                    //fetch no of works associated
+                    $table = new \App\Db\Table\WorkAgent($this->adapter);
+                    $paginator = $table->countRecords($id);
+                    $cnt = $paginator->getTotalItemCount();
+                    echo "<p><b>There are $cnt works associated with it.</b></p>";
                 } 
             ?>
-        </li>
+        <ul>
         <input type="hidden" name="id" value="<?=$id?>">
         <input type="hidden" name="action" value="<?=$action?>">
         </ul>

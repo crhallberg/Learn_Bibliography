@@ -21,9 +21,13 @@
         <td><?php echo $escaper->escapeHtml($row['name']); ?></td>
         <td>            
         <?php   $output = (array)$row;
-                $params = implode(', ', $output);        
+                $params = implode(', ', $output);  
+                $cnt = count($row);
+               /* echo "params is \n";
+                var_dump($params);
+                echo "count of row is \n".$cnt; */
         ?>        
-        <a href="<?=$this->url('manage_publisherlocation')?><?='?id='. $row['id']?>">Manage Locations</a>              
+        <a href="<?=$this->url('manage_publisherlocation')?><?='?id='. $row['id'] . '&count=' . $cnt?>">Manage Locations</a>              
         </td>
         <td>                   
             <a href="<?=$this->url('edit_publisher')?><?='?id='. $row['id']. '&action=edit'?>">Edit</a>        

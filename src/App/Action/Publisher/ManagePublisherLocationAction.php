@@ -47,7 +47,15 @@ class ManagePublisherLocationAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        $query = $request->getqueryParams();
+        $query = $request->getqueryParams();        
+        //fetch publisher id based on location id passed
+        //var_dump($query);
+        if($query['count']==4) {
+            $table = new \App\Db\Table\PublisherLocation($this->adapter);
+            $row = $table->findPublisherId($query['id']);
+            $query['id'] = $row['publisher_id'];
+           // echo '<b>Publisher id: </b>'.$query['id'].'<br/>'; 
+        }
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();

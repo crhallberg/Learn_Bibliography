@@ -16,7 +16,9 @@
         {   
              //fetch name based on id
             $table = new \App\Db\Table\Publisher($adapter);
+            //echo $id;
             $row = $table->findRecordById($id);
+            //var_dump($row);
             $name = $row['name'];
             echo '<b>Publisher: </b>'.$name.'<br/>'; 
 ?>

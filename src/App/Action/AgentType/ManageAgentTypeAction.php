@@ -43,8 +43,9 @@ class ManageAgentTypeAction
             if($post['action'] == "edit"){
                     if ($post['submitt'] == "Save") {
                         if(!is_null($post['id'])) {
+                            
                             $table = new \App\Db\Table\AgentType($this->adapter);
-                            $table->updateRecord($post['id'], $post['edit_agenttype']);
+                            $table->updateRecord($post['id'], $post['edit_agenttype']);                            
                         }
                     }                     
             }               
@@ -52,8 +53,10 @@ class ManageAgentTypeAction
             if($post['action'] == "delete"){
                     if ($post['submitt'] == "Delete") {
                         if(!is_null($post['id'])) {
+                            $table = new \App\Db\Table\WorkAgent($this->adapter);
+                            $table->deleteRecordByAgentTypeId($post['id']);
                             $table = new \App\Db\Table\AgentType($this->adapter);
-                            $table->deleteRecord($post['id']);
+                            $table->deleteRecord($post['id']); 
                         }
                     }                    
             }
