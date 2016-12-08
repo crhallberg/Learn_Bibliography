@@ -43,6 +43,8 @@ return [
             'app::agent::new_agent' => 'templates/app/agent/new.phtml',
             'app::agent::find_agent' => 'templates/app/agent/find.phtml',
             'app::agent::manage_agent' => 'templates/app/agent/manage.phtml',
+            'app::agent::edit_agent' => 'templates/app/agent/edit.phtml',
+            'app::agent::delete_agent' => 'templates/app/agent/delete.phtml',
             'app::agent::merge_agent' => 'templates/app/agent/merge.phtml',
             //agent type
             'app::agenttype::new_agenttype' => 'templates/app/agenttype/new.phtml',

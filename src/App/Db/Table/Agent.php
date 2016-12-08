@@ -29,6 +29,13 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+use Zend\Db\Sql\Select;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Paginator\Adapter\DbSelect;
+use Zend\Db\Adapter\Adapter;
+use Zend\Paginator\Paginator;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Expression;
 
 /**
  * Table Definition for record
@@ -71,11 +78,14 @@ class Agent extends \Zend\Db\TableGateway\TableGateway
         );
     }
     
-    public function updateRecord($id, $type)
+    public function updateRecord($id, $fname, $lname, $altname, $orgname)
     {
         $this->update(
             [
-                'type' => $type,
+                'fname' => $fname,
+                'lname' => $lname,
+                'alternate_name' => $altname,
+                'organization_name' => $orgname,
             ],
             ['id' => $id]
         );
@@ -91,5 +101,63 @@ class Agent extends \Zend\Db\TableGateway\TableGateway
         $rowset = $this->select(array('id' => $id));
         $row = $rowset->current();
         return($row);
+    }
+    
+    public function findInitialLetter()
+    {
+       /* $callback = function ($select) {
+                $select->columns(
+                    [
+                        'letter' => new Expression(
+                            'DISTINCT(substring(concat(?,?), 1, 1))',
+                            ['lname','fname'],
+                            [
+                                Expression::TYPE_IDENTIFIER,
+                                Expression::TYPE_IDENTIFIER
+                            ]
+                        )
+                    ]
+                );
+            $select->order(
+                    [
+                        'name' => new Expression(
+                            'CONCAT(?,?)',
+                            ['lname','fname'],
+                            [
+                                Expression::TYPE_IDENTIFIER,
+                                Expression::TYPE_IDENTIFIER
+                            ]
+                        )
+                    ]
+            );
+            //('fname ASC');
+        };*/
+        
+        $callback = function ($select) {
+                $select->columns(
+                    [
+                        'letter' => new Expression(
+                            'DISTINCT(substring(concat(?), 1, 1))',
+                            ['fname'],
+                            [
+                                Expression::TYPE_IDENTIFIER
+                               
+                            ]
+                        )
+                    ]
+                );
+            $select->order('fname');
+            //('fname ASC');
+        };
+        
+        return $this->select($callback)->toArray();
+    }
+    
+    public function displayRecordsByName($letter)
+    {
+        $select = $this->sql->select();
+        $select->where->like('fname', $letter.'%');
+       $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
     }
 }

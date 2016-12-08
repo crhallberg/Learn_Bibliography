@@ -35,6 +35,7 @@ use Zend\Paginator\Adapter\DbSelect;
 use Zend\Db\Adapter\Adapter;
 use Zend\Paginator\Paginator;
 use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Expression;
 /**
  * Table Definition for record
  *
@@ -87,20 +88,6 @@ class Publisher extends \Zend\Db\TableGateway\TableGateway
         return($row);
     }
     
-    /*public function findRecords($name)
-    {
-        if (!empty($name)) {
-
-            $select = $this->tableGateway->getSql()->select();
-            $select->columns(["name"]
-            )->where([
-                "publisher.name" => $name
-            ]);
-            var_dump($this->tableGateway->selectWith($select));
-            return $this->tableGateway->selectWith($select);
-        }
-    } */
-    
     public function updateRecord($id, $name)
     {
         $this->update(
@@ -116,4 +103,31 @@ class Publisher extends \Zend\Db\TableGateway\TableGateway
         $this->delete(['id' => $id]);
         //$this->tableGateway->delete(['id' => $id]);
     }
+    
+    public function findInitialLetter()
+    {
+        $callback = function ($select) {
+                $select->columns(
+                    [
+                        'letter' => new Expression(
+                            'DISTINCT(substring(?, 1, 1))',
+                            ['name'],
+                            [Expression::TYPE_IDENTIFIER]
+                        )
+                    ]
+                );
+            $select->order('name');
+        };
+        
+        return $this->select($callback)->toArray();
+    }
+    
+    public function displayRecordsByName($letter)
+    {
+        $select = $this->sql->select();
+        $select->where->like('name', $letter.'%');
+       $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    }
+    
 }

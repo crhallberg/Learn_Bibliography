@@ -60,14 +60,22 @@ class WorkAgent extends \Zend\Db\TableGateway\TableGateway
         //$this->tableGateway->delete(['id' => $id]);
     }   
     
-    public function countRecords($id)
+    public function deleteRecordByAgentId($id)
     {
-      /* $rowset = $this->select(array('agenttype_id' => $id));
-       
-       $row = $rowset->current();
-       $cnt = count($row);
-       echo 'count is ' . $cnt; */
+        $this->delete(['agent_id' => $id]);
+        //$this->tableGateway->delete(['id' => $id]);
+    }  
+    
+    public function countRecordsByAgentType($id)
+    {
       $select = $this->sql->select()->where(['agenttype_id' => $id]);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    } 
+    
+    public function countRecordsByAgent($id)
+    {
+      $select = $this->sql->select()->where(['agent_id' => $id]);
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
     } 

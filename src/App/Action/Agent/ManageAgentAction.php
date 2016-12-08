@@ -7,6 +7,7 @@ use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Router;
 use Zend\Expressive\Template;
 use Zend\Db\Adapter\Adapter;
+use Zend\Paginator\Paginator;
 
 class ManageAgentAction
 {
@@ -23,11 +24,16 @@ class ManageAgentAction
         $this->adapter  = $adapter;
     }
 
-    protected function getPaginator($post)
+    protected function getPaginator($params,$post)
     {        
-        //edit, delete actions on agenttype
+        // search by letter
+        if (!empty($params['letter'])) {
+            $table = new \App\Db\Table\Agent($this->adapter);
+            return $table->displayRecordsByName($params['letter']);
+        }
+        //edit, delete actions on agent
         if(!empty($post['action'])){
-            //add a new agent type
+            //add a new agent
             if($post['action'] == "new"){
                     if ($post['submitt'] == "Save") {
                         $table = new \App\Db\Table\Agent($this->adapter);
@@ -35,22 +41,23 @@ class ManageAgentAction
                                               $post['new_agentaltname'],$post['new_agentorgname']);
                     }                     
             }  
-            //edit an agent type
+            //edit an agent
             if($post['action'] == "edit"){
                     if ($post['submitt'] == "Save") {
                         if(!is_null($post['id'])) {
                             
                             $table = new \App\Db\Table\Agent($this->adapter);
-                            $table->updateRecord($post['id'], $post['edit_agent']);                            
+                            $table->updateRecord($post['id'], $post['edit_agentfirstname'], $post['edit_agentlastname'], 
+                                                 $post['edit_agentaltname'], $post['edit_agentorgname']);                            
                         }
                     }                     
             }               
-            //delete an agent type
+            //delete an agent
             if($post['action'] == "delete"){
                     if ($post['submitt'] == "Delete") {
                         if(!is_null($post['id'])) {
                             $table = new \App\Db\Table\WorkAgent($this->adapter);
-                            $table->deleteRecordByAgentTypeId($post['id']);
+                            $table->deleteRecordByAgentId($post['id']);
                             $table = new \App\Db\Table\Agent($this->adapter);
                             $table->deleteRecord($post['id']); 
                         }
@@ -69,12 +76,15 @@ class ManageAgentAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
+        $table = new \App\Db\Table\Publisher($this->adapter);
+        $characs = $table->findInitialLetter();
+        
         $query = $request->getqueryParams();
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
         }
-        $paginator = $this->getPaginator($post);
+        $paginator = $this->getPaginator($query,$post);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
@@ -99,14 +109,21 @@ class ManageAgentAction
             $previous = $currentPage - 1;
         }
         
+        $searchParams = [];
+        if (!empty($query['letter'])) {
+            $searchParams[] = 'letter=' . urlencode($query['letter']);
+        }
+        
         return new HtmlResponse(
             $this->template->render(
-                'app::agenttype::manage_agent',
+                'app::agent::manage_agent',
                 [
                     'rows' => $paginator,
                     'previous' => $previous,
                     'next' => $next,
                     'countp' => $countPages,
+                    'searchParams' => implode('&', $searchParams),
+                    'carat' => $characs,
                 ]
             )
         );

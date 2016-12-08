@@ -42,6 +42,11 @@ class ManagePublisherAction
             $table = new \App\Db\Table\PublisherLocation($this->adapter);
             return $table->findRecords($params['location']);
         }
+        // search by letter
+        if (!empty($params['letter'])) {
+            $table = new \App\Db\Table\Publisher($this->adapter);
+            return $table->displayRecordsByName($params['letter']);
+        }
         //edit, delete actions on publisher
         if(!empty($post['action'])){
             //add a new publisher
@@ -84,6 +89,9 @@ class ManagePublisherAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
+         $table = new \App\Db\Table\Publisher($this->adapter);
+         $characs = $table->findInitialLetter();
+        
         $query = $request->getqueryParams();
         $post = [];
         if ($request->getMethod() == "POST") {
@@ -121,6 +129,9 @@ class ManagePublisherAction
         if (!empty($query['location'])) {
             $searchParams[] = 'location=' . urlencode($query['location']);
         }
+        if (!empty($query['letter'])) {
+            $searchParams[] = 'letter=' . urlencode($query['letter']);
+        }
         
         return new HtmlResponse(
             $this->template->render(
@@ -131,6 +142,7 @@ class ManagePublisherAction
                     'next' => $next,
                     'countp' => $countPages,
                     'searchParams' => implode('&', $searchParams),
+                    'carat' => $characs,
                 ]
             )
         );
