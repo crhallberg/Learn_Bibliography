@@ -33,6 +33,15 @@ class ManagePublisherLocationAction
                         $table->addPublisherLocation($query['id'],$post['add_publisherloc']);
                     }                     
             }  
+            //delete a location for a publisher */
+            if($post['action'] == "delete"){
+                    if ($post['submitt'] == "Delete") {
+                        if(!is_null($post['id'])) {
+                            $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                            $table->deletePublisherRecord($post['id']);                            
+                        }
+                    }                    
+            }
             //Cancel
             if ($post['submitt'] == "Cancel") {
                         $table = new \App\Db\Table\PublisherLocation($this->adapter);

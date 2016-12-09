@@ -107,8 +107,9 @@ class PublisherLocation extends \Zend\Db\TableGateway\TableGateway
     
     public function findPublisherId($id)
     {
-       $rowset = $this->select(array('id' => $id));
+       $rowset = $this->select(array('publisher_id' => $id));
        $row = $rowset->current();
        return($row);
     }
+    
 }

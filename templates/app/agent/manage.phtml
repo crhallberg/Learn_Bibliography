@@ -37,14 +37,16 @@
 		<?php endforeach; ?>
         </tbody>
 		</table>
+         <?php if($this->countp > 1) { ?>
       <form method="get" action="page">
-		<?php echo $this->paginationControl($this->rows,
-                                            'Sliding',
-                                            'app::controls',
-                                            [
-                                                'route'  => 'manage_agent',
-                                                'extraParams' => $searchParams,
-                                            ] 
-                                            );?>								   
-		</form>	      
+		<?=$this->paginationControl($this->rows,
+                'Sliding',
+                'app::controls',
+                [
+                    'route'  => 'manage_agent',
+                    'extraParams' => $searchParams,
+                ]
+            );?>							   
+		</form>
+        <?php } ?>
 </div>

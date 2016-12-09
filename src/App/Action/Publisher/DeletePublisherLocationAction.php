@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Action\Agent;
+namespace App\Action\Publisher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Router;
 use Zend\Expressive\Template;
 use Zend\Db\Adapter\Adapter;
+use Zend\Paginator\Paginator;
 
-class FindAgentAction
+class DeletePublisherLocationAction
 {
     private $router;
 
@@ -26,11 +27,10 @@ class FindAgentAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
-
+     
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        return new HtmlResponse($this->template->render('app::agent::find_agent'));
+        return new HtmlResponse($this->template->render('app::publisher::delete_publisher_location', 
+                                ['request' => $request, 'adapter' => $this->adapter]));
     } 
-     
-     
 }

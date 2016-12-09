@@ -31,6 +31,26 @@ class ManageAgentAction
             $table = new \App\Db\Table\Agent($this->adapter);
             return $table->displayRecordsByName($params['letter']);
         }
+        // search by first name
+        if (!empty($params['find_agentfname'])) {
+            $table = new \App\Db\Table\Agent($this->adapter);
+            return $table->findRecords($params['find_agentfname'],'fname');
+        }
+        // search by last name
+        if (!empty($params['find_agentlname'])) {
+            $table = new \App\Db\Table\Agent($this->adapter);
+            return $table->findRecords($params['find_agentlname'],'lname');
+        }
+        // search by alternate name
+        if (!empty($params['find_agentaltname'])) {
+            $table = new \App\Db\Table\Agent($this->adapter);
+            return $table->findRecords($params['find_agentaltname'],'altname');
+        }
+        // search by organization name
+        if (!empty($params['find_agentorgname'])) {
+            $table = new \App\Db\Table\Agent($this->adapter);
+            return $table->findRecords($params['find_agentorgname'],'orgname');
+        }
         //edit, delete actions on agent
         if(!empty($post['action'])){
             //add a new agent
@@ -76,7 +96,7 @@ class ManageAgentAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        $table = new \App\Db\Table\Publisher($this->adapter);
+        $table = new \App\Db\Table\Agent($this->adapter);
         $characs = $table->findInitialLetter();
         
         $query = $request->getqueryParams();
@@ -88,7 +108,8 @@ class ManageAgentAction
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
-        
+        //echo "count is ".$allItems;
+        //echo "page count is".$countPages;
         $currentPage = isset($query['page']) ? $query['page'] : 1;
         if ($currentPage < 1) {
             $currentPage = 1;
@@ -110,6 +131,18 @@ class ManageAgentAction
         }
         
         $searchParams = [];
+        if (!empty($query['find_agentfname'])) {
+            $searchParams[] = 'find_agentfname=' . urlencode($query['find_agentfname']);
+        }
+        if (!empty($query['find_agentlname'])) {
+            $searchParams[] = 'find_agentlname=' . urlencode($query['find_agentlname']);
+        }
+        if (!empty($query['find_agentaltname'])) {
+            $searchParams[] = 'find_agentaltname=' . urlencode($query['find_agentaltname']);
+        }
+        if (!empty($query['find_agentorgname'])) {
+            $searchParams[] = 'find_agentorgname=' . urlencode($query['find_agentorgname']);
+        }
         if (!empty($query['letter'])) {
             $searchParams[] = 'letter=' . urlencode($query['letter']);
         }

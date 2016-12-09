@@ -16,7 +16,7 @@
                 } 
 ?>
     <form class="form-horizontal" method="post" action="<?=$this->url('manage_publisherlocation')?><?='?id=' . $params['id'] . '&count=1'?>">
-        <input type="hidden" name="action" value="<?php echo $action; ?>">
+        <input type="hidden" name="action" value="<?=$action; ?>">
         <div class="form-group">
             <label class="col-xs-3 control-label">Location: </label>
             <div class="col-xs-7">

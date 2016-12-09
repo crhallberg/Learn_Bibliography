@@ -137,7 +137,7 @@ class Agent extends \Zend\Db\TableGateway\TableGateway
                 $select->columns(
                     [
                         'letter' => new Expression(
-                            'DISTINCT(substring(concat(?), 1, 1))',
+                            'DISTINCT(substring(?, 1, 1))',
                             ['fname'],
                             [
                                 Expression::TYPE_IDENTIFIER
@@ -158,6 +158,22 @@ class Agent extends \Zend\Db\TableGateway\TableGateway
         $select = $this->sql->select();
         $select->where->like('fname', $letter.'%');
        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    }
+    
+    public function findRecords($name, $type)
+    {
+        if($type == 'fname')
+        {
+            $select = $this->sql->select()->where(['fname' => $name]);
+        } else if($type == 'lname') {
+            $select = $this->sql->select()->where(['lname' => $name]);
+        } else if($type == 'altname') {
+            $select = $this->sql->select()->where(['alternate_name' => $name]);
+        } else if($type == 'orgname') {
+            $select = $this->sql->select()->where(['organization_name' => $name]);
+        }
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
     }
 }

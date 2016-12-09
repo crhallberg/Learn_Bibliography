@@ -58,6 +58,7 @@ return [
             'app::publisher::delete_publisher' => 'templates/app/publisher/delete.phtml',
             'app::publisher::find_publisher' => 'templates/app/publisher/find.phtml',
             'app::publisher::add_publisher_location' => 'templates/app/publisher/new_location.phtml',
+            'app::publisher::delete_publisher_location' => 'templates/app/publisher/delete_location.phtml',
             'app::publisher::manage_publisherlocation' => 'templates/app/publisher/manage_location.phtml',
             'app::publisher::merge_publisher' => 'templates/app/publisher/merge.phtml',
             //language
