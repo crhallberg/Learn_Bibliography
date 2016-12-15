@@ -1,0 +1,36 @@
+<?php $this->headTitle('Delete Publisher'); ?>
+<?php //$this->layout()->instructions = "The english words cannot be changed."; ?>
+<?php                                       
+               $id;
+                if ($request->getqueryParams('id') !== null) 
+                {   
+                    $params = $request->getqueryParams();
+                    $id = $params['id'];
+                }
+?>
+<?php if($_POST['submitt'] == 'Delete') { ?>
+<div class="col-xs-4">
+       <form method="post" action="<?=$this->url('manage_publisherlocation')?><?='?id=' . $params['id'] . '&count=0'?>">
+        <p>Are you sure you want to delete this location for the publisher?</p>
+        <ul>
+        <li><?php 
+             foreach($_POST['selectchk1'] as $loc) {
+                echo $loc . "<br />";
+                }  
+                ?>
+        </li>
+        <input type="hidden" name="id" value="<?=$id?>">
+        <input type="hidden" name="action" value="<?='delete'?>">
+        <?php 
+             foreach($_POST['selectchk1'] as $loc) { ?>
+             <input type="hidden" name="locs[]" value="<?=$loc?>">
+        <?php     } ?>
+        </ul>
+        <input type="submit" name="submitt" value="Delete"> 
+        <input type="submit" name="submitt" value="Cancel">
+       </form>
+   </div>
+<?php } ?>
+<?php if($_POST['submitt'] == 'Merge') { ?>
+    <p> coming soon </p>
+<?php } ?>

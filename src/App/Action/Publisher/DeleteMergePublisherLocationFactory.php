@@ -7,7 +7,7 @@ use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 use Zend\Db\Adapter\Adapter;
 
-class DeletePublisherLocationFactory
+class DeleteMergePublisherLocationFactory
 {
     public function __invoke(ContainerInterface $container)
     {
@@ -16,6 +16,6 @@ class DeletePublisherLocationFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new DeletePublisherLocationAction($router, $template, $adapter);
+        return new DeleteMergePublisherLocationAction($router, $template, $adapter);
     }
 }

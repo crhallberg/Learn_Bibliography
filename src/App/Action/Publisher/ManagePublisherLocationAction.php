@@ -24,6 +24,7 @@ class ManagePublisherLocationAction
     
     protected function getPaginator($query,$post)
     {   
+    //echo $post['action']
         //add location based on action query parameter
         if(!empty($post['action'])){
             //add a new publisher
@@ -36,12 +37,12 @@ class ManagePublisherLocationAction
             //delete a location for a publisher */
             if($post['action'] == "delete"){
                     if ($post['submitt'] == "Delete") {
-                        if(!is_null($post['id'])) {
-                            $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                            $table->deletePublisherRecord($post['id']);                            
+                        if(!is_null($post['id']) && ((count($post['locs'])) >= 0)) {
+                           $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                           $table->deletePublisherRecord($post['id'],$post['locs']);     
                         }
                     }                    
-            }
+            } 
             //Cancel
             if ($post['submitt'] == "Cancel") {
                         $table = new \App\Db\Table\PublisherLocation($this->adapter);
@@ -65,6 +66,7 @@ class ManagePublisherLocationAction
             $query['id'] = $row['publisher_id'];
            // echo '<b>Publisher id: </b>'.$query['id'].'<br/>'; 
         }
+        var_dump($_POST);
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();

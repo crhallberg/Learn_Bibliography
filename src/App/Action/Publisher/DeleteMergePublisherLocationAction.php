@@ -9,7 +9,7 @@ use Zend\Expressive\Template;
 use Zend\Db\Adapter\Adapter;
 use Zend\Paginator\Paginator;
 
-class DeletePublisherLocationAction
+class DeleteMergePublisherLocationAction
 {
     private $router;
 
@@ -30,7 +30,7 @@ class DeletePublisherLocationAction
      
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        return new HtmlResponse($this->template->render('app::publisher::delete_publisher_location', 
+        return new HtmlResponse($this->template->render('app::publisher::delete_merge_publisher_location', 
                                 ['request' => $request, 'adapter' => $this->adapter]));
     } 
 }
