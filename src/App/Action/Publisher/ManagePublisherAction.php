@@ -32,6 +32,7 @@ class ManagePublisherAction
 
     protected function getPaginator($params,$post)
     {
+        $locs = [];
         // search by name
         if (!empty($params['name'])) {
             $table = new \App\Db\Table\Publisher($this->adapter);
@@ -70,7 +71,7 @@ class ManagePublisherAction
                     if ($post['submitt'] == "Delete") {
                         if(!is_null($post['id'])) {
                             $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                            $table->deletePublisherRecord($post['id']);
+                            $table->deletePublisherRecord($post['id'],$locs);
                             $table = new \App\Db\Table\Publisher($this->adapter);
                             $table->deleteRecord($post['id']);    
                         }
@@ -94,6 +95,7 @@ class ManagePublisherAction
         
         $query = $request->getqueryParams();
         $post = [];
+        //$locs = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
         }

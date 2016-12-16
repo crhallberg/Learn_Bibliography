@@ -38,6 +38,9 @@ class ManagePublisherLocationAction
             if($post['action'] == "delete"){
                     if ($post['submitt'] == "Delete") {
                         if(!is_null($post['id']) && ((count($post['locs'])) >= 0)) {
+                            //var_dump($post['locids']);
+                           $table = new \App\Db\Table\WorkPublisher($this->adapter);
+                           $table->updatePublisherLocation($query['id'], $post['locids']);
                            $table = new \App\Db\Table\PublisherLocation($this->adapter);
                            $table->deletePublisherRecord($post['id'],$post['locs']);     
                         }
@@ -66,7 +69,7 @@ class ManagePublisherLocationAction
             $query['id'] = $row['publisher_id'];
            // echo '<b>Publisher id: </b>'.$query['id'].'<br/>'; 
         }
-        var_dump($_POST);
+        //var_dump($_POST);
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
