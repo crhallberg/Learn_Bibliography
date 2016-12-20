@@ -46,6 +46,20 @@ class ManagePublisherLocationAction
                         }
                     }                    
             } 
+            //Merge publisher locations */
+            if($post['action'] == "merge"){
+                    if ($post['submitt'] == "Merge") {
+                        if(!is_null($post['id'])) {
+
+                          
+                          $table = new \App\Db\Table\WorkPublisher($this->adapter);
+                          $table->updatePublisherLocationId($query['id'], $post['sourceids'], $post['destid']);
+                          
+                          $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                          $table->deletePublisherRecordById($query['id'], $post['sourceids']); 
+                        }
+                    }                    
+            } 
             //Cancel
             if ($post['submitt'] == "Cancel") {
                         $table = new \App\Db\Table\PublisherLocation($this->adapter);
@@ -61,15 +75,12 @@ class ManagePublisherLocationAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         $query = $request->getqueryParams();        
-        //fetch publisher id based on location id passed
-        //var_dump($query);
+
         if($query['count']==4) {
             $table = new \App\Db\Table\PublisherLocation($this->adapter);
             $row = $table->findPublisherId($query['id']);
             $query['id'] = $row['publisher_id'];
-           // echo '<b>Publisher id: </b>'.$query['id'].'<br/>'; 
         }
-        //var_dump($_POST);
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();

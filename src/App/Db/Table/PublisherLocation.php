@@ -98,6 +98,20 @@ class PublisherLocation extends \Zend\Db\TableGateway\TableGateway
        }        
     }
     
+    public function deletePublisherRecordById($id, $loc_ids)
+    {
+         $callback = function($select) use ($id, $loc_ids) {
+            $select->where->in('id', $loc_ids);
+            $select->where->equalTo('publisher_id', $id);
+        };
+        //$this->delete($callback);       
+        $rows = $this->select($callback)->toArray();
+        $cnt = count($rows);
+        for($i=0;$i<$cnt;$i++) {
+            $this->delete($callback);
+        }
+    }
+    
     public function addPublisherLocation($id,$loc)
     {
        $this->insert(

@@ -9,18 +9,17 @@
             /*$queryString = implode('',$request->getqueryParams());
             $params = explode(',',$queryString); */
             $params = $request->getqueryParams();
-            //$action = $params['action'];
             $id = $params['id'];           
         } 
         if ($id !== null) 
         {   
-             //fetch name based on id
+            //fetch name based on id
             $table = new \App\Db\Table\Publisher($adapter);
-            //echo $id;
             $row = $table->findRecordById($id);
-            //var_dump($row);
             $name = $row['name'];
             echo '<b>Publisher: </b>'.$name.'<br/>'; 
+            
+            
 ?>
             <a href="<?=$this->url('add_publisher_location')?><?='?id=' . $id. '&action=new'?>">Add Location</a> 
 <?php   } ?>
@@ -35,7 +34,9 @@
      </thead>
      <tbody>
      <?php $escaper = new Zend\Escaper\Escaper('utf-8');
-        foreach($this->rows as $row) : ?>
+        foreach($this->rows as $row) : 
+        //$row1 = [];        
+        $row1 = $row;?>
      <form>
          <tr>
              <td>
@@ -45,17 +46,14 @@
                     </label>
                  </div>
              </td>
-             <!--<td>
-                 <?php //echo $escaper->escapeHtml($row['location']); ?>
-             </td>  -->   
              <td>
                  <div class="checkbox">
-                     <label><input type="checkbox" id='select' name="selectchk2"></label>
+                     <label><input type="checkbox" id='select' name="selectsource[]" value=<?=serialize($row1);?>></label>
                  </div>
              </td> 
              <td>
                  <div class="radio">
-                     <label><input type="radio" id='select' name="selectradio"></label>
+                     <label><input type="radio" id='select' name="selectdest"  value=<?=serialize(array($row1));?>></label>
                  </div>
              </td>
          </tr>
@@ -67,8 +65,6 @@
             <div class="col-sm-offset-2 col-sm-10">
             <input type="submit" class="btn btn-default" name="submitt" value="Delete"/>
             <input type="submit" class="btn btn-default" name="submitt" value="Merge"/>
-                <!--<button type="submit" class="btn btn-default" name="submitt" value="delete_loc">Delete</button>
-                <button type="submit" class="btn btn-default" name="submitt" value="merge_loc">Merge</button>-->
             </div>
 </div>
 </form>

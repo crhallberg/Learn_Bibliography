@@ -18,8 +18,7 @@ class ManagePublisherAction
     private $template;
     
     private $adapter;
-    
-    
+        
     //private $dbh;
     //private $qstmt;
 
@@ -70,13 +69,24 @@ class ManagePublisherAction
             if($post['action'] == "delete"){
                     if ($post['submitt'] == "Delete") {
                         if(!is_null($post['id'])) {
+                            $table = new \App\Db\Table\WorkPublisher($this->adapter);
+                            $table->deleteRecordByPub($post['id']);
+                            
                             $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                            $table->deletePublisherRecord($post['id'],$locs);
+                            $table->deletePublisherRecord($post['id'],$locs);                            
+                            
                             $table = new \App\Db\Table\Publisher($this->adapter);
-                            $table->deleteRecord($post['id']);    
+                            $table->deleteRecord($post['id']);                                                          
                         }
                     }                    
-            }
+            } 
+             //Merge publisher
+            if($post['action'] == "merge_publisher"){
+                    if ($post['submitt'] == "Find_Source") {
+                        $table = new \App\Db\Table\Publisher($this->adapter);
+                        return $table->findRecords($post['source_publisher']);
+                    }                     
+            }  
             //Cancel edit\delete
             if ($post['submitt'] == "Cancel") {
                         $table = new \App\Db\Table\Publisher($this->adapter);
@@ -99,6 +109,7 @@ class ManagePublisherAction
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
         }
+        
         $paginator = $this->getPaginator($query,$post);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
@@ -135,6 +146,21 @@ class ManagePublisherAction
             $searchParams[] = 'letter=' . urlencode($query['letter']);
         }
         
+        if($post['action'] == "merge_publisher"){
+            return new HtmlResponse(
+            $this->template->render(
+                'app::publisher::merge_publisher',
+                [
+                    'rows' => $paginator,
+                    'previous' => $previous,
+                    'next' => $next,
+                    'countp' => $countPages,
+                    'searchParams' => implode('&', $searchParams),
+                ]
+            )
+        );
+        }
+        else {
         return new HtmlResponse(
             $this->template->render(
                 'app::publisher::manage_publisher',
@@ -144,9 +170,10 @@ class ManagePublisherAction
                     'next' => $next,
                     'countp' => $countPages,
                     'searchParams' => implode('&', $searchParams),
-                    'carat' => $characs,
+                    'carat' => $characs,                    
                 ]
             )
         );
+        }
     }
 }

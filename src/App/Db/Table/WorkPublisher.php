@@ -61,10 +61,31 @@ class WorkPublisher extends \Zend\Db\TableGateway\TableGateway
             $select->where->in('location_id', $loc_ids);
             $select->where->equalTo('publisher_id', $pub_id);
         };
-        foreach($this->select($callback)->toArray() as row) {
-            $this->update(['location_id' => null]);
-        }
-        
+        $rows = $this->select($callback)->toArray();
+        $cnt = count($rows);
+            for($i=0;$i<$cnt;$i++) {
+                $this->update(['location_id' => null]);
+            }
+    }
+    
+    public function updatePublisherLocationId($pub_id, $source_ids, $dest_id)
+    {      
+        $callback = function($select) use ($pub_id, $source_ids) {
+            $select->columns(['id','work_id','publisher_id','location_id']);
+            $select->where->equalTo('publisher_id', $pub_id);
+            $select->where->in('location_id', $source_ids);          
+        };
+        $rows = $this->select($callback)->toArray();
+        $cnt = count($rows);
+        for($i=0;$i<$cnt;$i++) {
+            $this->update(['location_id' => $dest_id]);
+        } 
+    } 
+    
+    public function deleteRecordByPub($pub_id)
+    {
+        $this->delete(['publisher_id' => $pub_id]);
+        //$this->tableGateway->delete(['id' => $id]);
     }
     
 }

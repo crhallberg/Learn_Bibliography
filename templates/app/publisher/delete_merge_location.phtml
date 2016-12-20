@@ -20,9 +20,6 @@
                 $locs[] = $loc;
                 echo $loc . "<br />";
             }  
-            //var_dump($locs);
-            
-            //$name = $row['name'];
         ?>
         </li>
         <input type="hidden" name="id" value="<?=$id?>">
@@ -47,5 +44,32 @@
    </div>
 <?php } ?>
 <?php if($_POST['submitt'] == 'Merge') { ?>
-    <p> coming soon </p>
+<div class="col-xs-4">
+    <form method="post" action="<?=$this->url('manage_publisherlocation')?><?='?id=' . $params['id'] . '&count=0'?>">
+    <p>Are you sure you want to merge these?</p>
+        <ul>
+        <li>
+        <?php 
+            $source_locs;
+            $dest_loc;
+            foreach($_POST['selectsource'] as $sourceloc) {
+                $source_locs = unserialize($sourceloc); 
+        ?>
+                <input type="hidden" name="sourceids[]" value="<?=$source_locs['id']?>">
+        <?php 
+                echo $source_locs['location'] . "<br />";
+            }
+            $dest_loc = unserialize($_POST['selectdest']);
+            //var_dump($dest_loc[0]['location']);
+            echo "To " . $dest_loc[0]['location'];
+        ?>
+        </li>
+        <input type="hidden" name="id" value="<?=$id?>">
+        <input type="hidden" name="action" value="<?='merge'?>">        
+        <input type="hidden" name="destid" value="<?=$dest_loc[0]['id']?>">
+        </ul>
+        <input type="submit" name="submitt" value="Merge"> 
+        <input type="submit" name="submitt" value="Cancel">
+    </form>
+</div>   
 <?php } ?>
