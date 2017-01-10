@@ -26,15 +26,47 @@ class ManageClassificationAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
-
+	
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        //$displaystr = "Coming Soon";
-        $sth = $this->adapter->query("select * from agenttype");
-        $rows = $sth->execute();
-        //var_dump($this);
-        return new HtmlResponse($this->template->render('app::classification::manage_classification', ['rows' => $rows]));
-    }
-     
-     
+        $table = new \App\Db\Table\Folder($this->adapter);
+		$paginator = $table->findParent();
+		
+        $paginator->setDefaultItemCountPerPage(7);
+        $allItems = $paginator->getTotalItemCount();
+        $countPages = $paginator->count();
+
+        $currentPage = isset($query['page']) ? $query['page'] : 1;
+        if ($currentPage < 1) {
+            $currentPage = 1;
+        }
+        $paginator->setCurrentPageNumber($currentPage);
+
+        if($currentPage == $countPages) {
+            $next = $currentPage;
+            $previous = $currentPage - 1;
+        }
+        else if($currentPage == 1) {
+            $next = $currentPage + 1;
+            $previous = 1;
+        }
+        else
+        {
+            $next = $currentPage + 1;
+            $previous = $currentPage - 1;
+        }
+        
+        return new HtmlResponse(
+            $this->template->render(
+                'app::classification::manage_classification',
+                [
+                    'rows' => $paginator,
+                    'previous' => $previous,
+                    'next' => $next,
+                    'countp' => $countPages,                    
+                ]
+            )
+        );
+
+    }         
 }
