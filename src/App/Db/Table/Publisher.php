@@ -76,7 +76,9 @@ class Publisher extends \Zend\Db\TableGateway\TableGateway
     
     public function findRecords($name)
     {
-        $select = $this->sql->select()->where(['name' => $name]);
+        $select = $this->sql->select();
+		$select->where->like('name', $name.'%');
+		//->where(['name' => $name]);
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
     }

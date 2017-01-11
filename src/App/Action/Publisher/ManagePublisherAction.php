@@ -145,7 +145,7 @@ class ManagePublisherAction
         if (!empty($query['letter'])) {
             $searchParams[] = 'letter=' . urlencode($query['letter']);
         }
-        
+
         if($post['action'] == "merge_publisher"){
             return new HtmlResponse(
             $this->template->render(
@@ -156,6 +156,7 @@ class ManagePublisherAction
                     'next' => $next,
                     'countp' => $countPages,
                     'searchParams' => implode('&', $searchParams),
+					'adapter' => $this->adapter,
                 ]
             )
         );

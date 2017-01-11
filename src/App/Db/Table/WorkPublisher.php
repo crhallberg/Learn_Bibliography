@@ -34,6 +34,7 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Db\Adapter\Adapter;
 use Zend\Paginator\Paginator;
+use Zend\Db\Sql\Expression;
 /**
  * Table Definition for record
  *
@@ -88,4 +89,25 @@ class WorkPublisher extends \Zend\Db\TableGateway\TableGateway
         //$this->tableGateway->delete(['id' => $id]);
     }
     
+	public function findNoofWorks($id)
+    {
+		//echo "entered";
+		//echo $id;
+        $callback = function ($select) use ($id) {
+			//echo 'callback';
+                $select->columns(
+				[
+					'cnt' => new Expression(
+                    'COUNT(DISTINCT(?))', ['work_id'],
+                    [Expression::TYPE_IDENTIFIER]
+					)
+				]
+				);			
+				$select->where->equalTo('publisher_id', $id);
+        };
+        $rows = $this->select($callback)->toArray();
+		return $rows;
+		//var_dump($rows);
+		//echo "done";
+    }
 }

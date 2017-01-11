@@ -33,7 +33,7 @@ class MergePublisherAction
         $sth = $this->adapter->query("select * from agenttype");
         $rows = $sth->execute();
         //var_dump($this);
-        return new HtmlResponse($this->template->render('app::publisher::merge_publisher', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::publisher::merge_publisher', ['rows' => $rows, 'adapter' => $this->adapter]));
     }
      
      
