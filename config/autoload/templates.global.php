@@ -33,6 +33,9 @@ return [
             //work type
             'app::worktype::new_worktype' => 'templates/app/worktype/new.phtml',
             'app::worktype::manage_worktype' => 'templates/app/worktype/manage.phtml',
+			'app::worktype::edit_worktype' => 'templates/app/worktype/edit.phtml',
+			'app::worktype::delete_worktype' => 'templates/app/worktype/delete.phtml',
+			'app::worktype::manage_worktypeattribute' => 'templates/app/worktype/manage_attributes.phtml',
             'app::worktype::attributes_worktype' => 'templates/app/worktype/attributes.phtml',
             //classification
             'app::classification::new_classification' => 'templates/app/classification/new.phtml',

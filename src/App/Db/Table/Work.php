@@ -47,14 +47,14 @@ use Zend\Db\Sql\Expression;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class WorkType extends \Zend\Db\TableGateway\TableGateway
+class Work extends \Zend\Db\TableGateway\TableGateway
 {
     /**
      * Constructor
      */
     public function __construct($adapter)
     {
-        parent::__construct('worktype', $adapter);
+        parent::__construct('work', $adapter);
     }
     
     /**
@@ -67,34 +67,20 @@ class WorkType extends \Zend\Db\TableGateway\TableGateway
      * @return Updated or newly added record
      */
     
-	public function insertRecords($type)
+	public function countRecordsByWorkType($id)
     {
-        $this->insert(
-            [
-            'type' => $type,            
-            ]
-        );
-    }
+      $select = $this->sql->select()->where(['type_id' => $id]);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    } 
 	
-	public function findRecordById($id)
-    {
-        $rowset = $this->select(array('id' => $id));
-        $row = $rowset->current();
-        return($row);
-    }
-	
-	public function updateRecord($id, $type)
+	public function updateWorkTypeId($id)
     {
         $this->update(
             [
-                'type' => $type,
+                'type_id' => NULL,
             ],
-            ['id' => $id]
+            ['type_id' => $id]
         );
-    }
-	
-	public function deleteRecord($id)
-    {
-        $this->delete(['id' => $id]);
     }
 }

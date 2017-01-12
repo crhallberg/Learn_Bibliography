@@ -47,14 +47,14 @@ use Zend\Db\Sql\Expression;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class WorkType extends \Zend\Db\TableGateway\TableGateway
+class WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 {
     /**
      * Constructor
      */
     public function __construct($adapter)
     {
-        parent::__construct('worktype', $adapter);
+        parent::__construct('workattribute', $adapter);
     }
     
     /**
@@ -65,36 +65,12 @@ class WorkType extends \Zend\Db\TableGateway\TableGateway
      * @param string $rawData Raw data from source
      *
      * @return Updated or newly added record
-     */
-    
-	public function insertRecords($type)
-    {
-        $this->insert(
-            [
-            'type' => $type,            
-            ]
-        );
-    }
+     */    
 	
-	public function findRecordById($id)
-    {
-        $rowset = $this->select(array('id' => $id));
-        $row = $rowset->current();
-        return($row);
-    }
-	
-	public function updateRecord($id, $type)
-    {
-        $this->update(
-            [
-                'type' => $type,
-            ],
-            ['id' => $id]
-        );
-    }
-	
-	public function deleteRecord($id)
-    {
-        $this->delete(['id' => $id]);
-    }
+	public function displayAttributes()
+	{
+		$select = $this->sql->select();
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+	}
 }

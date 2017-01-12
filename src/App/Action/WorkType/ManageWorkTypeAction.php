@@ -7,6 +7,7 @@ use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Router;
 use Zend\Expressive\Template;
 use Zend\Db\Adapter\Adapter;
+use Zend\Paginator\Paginator;
 
 class ManageWorkTypeAction
 {
@@ -26,35 +27,62 @@ class ManageWorkTypeAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
-   
-    /*public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
-    {
-		$rows = [];
-       return new HtmlResponse($this->template->render('app::worktype::manage_worktype', ['rows' => $rows]));
-    } */
-
-	protected function getPaginator($query)
-    {        
-        // default: blank/missing search
+	
+	protected function getPaginator($post)
+    {       
+        //add, edit, delete actions on worktype
+        if(!empty($post['action'])){
+            //add a new work type
+            if($post['action'] == "new"){
+                    if ($post['submitt'] == "Save") {
+                        $table = new \App\Db\Table\WorkType($this->adapter);
+                        $table->insertRecords($post['new_worktype']);
+                    }                     
+            }
+			//edit a work type
+            if($post['action'] == "edit"){
+                    if ($post['submitt'] == "Save") {
+                        if(!is_null($post['id'])) {
+                            
+                            $table = new \App\Db\Table\WorkType($this->adapter);
+                            $table->updateRecord($post['id'], $post['edit_worktype']);                            
+                        }
+                    }                     
+            }  
+			//delete a work type
+            if($post['action'] == "delete"){
+                    if ($post['submitt'] == "Delete") {
+                        if(!is_null($post['id'])) {
+                            $table = new \App\Db\Table\Work($this->adapter);
+                            $table->updateWorkTypeId($post['id']);
+                            $table = new \App\Db\Table\WorkType($this->adapter);
+                            $table->deleteRecord($post['id']); 
+                        }
+                    }                    
+            }
+            //Cancel add\edit\delete
+            if ($post['submitt'] == "Cancel") {
+                        $table = new \App\Db\Table\WorkType($this->adapter);
+                        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));        
+            } 
+        }
+        // default: blank for listing in manage
         $table = new \App\Db\Table\WorkType($this->adapter);
-        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));				
+        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        $query = $request->getqueryParams();
-  
-		$table = new \App\Db\Table\WorkType($this->adapter);
-        //$paginator = new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
-		$paginator = $table->findType();
-		//var_dump($paginator);
-		//$paginator = $this->getPaginator($query);
-		//var_dump($paginator);
+		$query = $request->getqueryParams();
+        $post = [];
+        if ($request->getMethod() == "POST") {
+            $post = $request->getParsedBody();
+        }
+        $paginator = $this->getPaginator($post);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
-		
-        //echo "count is $allItems";
+        
         $currentPage = isset($query['page']) ? $query['page'] : 1;
         if ($currentPage < 1) {
             $currentPage = 1;
@@ -74,18 +102,6 @@ class ManageWorkTypeAction
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }
-
-        $searchParams = [];
-        if (!empty($query['name'])) {
-            $searchParams[] = 'name=' . urlencode($query['name']);
-        }
-        if (!empty($query['location'])) {
-            $searchParams[] = 'location=' . urlencode($query['location']);
-        }
-        if (!empty($query['letter'])) {
-            $searchParams[] = 'letter=' . urlencode($query['letter']);
-        }
-        
         return new HtmlResponse(
             $this->template->render(
                 'app::worktype::manage_worktype',
@@ -94,10 +110,9 @@ class ManageWorkTypeAction
                     'previous' => $previous,
                     'next' => $next,
                     'countp' => $countPages,
-                    'searchParams' => implode('&', $searchParams),                    
                 ]
             )
         );
-    }
+    }          
     
 }

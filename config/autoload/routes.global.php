@@ -20,6 +20,9 @@ return [
             
 			App\Action\WorkType\NewWorkTypeAction::class => App\Action\WorkType\NewWorkTypeFactory::class,
 			App\Action\WorkType\ManageWorkTypeAction::class => App\Action\WorkType\ManageWorkTypeFactory::class,
+			App\Action\WorkType\EditWorkTypeAction::class => App\Action\WorkType\EditWorkTypeFactory::class,  
+			App\Action\WorkType\DeleteWorkTypeAction::class => App\Action\WorkType\DeleteWorkTypeFactory::class, 
+			App\Action\WorkType\ManageWorkTypeAttributeAction::class => App\Action\WorkType\ManageWorkTypeAttributeFactory::class,
 			App\Action\WorkType\AttributesWorkTypeAction::class => App\Action\WorkType\AttributesWorkTypeFactory::class,
             
 			App\Action\Classification\NewClassificationAction::class => App\Action\Classification\NewClassificationFactory::class,
@@ -150,6 +153,36 @@ return [
                 BodyParamsMiddleware::class,
                 App\Action\WorkType\ManageWorkTypeAction::class,
             ],
+            'allowed_methods' => ['GET','POST'],
+        ],
+		
+		[
+            'name' => 'edit_worktype',
+		    'path' => '/WorkType/edit',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\WorkType\EditWorkTypeAction::class,
+            ],                
+            'allowed_methods' => ['GET','POST'],
+        ],   
+		
+		[
+            'name' => 'delete_worktype',
+		    'path' => '/WorkType/delete',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\WorkType\DeleteWorkTypeAction::class,
+            ],                
+            'allowed_methods' => ['GET','POST'],
+        ],
+		
+		[
+            'name' => 'manage_worktypeattribute',
+		    'path' => '/WorkType/manage_attribute',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\WorkType\ManageWorkTypeAttributeAction::class,
+            ],                
             'allowed_methods' => ['GET','POST'],
         ],
 		

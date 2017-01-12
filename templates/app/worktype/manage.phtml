@@ -11,14 +11,21 @@
         </thead>
         <tbody>
 		<?php $escaper = new Zend\Escaper\Escaper('utf-8'); ?>
-        <?php foreach($this->rows as $row) : ?>
+        <?php foreach($this->rows as $row) : 
+				$output = (array)$row;
+                $params = implode(', ', $output);        
+		?>
         <tr>
-        <td><?php echo $escaper->escapeHtml($row['type']); ?></td>
-		<td><a href="#">Manage Attributes</a></td>
-        <td>                   
-            <a href="#">Edit</a>        
-			|
-			<a href="#">Move</a>          			
+        <td>
+			<?php echo $escaper->escapeHtml($row['type']); ?>
+		</td>
+		<td>
+			<a href="<?=$this->url('manage_worktypeattribute')?><?='?id='. $row['id']?>">Manage Attributes</a>
+		</td>
+        <td>			             
+            <a href="<?=$this->url('edit_worktype')?><?='?id='. $row['id']. '&action=edit'?>">Edit</a>        
+            |
+            <a href="<?=$this->url('delete_worktype')?><?='?id='. $row['id']. '&action=delete'?>">Delete</a>   			
         </td>
         </tr>
 		<?php endforeach; ?>
