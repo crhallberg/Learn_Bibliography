@@ -47,14 +47,14 @@ use Zend\Db\Sql\Expression;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class WorkAttribute extends \Zend\Db\TableGateway\TableGateway
+class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 {
     /**
      * Constructor
      */
     public function __construct($adapter)
     {
-        parent::__construct('workattribute', $adapter);
+        parent::__construct('worktype_workattribute', $adapter);
     }
     
     /**
@@ -67,23 +67,37 @@ class WorkAttribute extends \Zend\Db\TableGateway\TableGateway
      * @return Updated or newly added record
      */    
 	
-	public function displayAttributes()
+	public function displayRanks($id)
 	{
 		$select = $this->sql->select();
+		$select->join('workattribute', 'worktype_workattribute.workattribute_id = workattribute.id', array('field'), 'inner');
+		$select->where(['worktype_id' => $id]);
+		$select->order('rank');
+		//return $this->select($callback)->toArray();
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
 	}
 	
-	public function displayAttributes1($id)
+	public function getWorkAttributeQuery($id)
 	{
-		$wtwa = new WorkType_WorkAttribute($this->adapter);
-		$subselect = $wtwa->getWorkAttributeQuery($id);
+		//echo $id;
+		$subselect = $this->sql->select();
+		$subselect->join('workattribute', 'worktype_workattribute.workattribute_id = workattribute.id', array('field'), 'inner');
+		$subselect->where(['worktype_id' => $id]);
+		$subselect->order('rank');
 		
-		$callback = function($select) use ($subselect) {
-			$select->columns(['id','field']);
-			$select->where->notIn('field',$subselect);
-		};
-		$rows = $this->select($callback)->toArray();				
-		return $rows;		
+		$paginatorAdapter = new Paginator(new DbSelect($subselect, $this->adapter));
+		$fieldRows = [];
+		foreach($paginatorAdapter as $row) :
+				$fieldRows[] = $row['field'];
+		endforeach;
+		return $fieldRows;
+	}
+	
+	public function darrowUpdate($wkt_id,$wat_id,$wkt_wkat_rank,$wkat_field) {
+	   echo "worktype id is $wkt_id <br />";
+	   echo "workattribute id is $wat_id <br />";
+	   echo "rank is $wkt_wkat_rank <br />";
+	   echo "field is $wkat_field <br />";
 	}
 }

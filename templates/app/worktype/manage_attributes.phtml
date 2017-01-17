@@ -17,6 +17,11 @@
             $row = $table->findRecordById($id);
             $type = $row['type'];
             echo '<b>Attributes for: </b>'.$type.'<br/>'; 
+			
+			//test if any attributes are attached to a work type
+			$table = new \App\Db\Table\WorkType_WorkAttribute($adapter);
+			$paginator = $table->displayRanks($id);
+			$allItems = $paginator->getTotalItemCount();
 ?>
 			Used attributes are checked <input type="checkbox" checked disabled>
 <?php	}
@@ -31,27 +36,84 @@
          </tr>
      </thead>
      <tbody>
-     <?php 
-		$table = new \App\Db\Table\WorkAttribute($this->adapter);
-        $paginator = $table->displayAttributes();
-		$escaper = new Zend\Escaper\Escaper('utf-8');
-        foreach($paginator as $row) : 
-	 ?>
-     <form>
-         <tr>
+		<form>
+		<?php //check if any attributes are attached to a work type
+		if($allItems >= 1) { 
+	 		$escaper = new Zend\Escaper\Escaper('utf-8');
+			//display attributes not attached to a work type
+			$table = new \App\Db\Table\WorkAttribute($adapter);
+			$rows = $table->displayAttributes1($id);
+			$cnt = count($rows);
+			for($i=0;$i<$cnt;$i++) {
+		?>
+		<tr>
             <td>
                  <div class="checkbox">
-                    <label><input type="checkbox" id='select' name="selectchk1[]" value=<?=$escaper->escapeHtml($row['id'])?>>                   
+                    <label><input type="checkbox" id='select' name="selectchk1[]" value=<?=$escaper->escapeHtml($rows[$i]['id'])?>>                   
                     </label>
                  </div>
             </td>
 			<td>
 			</td>
             <td>
+                <?php echo $escaper->escapeHtml($rows[$i]['field']); ?>
+            </td>            
+         </tr>
+		<?php } 
+		} else { 
+				//display all work attributes if work type has no attributes attached to it
+				$table = new \App\Db\Table\WorkAttribute($this->adapter);
+				$paginator = $table->displayAttributes();
+				$escaper = new Zend\Escaper\Escaper('utf-8');
+				foreach($paginator as $row) : ?>
+				<tr>
+				<td>
+                 <div class="checkbox">
+                    <label><input type="checkbox" id='select' name="selectchk1[]" value=<?=$escaper->escapeHtml($row['id'])?>>                   
+                    </label>
+                 </div>
+				</td>
+				<td>
+				</td>
+				<td>
+                <?php echo $escaper->escapeHtml($row['field']); ?>
+				</td>            
+				</tr>
+		<?php			
+				endforeach; 
+			}
+			//display attributes attached to work type rank wise
+			$table = new \App\Db\Table\WorkType_WorkAttribute($adapter);
+			$paginator = $table->displayRanks($id);
+			$escaper = new Zend\Escaper\Escaper('utf-8');
+			foreach($paginator as $row) :
+				$output = (array)$row;
+                $params = implode(', ', $output); 
+		?>
+		<tr>
+            <td>
+                 <div class="checkbox">
+                    <label><input type="checkbox" id='select' name="selectchk1[]" value=<?=$escaper->escapeHtml($row['workattribute_id'])?> checked>                   
+                    </label>
+                 </div>
+            </td>
+			<td>
+			<?php if($row['rank'] == 0) { ?>
+					<a href="<?=$this->url('manage_worktypeattribute')?><?='?id='. $id. '&workattribute_id='. $row['workattribute_id']. '&rank='. $row['rank']. 
+					'&field='. $escaper->escapeHtml($row['field']). '&action=darrow'?>" style="font-weight:900">
+					&darr;
+					</a> <?php echo $escaper->escapeHtml($row['rank']); ?>
+			<?php } else { ?>
+					<a href="#" style="font-weight:900">&uarr;</a> 
+					<a href="#" style="font-weight:900">&darr;</a> 
+					<?php echo $escaper->escapeHtml($row['rank']); ?>
+			<?php } ?>
+			</td>
+            <td>
                 <?php echo $escaper->escapeHtml($row['field']); ?>
             </td>            
          </tr>
-         <?php endforeach; ?>
+         <?php endforeach; ?> 
          </tbody>
 </table>
 
