@@ -32,44 +32,69 @@ class ManageWorkTypeAttributeAction
     }*/
 	
 	protected function getPaginator($query, $post)
-    {       
+    {   
+/*echo "entered get paginator <br />";
+echo "query params is <br />";
+var_dump($query);
+echo "post is <br />";
+var_dump($post);*/
+    
         if(!empty($query['action'])) {
+			//decrease the rank
 			if($query['action'] == "darrow") {
-				echo "it is darrow";
+				echo "it is darrow<br />";
 				$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
 				$table->darrowUpdate($query['id'], $query['workattribute_id'], $query['rank'], $query['field']);
+			}
+			//increase the rank
+			if($query['action'] == "uarrow") {
+				echo "it is uarrow<br />";
+				$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+				$table->uarrowUpdate($query['id'], $query['workattribute_id'], $query['rank'], $query['field']);
 			}
 		}
 		//add, edit, delete actions on worktype
         if(!empty($post['action'])){
             //add a new work type
-            if($post['action'] == "new"){
-                    if ($post['submitt'] == "Save") {
-                        $table = new \App\Db\Table\WorkType($this->adapter);
-                        $table->insertRecords($post['new_worktype']);
-                    }                     
+            if($post['action'] == "add_attribute"){
+                    if ($post['submitt_add'] == "Add") {
+                        $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+                        $paginator = $table->displayRanks($post['type_id']);
+						$array = iterator_to_array($paginator);
+						$ranks = [];
+						foreach($paginator as $row) :
+						$ranks[] = $row['rank'];
+						endforeach;
+						$wkat_ids = [];
+						//print_r($ranks);
+						if($post['selectchk_notadded'] != null)
+						{
+							$wkat_ids = $post['selectchk_notadded'];
+							//print_r($wkat_ids);
+							//echo "selectchk_notadded selected <br />";
+						}
+						if($post['selectchk_noneadded'] != null)
+						{
+							$wkat_ids = $post['selectchk_noneadded'];
+							echo "selectchk_noneadded selected <br />";
+						}
+						$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+						$table->UpdateWorkTypeAttributeRank($post['type_id'],$wkat_ids,$ranks,$post['selectchk_added']);
+						$table->addAttributeToWorkType($post['type_id'],$wkat_ids);
+                    } 
+						//echo "entered add_attribute";
             }
 			//edit a work type
-            if($post['action'] == "edit"){
-                    if ($post['submitt'] == "Save") {
-                        if(!is_null($post['id'])) {
-                            
+            if($post['action'] == "remove_attribute"){
+                    /*if ($post['submitt'] == "Save") {
+                        if(!is_null($post['id'])) {                            
                             $table = new \App\Db\Table\WorkType($this->adapter);
                             $table->updateRecord($post['id'], $post['edit_worktype']);                            
                         }
-                    }                     
+                    }   */
+						echo "entered remove attribute";
             }  
-			//delete a work type
-            if($post['action'] == "delete"){
-                    if ($post['submitt'] == "Delete") {
-                        if(!is_null($post['id'])) {
-                            $table = new \App\Db\Table\Work($this->adapter);
-                            $table->updateWorkTypeId($post['id']);
-                            $table = new \App\Db\Table\WorkType($this->adapter);
-                            $table->deleteRecord($post['id']); 
-                        }
-                    }                    
-            }
+			
             //Cancel add\edit\delete
             if ($post['submitt'] == "Cancel") {
                         $table = new \App\Db\Table\WorkType($this->adapter);
@@ -83,9 +108,11 @@ class ManageWorkTypeAttributeAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
+		//echo "entered managa attributes action <br />";
 		$query = $request->getqueryParams();
 		if(!empty($query['action'])) {
-			echo $query['action'];
+			//echo "entered query if <br />";
+			//echo $query['action'];
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
@@ -128,6 +155,7 @@ class ManageWorkTypeAttributeAction
             )
         );
 		} else {
+			//echo "entered else";
 			return new HtmlResponse($this->template->render(
 			'app::worktype::manage_worktypeattribute', 
 			['request' => $request, 'adapter' => $this->adapter]

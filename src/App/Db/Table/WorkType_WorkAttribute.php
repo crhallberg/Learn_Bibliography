@@ -94,10 +94,85 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 		return $fieldRows;
 	}
 	
-	public function darrowUpdate($wkt_id,$wat_id,$wkt_wkat_rank,$wkat_field) {
+	public function darrowUpdate($wkt_id,$wat_id,$wkt_wkat_rank,$wkat_field) 
+	{
 	   echo "worktype id is $wkt_id <br />";
 	   echo "workattribute id is $wat_id <br />";
 	   echo "rank is $wkt_wkat_rank <br />";
 	   echo "field is $wkat_field <br />";
+	   
+        $this->update(
+            [
+                'rank' => new Expression('rank - 1'),
+            ],
+            ['worktype_id' => $wkt_id, 'rank' => $wkt_wkat_rank+1]
+        );
+		$this->update(
+			[
+				'rank' => new Expression('rank + 1'),
+			],
+			['worktype_id' => $wkt_id, 'workattribute_id' => $wat_id]
+		);
+	}
+	
+	public function uarrowUpdate($wkt_id,$wat_id,$wkt_wkat_rank,$wkat_field) 
+	{
+	   echo "worktype id is $wkt_id <br />";
+	   echo "workattribute id is $wat_id <br />";
+	   echo "rank is $wkt_wkat_rank <br />";
+	   echo "field is $wkat_field <br />";
+	   
+        $this->update(
+            [
+                'rank' => new Expression('rank + 1'),
+            ],
+            ['worktype_id' => $wkt_id, 'rank' => $wkt_wkat_rank-1]
+        );
+		$this->update(
+			[
+				'rank' => new Expression('rank - 1'),
+			],
+			['worktype_id' => $wkt_id, 'workattribute_id' => $wat_id]
+		);
+	}
+	
+	public function UpdateWorkTypeAttributeRank($wkt_id,$wkat_ids,$ranks,$selected_wkat)
+	{
+		
+		$callback = function($select) use ($wkt_id,$ranks) {
+			$select->columns(['*']);
+			$select->where->in('rank', $ranks);
+			$select->where->equalTo('worktype_id', $wkt_id);
+		};
+		$rows = $this->select($callback)->toArray();
+		$cnt = count($rows);
+		//echo "no of attributes added to worktype - $cnt";
+		$count = count($wkat_ids);
+		//echo "selected attributes to add - $count";
+		
+		//print_r($wkat_ids);
+		for($i=0;$i<$cnt;$i++) {
+			$this->update(
+            [
+                'rank' => new Expression('rank + ' . $count),
+            ],
+			['workattribute_id' => $selected_wkat[$i]]
+			);
+			//echo "$i id is $selected_wkat[$i]";
+		}
+	}
+	
+	public function addAttributeToWorkType($wkt_id,$wkat_ids)
+	{
+		$cnt = count($wkat_ids);
+		for($i=0;$i<$cnt;$i++) {
+			$this->insert(
+            [
+				'worktype_id' => $wkt_id,
+				'workattribute_id' => $wkat_ids[$i],
+				'rank' => $i,
+            ]
+			); 
+		}
 	}
 }
