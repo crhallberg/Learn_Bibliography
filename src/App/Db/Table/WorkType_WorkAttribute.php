@@ -73,9 +73,13 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 		$select->join('workattribute', 'worktype_workattribute.workattribute_id = workattribute.id', array('field'), 'inner');
 		$select->where(['worktype_id' => $id]);
 		$select->order('rank');
-		//return $this->select($callback)->toArray();
-        $paginatorAdapter = new DbSelect($select, $this->adapter);
-        return new Paginator($paginatorAdapter);
+
+        $paginatorAdapter = new Paginator(new DbSelect($select, $this->adapter));
+		foreach($paginator as $row) :
+				echo $row['rank'];
+			endforeach;
+        //return new Paginator($paginatorAdapter);
+		return $paginatorAdapter;
 	}
 	
 	public function getWorkAttributeQuery($id)
@@ -146,11 +150,11 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 		};
 		$rows = $this->select($callback)->toArray();
 		$cnt = count($rows);
-		//echo "no of attributes added to worktype - $cnt";
+		echo "no of attributes added to worktype - $cnt";
 		$count = count($wkat_ids);
-		//echo "selected attributes to add - $count";
+		echo "selected attributes to add - $count";
 		
-		//print_r($wkat_ids);
+		print_r($wkat_ids);
 		for($i=0;$i<$cnt;$i++) {
 			$this->update(
             [
@@ -158,7 +162,7 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
             ],
 			['workattribute_id' => $selected_wkat[$i]]
 			);
-			//echo "$i id is $selected_wkat[$i]";
+			echo "$i id is $selected_wkat[$i]";
 		}
 	}
 	

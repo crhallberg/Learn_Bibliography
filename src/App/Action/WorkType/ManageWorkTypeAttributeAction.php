@@ -33,11 +33,6 @@ class ManageWorkTypeAttributeAction
 	
 	protected function getPaginator($query, $post)
     {   
-/*echo "entered get paginator <br />";
-echo "query params is <br />";
-var_dump($query);
-echo "post is <br />";
-var_dump($post);*/
     
         if(!empty($query['action'])) {
 			//decrease the rank
@@ -53,9 +48,9 @@ var_dump($post);*/
 				$table->uarrowUpdate($query['id'], $query['workattribute_id'], $query['rank'], $query['field']);
 			}
 		}
-		//add, edit, delete actions on worktype
+		//add, remove attributes to worktype
         if(!empty($post['action'])){
-            //add a new work type
+            //add attribute(s) new work type
             if($post['action'] == "add_attribute"){
                     if ($post['submitt_add'] == "Add") {
                         $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
@@ -66,25 +61,20 @@ var_dump($post);*/
 						$ranks[] = $row['rank'];
 						endforeach;
 						$wkat_ids = [];
-						//print_r($ranks);
 						if($post['selectchk_notadded'] != null)
 						{
 							$wkat_ids = $post['selectchk_notadded'];
-							//print_r($wkat_ids);
-							//echo "selectchk_notadded selected <br />";
 						}
 						if($post['selectchk_noneadded'] != null)
 						{
 							$wkat_ids = $post['selectchk_noneadded'];
-							echo "selectchk_noneadded selected <br />";
 						}
 						$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
 						$table->UpdateWorkTypeAttributeRank($post['type_id'],$wkat_ids,$ranks,$post['selectchk_added']);
 						$table->addAttributeToWorkType($post['type_id'],$wkat_ids);
                     } 
-						//echo "entered add_attribute";
             }
-			//edit a work type
+			//remove attribute(s) from worktype
             if($post['action'] == "remove_attribute"){
                     /*if ($post['submitt'] == "Save") {
                         if(!is_null($post['id'])) {                            
@@ -96,21 +86,21 @@ var_dump($post);*/
             }  
 			
             //Cancel add\edit\delete
-            if ($post['submitt'] == "Cancel") {
-                        $table = new \App\Db\Table\WorkType($this->adapter);
+            if ($post['cancel'] == "Cancel") {
+                        $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
                         return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));        
             } 
         }
         // default: blank for listing in manage
-        $table = new \App\Db\Table\WorkType($this->adapter);
-        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+        $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table)); 
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
 		//echo "entered managa attributes action <br />";
 		$query = $request->getqueryParams();
-		if(!empty($query['action'])) {
+		//if(!empty($query['action'])) {
 			//echo "entered query if <br />";
 			//echo $query['action'];
         $post = [];
@@ -154,13 +144,13 @@ var_dump($post);*/
                 ]
             )
         );
-		} else {
+		/*} else {
 			//echo "entered else";
 			return new HtmlResponse($this->template->render(
 			'app::worktype::manage_worktypeattribute', 
 			['request' => $request, 'adapter' => $this->adapter]
 			)
 			);
-		}
+		}*/
     }          
 }

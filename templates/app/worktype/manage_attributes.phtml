@@ -36,7 +36,7 @@ function set_action_remove()
 			Used attributes are checked <input type="checkbox" checked disabled>
 <?php	}
 ?>
-<form class="form-horizontal" method="post" action="<?=$this->url('manage_worktypeattribute')?><?='?action=add_remove'?>">
+<form class="form-horizontal" method="post" action="<?=$this->url('manage_worktypeattribute')?><?='?id=' . $id?>">
 <input type="hidden" name="action" id="action_param" value="">
 <input type="hidden" name="type_id" value="<?=trim($id)?>">
 <table class="table table-striped table-condensed" style="font-size:10pt;">
@@ -103,8 +103,13 @@ function set_action_remove()
 			$paginator = $table->displayRanks($id);
 			$allItems = $paginator->getTotalItemCount();
 			echo "no of ranks is $allItems";
+			foreach($paginator as $row) :
+				echo $row['rank'];
+			endforeach;
+			//var_dump($paginator);
 			$escaper = new Zend\Escaper\Escaper('utf-8');
 			foreach($paginator as $row) :
+			//var_dump($row);
 				$output = (array)$row;
                 $params = implode(', ', $output); 
 		?>
