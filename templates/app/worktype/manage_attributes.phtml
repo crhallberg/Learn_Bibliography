@@ -9,6 +9,10 @@ function set_action_remove()
 {
 	document.getElementById("action_param").value = "remove_attribute";
 }
+function set_action_cancel()
+{
+	document.getElementById("action_param").value = "cancel_attributes";
+}
 </script>
 <div class="col-md-9">
 <?php                                       
@@ -36,7 +40,7 @@ function set_action_remove()
 			Used attributes are checked <input type="checkbox" checked disabled>
 <?php	}
 ?>
-<form class="form-horizontal" method="post" action="<?=$this->url('manage_worktypeattribute')?><?='?id=' . $id?>">
+<form class="form-horizontal" method="post" action="<?=$this->url('manage_worktypeattribute')?><?='?id=' . $id . '&action=add_remove'?>">
 <input type="hidden" name="action" id="action_param" value="">
 <input type="hidden" name="type_id" value="<?=trim($id)?>">
 <table class="table table-striped table-condensed" style="font-size:10pt;">
@@ -51,6 +55,7 @@ function set_action_remove()
 		<form>
 		<?php //check if any attributes are attached to a work type
 		if($allItems >= 1) { 
+			//echo "frst:attributes attached to worktype <br />";
 	 		$escaper = new Zend\Escaper\Escaper('utf-8');
 			//display attributes not attached to a work type
 			$table = new \App\Db\Table\WorkAttribute($adapter);
@@ -74,7 +79,8 @@ function set_action_remove()
             </td>            
          </tr>
 		<?php } 
-		} else { 
+		} else {
+				//echo "scnd else:attributes are not attached to worktype <br />";
 				//display all work attributes if work type has no attributes attached to it
 				$table = new \App\Db\Table\WorkAttribute($this->adapter);
 				$paginator = $table->displayAttributes();
@@ -98,27 +104,27 @@ function set_action_remove()
 		<?php			
 				endforeach; 
 			}
+			//echo "last:display ranks of attributes attached to worktype <br />";
 			//display attributes attached to work type rank wise
 			$table = new \App\Db\Table\WorkType_WorkAttribute($adapter);
 			$paginator = $table->displayRanks($id);
+			$paginator->setDefaultItemCountPerPage(20);
 			$allItems = $paginator->getTotalItemCount();
-			echo "no of ranks is $allItems";
-			foreach($paginator as $row) :
-				echo $row['rank'];
-			endforeach;
-			//var_dump($paginator);
+
 			$escaper = new Zend\Escaper\Escaper('utf-8');
 			foreach($paginator as $row) :
-			//var_dump($row);
 				$output = (array)$row;
                 $params = implode(', ', $output); 
 		?>
 		<tr>
             <td>
                  <div class="checkbox">
-                    <label><input type="checkbox" id='select_added' name="selectchk_added[]" 
+                    <label>
+					<input type="checkbox" id='select_added' name="selectchk_added[]" 
 					onchange="document.getElementById('submit_remove').disabled = this.checked;" 
-					value=<?=$escaper->escapeHtml($row['workattribute_id'])?> checked>                   
+					value=<?=$escaper->escapeHtml($row['workattribute_id'])?> checked>
+					<input type="hidden" id='all_attributes' name="allAttributes[]" 
+					value=<?=$escaper->escapeHtml($row['workattribute_id'])?>>
                     </label>
                  </div>
             </td>
@@ -155,11 +161,10 @@ function set_action_remove()
 </table>
 
 <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-    <input type="submit" class="btn btn-default" id="submit_add" name="submitt_add" value="Add" disabled onclick="set_action_add()"/>
-    <input type="submit" class="btn btn-default" id="submit_remove" name="submitt_remove" value="Remove" disabled 
-			onclick="set_action_remove()"/>
-	<input type="submit" class="btn btn-default" name="cancel" value="Cancel"/>
+<div class="col-sm-offset-2 col-sm-10">
+    <input type="submit" class="btn btn-default" id="submit_add" name="submit_add" value="Add" disabled onclick="set_action_add()"/>
+    <input type="submit" class="btn btn-default" id="submit_remove" name="submit_remove" value="Remove" disabled onclick="set_action_remove()"/>
+	<input type="submit" class="btn btn-default" id = "submit_cancel" name="submit_cancel" value="Cancel" onclick="set_action_cancel()"/>
 </div>
 </div>
 </form>

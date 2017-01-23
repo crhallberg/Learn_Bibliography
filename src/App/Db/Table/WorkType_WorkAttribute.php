@@ -68,17 +68,21 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
      */    
 	
 	public function displayRanks($id)
-	{
+	{		
 		$select = $this->sql->select();
 		$select->join('workattribute', 'worktype_workattribute.workattribute_id = workattribute.id', array('field'), 'inner');
 		$select->where(['worktype_id' => $id]);
 		$select->order('rank');
 
         $paginatorAdapter = new Paginator(new DbSelect($select, $this->adapter));
-		foreach($paginator as $row) :
-				echo $row['rank'];
-			endforeach;
-        //return new Paginator($paginatorAdapter);
+		$cnt = $paginatorAdapter->getTotalItemCount();
+		/*echo "fetched record count is $cnt <br />";
+		//$paginatorAdapter->setDefaultItemCountPerPage(12);
+		foreach($paginatorAdapter as $row) :
+		echo $row['rank']."<br />";
+		//print_r($row);
+		endforeach; 
+        //return new Paginator($paginatorAdapter);*/
 		return $paginatorAdapter;
 	}
 	
@@ -91,10 +95,14 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 		$subselect->order('rank');
 		
 		$paginatorAdapter = new Paginator(new DbSelect($subselect, $this->adapter));
+		$cnt = $paginatorAdapter->getTotalItemCount();
+		//echo "selected field count is $cnt <br />";
+		$paginatorAdapter->setDefaultItemCountPerPage($cnt);
 		$fieldRows = [];
 		foreach($paginatorAdapter as $row) :
 				$fieldRows[] = $row['field'];
 		endforeach;
+		//print_r($fieldRows);
 		return $fieldRows;
 	}
 	
@@ -140,29 +148,35 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 		);
 	}
 	
-	public function UpdateWorkTypeAttributeRank($wkt_id,$wkat_ids,$ranks,$selected_wkat)
+	public function UpdateWorkTypeAttributeRank($wkt_id,$wkat_ids,$selected_wkat)
 	{
-		
+		//print_r($ranks);
 		$callback = function($select) use ($wkt_id,$ranks) {
 			$select->columns(['*']);
-			$select->where->in('rank', $ranks);
+			//$select->where->in('rank', $ranks);
 			$select->where->equalTo('worktype_id', $wkt_id);
+			$select->order('rank');
 		};
 		$rows = $this->select($callback)->toArray();
+		//echo '<pre>';print_r($rows);echo '</pre>';
 		$cnt = count($rows);
-		echo "no of attributes added to worktype - $cnt";
+		//echo "no of attributes added to worktype - $cnt <br />";
 		$count = count($wkat_ids);
-		echo "selected attributes to add - $count";
+		//echo "selected attributes to add - $count <br />";
 		
-		print_r($wkat_ids);
+		//echo "id of attribute(s) selected to add";
+		//echo '<pre>';print_r($wkat_ids);echo '</pre>';
+		
+		//echo "selected_wkat ids is";
+		//echo '<pre>';print_r($selected_wkat);echo '</pre>';
 		for($i=0;$i<$cnt;$i++) {
 			$this->update(
             [
                 'rank' => new Expression('rank + ' . $count),
             ],
 			['workattribute_id' => $selected_wkat[$i]]
-			);
-			echo "$i id is $selected_wkat[$i]";
+			); 
+			//echo "$i id is $selected_wkat[$i] <br />";
 		}
 	}
 	

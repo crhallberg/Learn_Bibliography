@@ -52,14 +52,19 @@ class ManageWorkTypeAttributeAction
         if(!empty($post['action'])){
             //add attribute(s) new work type
             if($post['action'] == "add_attribute"){
-                    if ($post['submitt_add'] == "Add") {
+                    if ($post['submit_add'] == "Add") {
                         $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
                         $paginator = $table->displayRanks($post['type_id']);
-						$array = iterator_to_array($paginator);
+						$cnt = $paginator->getTotalItemCount();
+						//echo "fetched no of ranks to be sent to update method $cnt <br />";
+						//$array = iterator_to_array($paginator);
 						$ranks = [];
 						foreach($paginator as $row) :
 						$ranks[] = $row['rank'];
 						endforeach;
+						//echo"post is";
+						//echo '<pre>';print_r($post['selectchk_added']);echo '</pre>';
+						//print_r($ranks);
 						$wkat_ids = [];
 						if($post['selectchk_notadded'] != null)
 						{
@@ -70,26 +75,41 @@ class ManageWorkTypeAttributeAction
 							$wkat_ids = $post['selectchk_noneadded'];
 						}
 						$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-						$table->UpdateWorkTypeAttributeRank($post['type_id'],$wkat_ids,$ranks,$post['selectchk_added']);
+						$table->UpdateWorkTypeAttributeRank($post['type_id'],$wkat_ids,$post['selectchk_added']);
 						$table->addAttributeToWorkType($post['type_id'],$wkat_ids);
                     } 
             }
 			//remove attribute(s) from worktype
             if($post['action'] == "remove_attribute"){
-                    /*if ($post['submitt'] == "Save") {
-                        if(!is_null($post['id'])) {                            
-                            $table = new \App\Db\Table\WorkType($this->adapter);
-                            $table->updateRecord($post['id'], $post['edit_worktype']);                            
-                        }
-                    }   */
-						echo "entered remove attribute";
-            }  
-			
+                    if ($post['submit_remove'] == "Remove")
+					{
+						/*if($post['allAttributes'] != null) {
+							if($post['selectchk_added'] != null)
+							{
+								for($i=0;$i<count($post['allAttributes']);$i++){
+									
+								}
+								$wkat_ids = $post['selectchk_added'];
+							}
+						}*/
+						$result = array_diff($post['allAttributes'], $post['selectchk_added']);
+						echo '<pre>';print_r($result);echo '</pre>';
+						/*$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+						$table->deleteAttributeFromWorkType($post['type_id'],);
+                        $table->updateWorkTypeAttributeRank_Remove($post['id'], $post['edit_worktype']);  */
+						echo '<pre>';print_r($post);echo '</pre>';	
+                        
+                    }
+					echo "entered remove attribute";
+			}								
             //Cancel add\edit\delete
-            if ($post['cancel'] == "Cancel") {
-                        $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-                        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));        
-            } 
+			if($post['action'] == "cancel_attributes"){
+				if ($post['submit_cancel'] == "Cancel") {
+					echo "entered cancel";
+                    $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+                    return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));      
+				}
+			}			
         }
         // default: blank for listing in manage
         $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
@@ -98,11 +118,10 @@ class ManageWorkTypeAttributeAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-		//echo "entered managa attributes action <br />";
 		$query = $request->getqueryParams();
-		//if(!empty($query['action'])) {
-			//echo "entered query if <br />";
-			//echo $query['action'];
+		if(!empty($query['action'])) {
+			$action = $query['action'];
+		}
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
@@ -131,6 +150,7 @@ class ManageWorkTypeAttributeAction
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }
+		if($action == "add_remove"){	
         return new HtmlResponse(
             $this->template->render(
                 'app::worktype::manage_worktypeattribute',
@@ -144,13 +164,12 @@ class ManageWorkTypeAttributeAction
                 ]
             )
         );
-		/*} else {
-			//echo "entered else";
+		} else {
 			return new HtmlResponse($this->template->render(
 			'app::worktype::manage_worktypeattribute', 
 			['request' => $request, 'adapter' => $this->adapter]
 			)
 			);
-		}*/
+		}
     }          
 }
