@@ -33,9 +33,9 @@ return [
             //work type
             'app::worktype::new_worktype' => 'templates/app/worktype/new.phtml',
             'app::worktype::manage_worktype' => 'templates/app/worktype/manage.phtml',
-			'app::worktype::edit_worktype' => 'templates/app/worktype/edit.phtml',
-			'app::worktype::delete_worktype' => 'templates/app/worktype/delete.phtml',
-			'app::worktype::manage_worktypeattribute' => 'templates/app/worktype/manage_attributes.phtml',
+            'app::worktype::edit_worktype' => 'templates/app/worktype/edit.phtml',
+            'app::worktype::delete_worktype' => 'templates/app/worktype/delete.phtml',
+            'app::worktype::manage_worktypeattribute' => 'templates/app/worktype/manage_attributes.phtml',
             'app::worktype::attributes_worktype' => 'templates/app/worktype/attributes.phtml',
             //classification
             'app::classification::new_classification' => 'templates/app/classification/new.phtml',
@@ -53,7 +53,7 @@ return [
             'app::agenttype::new_agenttype' => 'templates/app/agenttype/new.phtml',
             'app::agenttype::manage_agenttype' => 'templates/app/agenttype/manage.phtml',
             'app::agenttype::edit_agenttype' => 'templates/app/agenttype/edit.phtml',
-            'app::agenttype::delete_agenttype' => 'templates/app/agenttype/delete.phtml',     
+            'app::agenttype::delete_agenttype' => 'templates/app/agenttype/delete.phtml',
              //publisher
             'app::publisher::new_publisher' => 'templates/app/publisher/new.phtml',
             'app::publisher::manage_publisher' => 'templates/app/publisher/manage.phtml',
@@ -68,7 +68,7 @@ return [
             'app::language::new_language' => 'templates/app/language/new.phtml',
             'app::language::manage_language' => 'templates/app/language/manage.phtml',
             'app::language::edit_language' => 'templates/app/language/edit.phtml',
-            'app::language::delete_language' => 'templates/app/language/delete.phtml',           
+            'app::language::delete_language' => 'templates/app/language/delete.phtml',
             //users
             'app::users::new_users' => 'templates/app/users/new.phtml',
             'app::users::manage_users' => 'templates/app/users/manage.phtml',

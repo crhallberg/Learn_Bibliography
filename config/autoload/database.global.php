@@ -1,6 +1,7 @@
 <?php
 use Zend\Expressive\Application;
 use Zend\Db\Adapter\Adapter;
+
 return array(
     'service_manager' => array(
         'factories' => array(
@@ -15,7 +16,7 @@ return array(
         'database'       => 'panta_rhei',
         'username'  => 'root',
         'password'  => '',
-		'charset'  => 'utf8',
-    	
+        'charset'  => 'utf8',
+        
     ),
 );

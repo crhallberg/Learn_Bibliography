@@ -5,9 +5,9 @@ use Zend\Expressive\Helper;
 return [
     'dependencies' => [
         'factories' => [
-		//new
-		Blast\BaseUrl\BaseUrlMiddleware::class => Blast\BaseUrl\BaseUrlMiddlewareFactory::class,
-		
+        //new
+        Blast\BaseUrl\BaseUrlMiddleware::class => Blast\BaseUrl\BaseUrlMiddlewareFactory::class,
+        
             Helper\ServerUrlMiddleware::class => Helper\ServerUrlMiddlewareFactory::class,
             Helper\UrlHelperMiddleware::class => Helper\UrlHelperMiddlewareFactory::class,
             'App\SlimFlashMiddleware' => App\SlimFlashMiddlewareFactory::class,
@@ -44,8 +44,8 @@ return [
                 // - pre-conditions
                 // - modifications to outgoing responses
                 Helper\ServerUrlMiddleware::class,
-				//new
-				Blast\BaseUrl\BaseUrlMiddleware::class,
+                //new
+                Blast\BaseUrl\BaseUrlMiddleware::class,
                 'App\SlimFlashMiddleware',
             ],
             'priority' => 10000,
@@ -53,11 +53,11 @@ return [
 
         'routing' => [
             'middleware' => [
-			    //new
-				Zend\Expressive\Container\ApplicationFactory::ROUTING_MIDDLEWARE,
+                //new
+                Zend\Expressive\Container\ApplicationFactory::ROUTING_MIDDLEWARE,
                 Zend\Expressive\Helper\UrlHelperMiddleware::class,
                 Zend\Expressive\Container\ApplicationFactory::DISPATCH_MIDDLEWARE,
-				
+                
                 /* ApplicationFactory::ROUTING_MIDDLEWARE,
                 Helper\UrlHelperMiddleware::class,
                 // Add more middleware here that needs to introspect the routing
