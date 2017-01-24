@@ -37,13 +37,13 @@ class ManageWorkTypeAttributeAction
         if(!empty($query['action'])) {
 			//decrease the rank
 			if($query['action'] == "darrow") {
-				echo "it is darrow<br />";
+				//echo "it is darrow<br />";
 				$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
 				$table->darrowUpdate($query['id'], $query['workattribute_id'], $query['rank'], $query['field']);
 			}
 			//increase the rank
 			if($query['action'] == "uarrow") {
-				echo "it is uarrow<br />";
+				//echo "it is uarrow<br />";
 				$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
 				$table->uarrowUpdate($query['id'], $query['workattribute_id'], $query['rank'], $query['field']);
 			}
@@ -56,15 +56,12 @@ class ManageWorkTypeAttributeAction
                         $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
                         $paginator = $table->displayRanks($post['type_id']);
 						$cnt = $paginator->getTotalItemCount();
-						//echo "fetched no of ranks to be sent to update method $cnt <br />";
-						//$array = iterator_to_array($paginator);
+
 						$ranks = [];
 						foreach($paginator as $row) :
 						$ranks[] = $row['rank'];
 						endforeach;
-						//echo"post is";
-						//echo '<pre>';print_r($post['selectchk_added']);echo '</pre>';
-						//print_r($ranks);
+						
 						$wkat_ids = [];
 						if($post['selectchk_notadded'] != null)
 						{
@@ -83,31 +80,25 @@ class ManageWorkTypeAttributeAction
             if($post['action'] == "remove_attribute"){
                     if ($post['submit_remove'] == "Remove")
 					{
-						/*if($post['allAttributes'] != null) {
-							if($post['selectchk_added'] != null)
-							{
-								for($i=0;$i<count($post['allAttributes']);$i++){
-									
-								}
-								$wkat_ids = $post['selectchk_added'];
-							}
-						}*/
+						$ranks_remove = [];
 						$result = array_diff($post['allAttributes'], $post['selectchk_added']);
-						echo '<pre>';print_r($result);echo '</pre>';
-						/*$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-						$table->deleteAttributeFromWorkType($post['type_id'],);
-                        $table->updateWorkTypeAttributeRank_Remove($post['id'], $post['edit_worktype']);  */
-						echo '<pre>';print_r($post);echo '</pre>';	
+						$cnt = count($result);
+						foreach($result as $key=>$value):
+							$ranks_remove[] = $value;
+						endforeach;
+						//echo '<pre>';print_r($ranks_remove);echo '</pre>';
+						$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+						$table->deleteAttributeFromWorkType($post['type_id'],$ranks_remove);
+                        $table->updateWorkTypeAttributeRank_Remove($post['type_id']);
+						//echo '<pre>';print_r($post);echo '</pre>';	
                         
                     }
-					echo "entered remove attribute";
 			}								
             //Cancel add\edit\delete
 			if($post['action'] == "cancel_attributes"){
 				if ($post['submit_cancel'] == "Cancel") {
-					echo "entered cancel";
-                    $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-                    return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));      
+                    $table = new \App\Db\Table\WorkType($this->adapter);
+                    return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));         
 				}
 			}			
         }
@@ -123,9 +114,15 @@ class ManageWorkTypeAttributeAction
 			$action = $query['action'];
 		}
         $post = [];
+		$post_cancel = false;
         if ($request->getMethod() == "POST") {
-            $post = $request->getParsedBody();
-        }
+            $post = $request->getParsedBody();  
+			if($post['action'] == "cancel_attributes"){
+				if ($post['submit_cancel'] == "Cancel") {
+					$post_cancel = 'true_cancel';
+				}
+			}
+		}
         $paginator = $this->getPaginator($query, $post);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
@@ -150,6 +147,20 @@ class ManageWorkTypeAttributeAction
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }
+		if($post_cancel == 'true_cancel') {
+			return new HtmlResponse($this->template->render(
+			'app::worktype::manage_worktype', 
+			[
+				'rows' => $paginator,
+                'previous' => $previous,
+                'next' => $next,
+                'countp' => $countPages,
+				'request' => $request,
+				'adapter' => $this->adapter,
+			]
+			)
+			);
+		} 
 		if($action == "add_remove"){	
         return new HtmlResponse(
             $this->template->render(

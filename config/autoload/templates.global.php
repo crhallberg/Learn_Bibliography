@@ -37,6 +37,9 @@ return [
 			'app::worktype::delete_worktype' => 'templates/app/worktype/delete.phtml',
 			'app::worktype::manage_worktypeattribute' => 'templates/app/worktype/manage_attributes.phtml',
             'app::worktype::attributes_worktype' => 'templates/app/worktype/attributes.phtml',
+			'app::worktype::new_attribute' => 'templates/app/worktype/new_attribute.phtml',
+			'app::worktype::edit_attribute' => 'templates/app/worktype/edit_attribute.phtml',
+			'app::worktype::delete_attribute' => 'templates/app/worktype/delete_attribute.phtml',
             //classification
             'app::classification::new_classification' => 'templates/app/classification/new.phtml',
             'app::classification::manage_classification' => 'templates/app/classification/manage.phtml',

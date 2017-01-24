@@ -86,4 +86,31 @@ class WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 		$rows = $this->select($callback)->toArray();				
 		return $rows;		
 	}
+	
+	public function addAttribute($field,$type)
+    {
+        $this->insert(
+            [
+			'field' => $field,
+            'type' => $type,            
+            ]
+        );
+    }
+	
+	public function findRecordById($id)
+	{
+		$rowset = $this->select(array('id' => $id));
+        $row = $rowset->current();
+        return($row);
+	}
+	
+	public function updateRecord($id, $field)
+	{
+		$this->update(
+            [
+                'field' => $field,
+            ],
+            ['id' => $id]
+        );
+	}
 }

@@ -7,6 +7,7 @@ use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Router;
 use Zend\Expressive\Template;
 use Zend\Db\Adapter\Adapter;
+use Zend\Paginator\Paginator;
 
 class AttributesWorkTypeAction
 {
@@ -26,15 +27,92 @@ class AttributesWorkTypeAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
+    
+	protected function getPaginator($post)
+    {       
+        //add, edit, delete actions on attribute
+        if(!empty($post['action'])){
+            //add new attribute
+            if($post['action'] == "new"){
+                    if ($post['submitt'] == "Save") {
+						echo '<pre>';print_r($post);echo '</pre>';
+						$table = new \App\Db\Table\WorkAttribute($this->adapter);
+						$table->addAttribute($post['new_attribute'],$post['field_type']);
+                    }                     
+            }
+			//edit attribute
+            if($post['action'] == "edit"){
+                    if ($post['submitt'] == "Save") {
+                        if(!is_null($post['id'])) {                           
+                            $table = new \App\Db\Table\WorkAttribute($this->adapter);
+                            $table->updateRecord($post['id'], $post['edit_attribute']);                            
+                        }
+                    }                     
+            }
+			//delete attribute
+            if($post['action'] == "delete"){
+                    if ($post['submitt'] == "Delete") {
+                        if(!is_null($post['id'])) {
+                            /*$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+                            $table->deleteWorkAttributeFromWorkTypeId($post['id']);
+                            $table = new \App\Db\Table\WorkType($this->adapter);
+                            $table->deleteRecord($post['id']);*/ 
+                        }
+                    }                    
+            }
+            //Cancel add\edit\delete
+            if ($post['submitt'] == "Cancel") {
+                $table = new \App\Db\Table\WorkAttribute($this->adapter);
+				return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));      
+            } 
+        }
+        // default: blank for listing in manage
+        $table = new \App\Db\Table\WorkAttribute($this->adapter);
+        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+    }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        //$displaystr = "Coming Soon";
-        $sth = $this->adapter->query("select * from agenttype");
-        $rows = $sth->execute();
-        //var_dump($this);
-        return new HtmlResponse($this->template->render('app::worktype::attributes_worktype', ['rows' => $rows]));
-    }
-     
+		$query = $request->getqueryParams();
+        $post = [];
+        if ($request->getMethod() == "POST") {
+            $post = $request->getParsedBody();
+        }
+        $paginator = $this->getPaginator($post);
+        $paginator->setDefaultItemCountPerPage(7);
+        $allItems = $paginator->getTotalItemCount();
+        $countPages = $paginator->count();
+        
+        $currentPage = isset($query['page']) ? $query['page'] : 1;
+        if ($currentPage < 1) {
+            $currentPage = 1;
+        }
+        $paginator->setCurrentPageNumber($currentPage);
+
+        if($currentPage == $countPages) {
+            $next = $currentPage;
+            $previous = $currentPage - 1;
+        }
+        else if($currentPage == 1) {
+            $next = $currentPage + 1;
+            $previous = 1;
+        }
+        else
+        {
+            $next = $currentPage + 1;
+            $previous = $currentPage - 1;
+        }
+        return new HtmlResponse(
+            $this->template->render(
+                'app::worktype::attributes_worktype',
+                [
+                    'rows' => $paginator,
+                    'previous' => $previous,
+                    'next' => $next,
+                    'countp' => $countPages,
+                ]
+            )
+        );
+    }     
      
 }
