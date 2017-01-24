@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Classification;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -26,12 +27,12 @@ class ManageClassificationAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
-	
+    
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         $table = new \App\Db\Table\Folder($this->adapter);
-		$paginator = $table->findParent();
-		
+        $paginator = $table->findParent();
+        
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
@@ -42,16 +43,13 @@ class ManageClassificationAction
         }
         $paginator->setCurrentPageNumber($currentPage);
 
-        if($currentPage == $countPages) {
+        if ($currentPage == $countPages) {
             $next = $currentPage;
             $previous = $currentPage - 1;
-        }
-        else if($currentPage == 1) {
+        } elseif ($currentPage == 1) {
             $next = $currentPage + 1;
             $previous = 1;
-        }
-        else
-        {
+        } else {
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }
@@ -63,10 +61,9 @@ class ManageClassificationAction
                     'rows' => $paginator,
                     'previous' => $previous,
                     'next' => $next,
-                    'countp' => $countPages,                    
+                    'countp' => $countPages,
                 ]
             )
         );
-
-    }         
+    }
 }

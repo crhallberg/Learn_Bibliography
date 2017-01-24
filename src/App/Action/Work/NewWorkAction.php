@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Work;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -35,6 +36,4 @@ class NewWorkAction
         //var_dump($this);
         return new HtmlResponse($this->template->render('app::work::new_work', ['rows' => $rows]));
     }
-     
-     
 }

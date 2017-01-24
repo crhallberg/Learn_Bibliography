@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Agent;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -32,6 +33,4 @@ class DeleteAgentAction
     {
         return new HtmlResponse($this->template->render('app::agent::delete_agent', ['request' => $request, 'adapter' => $this->adapter]));
     }
-     
-     
 }

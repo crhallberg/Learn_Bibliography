@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\WorkType;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -29,8 +30,6 @@ class NewWorkTypeAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-		return new HtmlResponse($this->template->render('app::worktype::new_worktype', ['request' => $request]));
+        return new HtmlResponse($this->template->render('app::worktype::new_worktype', ['request' => $request]));
     }
-     
-     
 }

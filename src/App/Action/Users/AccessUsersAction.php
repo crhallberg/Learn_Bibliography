@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Users;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -35,6 +36,4 @@ class AccessUsersAction
         //var_dump($this);
         return new HtmlResponse($this->template->render('app::users::access_users', ['rows' => $rows]));
     }
-     
-     
 }

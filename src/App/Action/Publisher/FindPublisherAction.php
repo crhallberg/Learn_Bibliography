@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Publisher;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -27,5 +28,5 @@ class FindPublisherAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         return new HtmlResponse($this->template->render('app::publisher::find_publisher'));
-    } 
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Language;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -29,43 +30,43 @@ class ManageLanguageAction
     }
      
     protected function getPaginator($post)
-    {        
+    {
         //edit, delete actions on language
-        if(!empty($post['action'])){
+        if (!empty($post['action'])) {
             //add a new language term
-            if($post['action'] == "new"){
-                    if ($post['submitt'] == "Save") {
-                        $table = new \App\Db\Table\TranslateLanguage($this->adapter);
-                        $table->insertRecords($_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], $_POST['fr_newlang'],
+            if ($post['action'] == "new") {
+                if ($post['submitt'] == "Save") {
+                    $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+                    $table->insertRecords($_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], $_POST['fr_newlang'],
                                               $_POST['it_newlang'], $_POST['nl_newlang']
                                               );
-                    }                     
-            }  
+                }
+            }
             //edit a language term
-            if($post['action'] == "edit"){
-                    if ($post['submitt'] == "Save") {
-                        if(!is_null($post['id'])) {
-                            $table = new \App\Db\Table\TranslateLanguage($this->adapter);
-                            $table->updateRecord($_POST['id'], $_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'], 
+            if ($post['action'] == "edit") {
+                if ($post['submitt'] == "Save") {
+                    if (!is_null($post['id'])) {
+                        $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+                        $table->updateRecord($_POST['id'], $_POST['de_newlang'], $_POST['en_newlang'], $_POST['es_newlang'],
                                                     $_POST['fr_newlang'], $_POST['it_newlang'], $_POST['nl_newlang']
                                                 );
-                        }
-                    }                     
-            }               
-            //delete a language term 
-            if($post['action'] == "delete"){
-                    if ($post['submitt'] == "Delete") {
-                        if(!is_null($post['id'])) {
-                            $table = new \App\Db\Table\TranslateLanguage($this->adapter);
-                            $table->deleteRecord($post['id']);
-                        }
-                    }                    
+                    }
+                }
+            }
+            //delete a language term
+            if ($post['action'] == "delete") {
+                if ($post['submitt'] == "Delete") {
+                    if (!is_null($post['id'])) {
+                        $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+                        $table->deleteRecord($post['id']);
+                    }
+                }
             }
             //Cancel edit\delete
             if ($post['submitt'] == "Cancel") {
-                        $table = new \App\Db\Table\TranslateLanguage($this->adapter);
-                        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));        
-            } 
+                $table = new \App\Db\Table\TranslateLanguage($this->adapter);
+                return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+            }
         }
         // default: blank for listing in manage
         $table = new \App\Db\Table\TranslateLanguage($this->adapter);
@@ -90,16 +91,13 @@ class ManageLanguageAction
         }
         $paginator->setCurrentPageNumber($currentPage);
 
-        if($currentPage == $countPages) {
+        if ($currentPage == $countPages) {
             $next = $currentPage;
             $previous = $currentPage - 1;
-        }
-        else if($currentPage == 1) {
+        } elseif ($currentPage == 1) {
             $next = $currentPage + 1;
             $previous = 1;
-        }
-        else
-        {
+        } else {
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }

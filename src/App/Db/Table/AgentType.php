@@ -63,7 +63,7 @@ class AgentType extends \Zend\Db\TableGateway\TableGateway
     {
         $this->insert(
             [
-            'type' => $type,            
+            'type' => $type,
             ]
         );
     }

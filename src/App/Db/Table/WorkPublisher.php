@@ -29,12 +29,14 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Db\Adapter\Adapter;
 use Zend\Paginator\Paginator;
 use Zend\Db\Sql\Expression;
+
 /**
  * Table Definition for record
  *
@@ -56,32 +58,32 @@ class WorkPublisher extends \Zend\Db\TableGateway\TableGateway
     }
     
     public function updatePublisherLocation($pub_id, $loc_ids)
-    {       
-        $callback = function($select) use ($pub_id, $loc_ids) {
+    {
+        $callback = function ($select) use ($pub_id, $loc_ids) {
             $select->columns(['id','work_id']);
             $select->where->in('location_id', $loc_ids);
             $select->where->equalTo('publisher_id', $pub_id);
         };
         $rows = $this->select($callback)->toArray();
         $cnt = count($rows);
-            for($i=0;$i<$cnt;$i++) {
-                $this->update(['location_id' => null]);
-            }
+        for ($i=0;$i<$cnt;$i++) {
+            $this->update(['location_id' => null]);
+        }
     }
     
     public function updatePublisherLocationId($pub_id, $source_ids, $dest_id)
-    {      
-        $callback = function($select) use ($pub_id, $source_ids) {
+    {
+        $callback = function ($select) use ($pub_id, $source_ids) {
             $select->columns(['id','work_id','publisher_id','location_id']);
             $select->where->equalTo('publisher_id', $pub_id);
-            $select->where->in('location_id', $source_ids);          
+            $select->where->in('location_id', $source_ids);
         };
         $rows = $this->select($callback)->toArray();
         $cnt = count($rows);
-        for($i=0;$i<$cnt;$i++) {
+        for ($i=0;$i<$cnt;$i++) {
             $this->update(['location_id' => $dest_id]);
-        } 
-    } 
+        }
+    }
     
     public function deleteRecordByPub($pub_id)
     {
@@ -89,25 +91,25 @@ class WorkPublisher extends \Zend\Db\TableGateway\TableGateway
         //$this->tableGateway->delete(['id' => $id]);
     }
     
-	public function findNoofWorks($id)
+    public function findNoofWorks($id)
     {
-		//echo "entered";
-		//echo $id;
+        //echo "entered";
+        //echo $id;
         $callback = function ($select) use ($id) {
-			//echo 'callback';
+            //echo 'callback';
                 $select->columns(
-				[
-					'cnt' => new Expression(
+                [
+                    'cnt' => new Expression(
                     'COUNT(DISTINCT(?))', ['work_id'],
                     [Expression::TYPE_IDENTIFIER]
-					)
-				]
-				);			
-				$select->where->equalTo('publisher_id', $id);
+                    )
+                ]
+                );
+            $select->where->equalTo('publisher_id', $id);
         };
         $rows = $this->select($callback)->toArray();
-		return $rows;
-		//var_dump($rows);
-		//echo "done";
+        return $rows;
+        //var_dump($rows);
+        //echo "done";
     }
 }

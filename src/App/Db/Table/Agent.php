@@ -29,6 +29,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
@@ -66,11 +67,11 @@ class Agent extends \Zend\Db\TableGateway\TableGateway
      *
      * @return Updated or newly added record
      */
-    public function insertRecords($fname,$lname,$altname,$orgname)
+    public function insertRecords($fname, $lname, $altname, $orgname)
     {
         $this->insert(
             [
-            'fname' => $fname, 
+            'fname' => $fname,
             'lname' => $lname,
             'alternate_name' => $altname,
             'organization_name' => $orgname,
@@ -105,7 +106,7 @@ class Agent extends \Zend\Db\TableGateway\TableGateway
     
     public function findInitialLetter()
     {
-       /* $callback = function ($select) {
+        /* $callback = function ($select) {
                 $select->columns(
                     [
                         'letter' => new Expression(
@@ -134,7 +135,7 @@ class Agent extends \Zend\Db\TableGateway\TableGateway
         };*/
         
         $callback = function ($select) {
-                $select->columns(
+            $select->columns(
                     [
                         'letter' => new Expression(
                             'DISTINCT(substring(?, 1, 1))',
@@ -157,20 +158,19 @@ class Agent extends \Zend\Db\TableGateway\TableGateway
     {
         $select = $this->sql->select();
         $select->where->like('fname', $letter.'%');
-       $paginatorAdapter = new DbSelect($select, $this->adapter);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
     }
     
     public function findRecords($name, $type)
     {
-        if($type == 'fname')
-        {
+        if ($type == 'fname') {
             $select = $this->sql->select()->where(['fname' => $name]);
-        } else if($type == 'lname') {
+        } elseif ($type == 'lname') {
             $select = $this->sql->select()->where(['lname' => $name]);
-        } else if($type == 'altname') {
+        } elseif ($type == 'altname') {
             $select = $this->sql->select()->where(['alternate_name' => $name]);
-        } else if($type == 'orgname') {
+        } elseif ($type == 'orgname') {
             $select = $this->sql->select()->where(['organization_name' => $name]);
         }
         $paginatorAdapter = new DbSelect($select, $this->adapter);

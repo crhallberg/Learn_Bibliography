@@ -29,6 +29,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
@@ -69,9 +70,8 @@ class Folder extends \Zend\Db\TableGateway\TableGateway
     
     public function findParent()
     {
-        $select = $this->sql->select()->where(['parent_id' => NULL]);
+        $select = $this->sql->select()->where(['parent_id' => null]);
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
     }
-       
 }

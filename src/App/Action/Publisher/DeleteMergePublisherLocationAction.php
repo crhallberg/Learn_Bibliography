@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Publisher;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -30,7 +31,7 @@ class DeleteMergePublisherLocationAction
      
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        return new HtmlResponse($this->template->render('app::publisher::delete_merge_publisher_location', 
+        return new HtmlResponse($this->template->render('app::publisher::delete_merge_publisher_location',
                                 ['request' => $request, 'adapter' => $this->adapter]));
-    } 
+    }
 }

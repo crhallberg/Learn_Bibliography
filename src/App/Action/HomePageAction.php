@@ -30,19 +30,19 @@ class HomePageAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         $data = [];
-        /* 
+        /*
         $this->layout()->instructions = "PRODUCTION - Live since 21st, November 2005
 
-                                   //      Running on NEW server September 2007"; 
+                                   //      Running on NEW server September 2007";
         $viewData = array(
-        "layout" => "app::home-page.phtml", 
-        "title" => "Hello World Title", 
+        "layout" => "app::home-page.phtml",
+        "title" => "Hello World Title",
         "instructions" => "PRODUCTION - Live since 21st, November 2005
 
                                          Running on NEW server September 2007"
                          );
         $html = $this->template->render("app::home-page.phtml", $viewData);
-        return new HtmlResponse($html);								 
+        return new HtmlResponse($html);
         $data = ['instructions' => 'foo']; */
         return new HtmlResponse($this->template->render('app::home-page', $this));
     }

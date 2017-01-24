@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Publisher;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -31,5 +32,5 @@ class AddPublisherLocationAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         return new HtmlResponse($this->template->render('app::publisher::add_publisher_location', ['request' => $request, 'adapter' => $this->adapter]));
-    } 
+    }
 }

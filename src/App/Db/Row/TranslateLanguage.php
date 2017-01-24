@@ -26,6 +26,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Row;
+
 /**
  * Row Definition for user
  *

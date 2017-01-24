@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Publisher;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -35,6 +36,4 @@ class MergePublisherAction
         //var_dump($this);
         return new HtmlResponse($this->template->render('app::publisher::merge_publisher', ['rows' => $rows, 'adapter' => $this->adapter]));
     }
-     
-     
 }

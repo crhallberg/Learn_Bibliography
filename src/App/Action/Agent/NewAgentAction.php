@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Agent;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -31,6 +32,4 @@ class NewAgentAction
     {
         return new HtmlResponse($this->template->render('app::agent::new_agent', ['request' => $request]));
     }
-     
-     
 }

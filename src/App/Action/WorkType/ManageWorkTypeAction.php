@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\WorkType;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -27,44 +28,43 @@ class ManageWorkTypeAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
-	
-	protected function getPaginator($post)
-    {       
+    
+    protected function getPaginator($post)
+    {
         //add, edit, delete actions on worktype
-        if(!empty($post['action'])){
+        if (!empty($post['action'])) {
             //add a new work type
-            if($post['action'] == "new"){
-                    if ($post['submitt'] == "Save") {
-                        $table = new \App\Db\Table\WorkType($this->adapter);
-                        $table->insertRecords($post['new_worktype']);
-                    }                     
+            if ($post['action'] == "new") {
+                if ($post['submitt'] == "Save") {
+                    $table = new \App\Db\Table\WorkType($this->adapter);
+                    $table->insertRecords($post['new_worktype']);
+                }
             }
-			//edit a work type
-            if($post['action'] == "edit"){
-                    if ($post['submitt'] == "Save") {
-                        if(!is_null($post['id'])) {
-                            
-                            $table = new \App\Db\Table\WorkType($this->adapter);
-                            $table->updateRecord($post['id'], $post['edit_worktype']);                            
-                        }
-                    }                     
-            }  
-			//delete a work type
-            if($post['action'] == "delete"){
-                    if ($post['submitt'] == "Delete") {
-                        if(!is_null($post['id'])) {
-                            $table = new \App\Db\Table\Work($this->adapter);
-                            $table->updateWorkTypeId($post['id']);
-                            $table = new \App\Db\Table\WorkType($this->adapter);
-                            $table->deleteRecord($post['id']); 
-                        }
-                    }                    
+            //edit a work type
+            if ($post['action'] == "edit") {
+                if ($post['submitt'] == "Save") {
+                    if (!is_null($post['id'])) {
+                        $table = new \App\Db\Table\WorkType($this->adapter);
+                        $table->updateRecord($post['id'], $post['edit_worktype']);
+                    }
+                }
+            }
+            //delete a work type
+            if ($post['action'] == "delete") {
+                if ($post['submitt'] == "Delete") {
+                    if (!is_null($post['id'])) {
+                        $table = new \App\Db\Table\Work($this->adapter);
+                        $table->updateWorkTypeId($post['id']);
+                        $table = new \App\Db\Table\WorkType($this->adapter);
+                        $table->deleteRecord($post['id']);
+                    }
+                }
             }
             //Cancel add\edit\delete
             if ($post['submitt'] == "Cancel") {
-                        $table = new \App\Db\Table\WorkType($this->adapter);
-                        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));        
-            } 
+                $table = new \App\Db\Table\WorkType($this->adapter);
+                return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+            }
         }
         // default: blank for listing in manage
         $table = new \App\Db\Table\WorkType($this->adapter);
@@ -73,7 +73,7 @@ class ManageWorkTypeAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-		$query = $request->getqueryParams();
+        $query = $request->getqueryParams();
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
@@ -89,16 +89,13 @@ class ManageWorkTypeAction
         }
         $paginator->setCurrentPageNumber($currentPage);
 
-        if($currentPage == $countPages) {
+        if ($currentPage == $countPages) {
             $next = $currentPage;
             $previous = $currentPage - 1;
-        }
-        else if($currentPage == 1) {
+        } elseif ($currentPage == 1) {
             $next = $currentPage + 1;
             $previous = 1;
-        }
-        else
-        {
+        } else {
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }
@@ -113,6 +110,5 @@ class ManageWorkTypeAction
                 ]
             )
         );
-    }          
-    
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Work;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -45,6 +46,4 @@ class ClassifyWorkAction
         // var_dump($path);
         return new HtmlResponse($this->template->render('app::work::classify_work', ['rows' => $rows]));
     }
-     
-     
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Language;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -32,6 +33,4 @@ class DeleteLanguageAction
     {
         return new HtmlResponse($this->template->render('app::language::delete_language', ['request' => $request, 'adapter' => $this->adapter]));
     }
-     
-     
 }

@@ -29,11 +29,13 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Db\Adapter\Adapter;
 use Zend\Paginator\Paginator;
+
 /**
  * Table Definition for record
  *
@@ -77,49 +79,49 @@ class PublisherLocation extends \Zend\Db\TableGateway\TableGateway
         $select = $this->sql->select();
        // $select->columns(array('location'));
        $select->join('publisher', 'publisher_location.publisher_id = publisher.id', array('name'), 'inner');
-       $select->where(['location' => $location]);
+        $select->where(['location' => $location]);
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
     }
     
     public function deletePublisherRecord($id, $locs)
     {
-       // print_r($locs);
-       if(($id != null) && (count($locs) == 0)) {
-          $this->delete(['publisher_id' => $id]);
+        // print_r($locs);
+       if (($id != null) && (count($locs) == 0)) {
+           $this->delete(['publisher_id' => $id]);
         //$this->tableGateway->delete(['id' => $id]);
        }
-       if(($id != null) && (count($locs) >= 1)) {
-         $callback = function($select) use ($id, $locs) {
-            $select->where->in('location', $locs);
-            $select->where->equalTo('publisher_id', $id);
-        };
-        $this->delete($callback);
-       }        
-    }
-    
-    public function deletePublisherRecordById($id, $loc_ids)
-    {
-         $callback = function($select) use ($id, $loc_ids) {
-            $select->where->in('id', $loc_ids);
-            $select->where->equalTo('publisher_id', $id);
-        };
-        //$this->delete($callback);       
-        $rows = $this->select($callback)->toArray();
-        $cnt = count($rows);
-        for($i=0;$i<$cnt;$i++) {
+        if (($id != null) && (count($locs) >= 1)) {
+            $callback = function ($select) use ($id, $locs) {
+                $select->where->in('location', $locs);
+                $select->where->equalTo('publisher_id', $id);
+            };
             $this->delete($callback);
         }
     }
     
-    public function addPublisherLocation($id,$loc)
+    public function deletePublisherRecordById($id, $loc_ids)
     {
-       $this->insert(
+        $callback = function ($select) use ($id, $loc_ids) {
+            $select->where->in('id', $loc_ids);
+            $select->where->equalTo('publisher_id', $id);
+        };
+        //$this->delete($callback);
+        $rows = $this->select($callback)->toArray();
+        $cnt = count($rows);
+        for ($i=0;$i<$cnt;$i++) {
+            $this->delete($callback);
+        }
+    }
+    
+    public function addPublisherLocation($id, $loc)
+    {
+        $this->insert(
             [
             'publisher_id' => $id,
             'location' => $loc
             ]
-        ); 
+        );
     }
     
     public function findPublisherLocations($id)
@@ -131,9 +133,9 @@ class PublisherLocation extends \Zend\Db\TableGateway\TableGateway
     
     public function findPublisherId($id)
     {
-       $rowset = $this->select(array('publisher_id' => $id));
-       $row = $rowset->current();
-       return($row);
+        $rowset = $this->select(array('publisher_id' => $id));
+        $row = $rowset->current();
+        return($row);
     }
     
     public function findLocationId($id, $locs)
@@ -141,11 +143,10 @@ class PublisherLocation extends \Zend\Db\TableGateway\TableGateway
         /*echo "entered";
         echo $id ."\n";
         print_r($locs); */
-        $callback = function($select) use ($id, $locs) {
+        $callback = function ($select) use ($id, $locs) {
             $select->where->in('location', $locs);
             $select->where->equalTo('publisher_id', $id);
         };
-        return $this->select($callback)->toArray(); 
+        return $this->select($callback)->toArray();
     }
-    
 }

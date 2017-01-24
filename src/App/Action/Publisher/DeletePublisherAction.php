@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Publisher;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -32,5 +33,4 @@ class DeletePublisherAction
     {
         return new HtmlResponse($this->template->render('app::publisher::delete_publisher', ['request' => $request, 'adapter' => $this->adapter]));
     }
-          
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Preferences;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -35,6 +36,4 @@ class ChangePasswordPreferencesAction
         //var_dump($this);
         return new HtmlResponse($this->template->render('app::preferences::changepassword_preferences', ['rows' => $rows]));
     }
-     
-     
 }
