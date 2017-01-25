@@ -40,6 +40,7 @@ return [
 			'app::worktype::new_attribute' => 'templates/app/worktype/new_attribute.phtml',
 			'app::worktype::edit_attribute' => 'templates/app/worktype/edit_attribute.phtml',
 			'app::worktype::delete_attribute' => 'templates/app/worktype/delete_attribute.phtml',
+			'app::worktype::manage_attribute_options' => 'templates/app/worktype/manage_attribute_options.phtml',
             //classification
             'app::classification::new_classification' => 'templates/app/classification/new.phtml',
             'app::classification::manage_classification' => 'templates/app/classification/manage.phtml',

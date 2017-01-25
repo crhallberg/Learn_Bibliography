@@ -236,4 +236,28 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 
         return $this->select($callback)->toArray();
 	}
+	
+	public function deleteRecordByWorkType($wkt_id)
+	{
+		$callback = function($select) use($wkt_id) {
+			$select->where->equalTo('worktype_id', $wkt_id);
+		};
+		$rows = $this->select($callback)->toArray();
+		$cnt = count($rows);
+		for($i=0;$i<$cnt;$i++) {
+			$this->delete($callback);
+		}
+	}
+	
+	public function deleteAttributeFromAllWorkTypes($wkat_id)
+	{
+		$callback = function($select) use($wkat_id) {
+			$select->where->equalTo('workattribute_id', $wkat_id);
+		};
+		$rows = $this->select($callback)->toArray();
+		$cnt = count($rows);
+		for($i=0;$i<$cnt;$i++) {
+			$this->delete($callback);
+		}
+	}
 }

@@ -47,14 +47,14 @@ use Zend\Db\Sql\Expression;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class WorkAttribute extends \Zend\Db\TableGateway\TableGateway
+class Work_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 {
     /**
      * Constructor
      */
     public function __construct($adapter)
     {
-        parent::__construct('workattribute', $adapter);
+        parent::__construct('work_workattribute', $adapter);
     }
     
     /**
@@ -67,55 +67,15 @@ class WorkAttribute extends \Zend\Db\TableGateway\TableGateway
      * @return Updated or newly added record
      */    
 	
-	public function displayAttributes()
+	public function deleteWorkAttributeFromWork($wkat_id)
 	{
-		$select = $this->sql->select();
-        $paginatorAdapter = new DbSelect($select, $this->adapter);
-        return new Paginator($paginatorAdapter);
-	}
-	
-	public function displayAttributes1($id)
-	{
-		$wtwa = new WorkType_WorkAttribute($this->adapter);
-		$subselect = $wtwa->getWorkAttributeQuery($id);
-		
-		$callback = function($select) use ($subselect) {
-			$select->columns(['id','field']);
-			$select->where->notIn('field',$subselect);
+		$callback = function($select) use($wkat_id) {
+			$select->where->equalTo('workattribute_id', $wkat_id);
 		};
-		$rows = $this->select($callback)->toArray();				
-		return $rows;		
-	}
-	
-	public function addAttribute($field,$type)
-    {
-        $this->insert(
-            [
-			'field' => $field,
-            'type' => $type,            
-            ]
-        );
-    }
-	
-	public function findRecordById($id)
-	{
-		$rowset = $this->select(array('id' => $id));
-        $row = $rowset->current();
-        return($row);
-	}
-	
-	public function updateRecord($id, $field)
-	{
-		$this->update(
-            [
-                'field' => $field,
-            ],
-            ['id' => $id]
-        );
-	}
-	
-	public function deleteRecord($id) 
-	{
-		$this->delete(['id' => $id]);
+		$rows = $this->select($callback)->toArray();
+		$cnt = count($rows);
+		for($i=0;$i<$cnt;$i++) {
+			$this->delete($callback);
+		}
 	}
 }

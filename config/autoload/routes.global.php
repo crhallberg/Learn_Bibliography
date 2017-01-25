@@ -27,6 +27,7 @@ return [
 			App\Action\WorkType\NewAttributeAction::class => App\Action\WorkType\NewAttributeFactory::class,
 			App\Action\WorkType\EditAttributeAction::class => App\Action\WorkType\EditAttributeFactory::class,
 			App\Action\WorkType\DeleteAttributeAction::class => App\Action\WorkType\DeleteAttributeFactory::class,
+			App\Action\WorkType\AttributeManageOptionsAction::class => App\Action\WorkType\AttributeManageOptionsFactory::class,
             
 			App\Action\Classification\NewClassificationAction::class => App\Action\Classification\NewClassificationFactory::class,
 			App\Action\Classification\ManageClassificationAction::class => App\Action\Classification\ManageClassificationFactory::class,
@@ -225,6 +226,16 @@ return [
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\WorkType\DeleteAttributeAction::class,
+            ],
+            'allowed_methods' => ['GET','POST'],
+        ],
+		
+		[
+            'name' => 'manage_attribute_options',
+		    'path' => '/WorkType/manage_attribute_options',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\WorkType\AttributeManageOptionsAction::class,
             ],
             'allowed_methods' => ['GET','POST'],
         ],

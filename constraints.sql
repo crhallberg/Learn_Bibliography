@@ -9,3 +9,12 @@ ALTER TABLE `work_publisher`
   
 ALTER TABLE `work`
   ADD CONSTRAINT `work_worktype_type_id_fk` FOREIGN KEY (`type_id`) REFERENCES `work_type` (`id`);
+  
+ALTER TABLE `work_workattribute`
+  ADD CONSTRAINT `work_workattribute_workattribute_id_fk` FOREIGN KEY (`workattribute_id`) REFERENCES `workattribute`(`id`);
+  
+ALTER TABLE `worktype_workattribute`
+  ADD CONSTRAINT `worktype_workattribute_workattribute_id_fk` FOREIGN KEY (`workattribute_id`) REFERENCES `workattribute`(`id`);
+  
+ALTER TABLE `workattribute_option`
+  ADD CONSTRAINT `workattribute_option_workattribute_id_fk` FOREIGN KEY (`workattribute_id`) REFERENCES `workattribute`(`id`);

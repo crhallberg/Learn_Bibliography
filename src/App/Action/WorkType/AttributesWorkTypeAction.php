@@ -53,10 +53,21 @@ class AttributesWorkTypeAction
             if($post['action'] == "delete"){
                     if ($post['submitt'] == "Delete") {
                         if(!is_null($post['id'])) {
-                            /*$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-                            $table->deleteWorkAttributeFromWorkTypeId($post['id']);
-                            $table = new \App\Db\Table\WorkType($this->adapter);
-                            $table->deleteRecord($post['id']);*/ 
+							//no
+							$table = new \App\Db\Table\Work_WorkAttribute($this->adapter);
+							$table->deleteWorkAttributeFromWork($post['id']);
+							
+							//yes
+                            $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+                            $table->deleteAttributeFromAllWorkTypes($post['id']);
+							
+							//yes
+							$table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
+							$table->deleteWorkAttributeOptions($post['id']);
+							
+							//no
+                            $table = new \App\Db\Table\WorkAttribute($this->adapter);
+                            $table->deleteRecord($post['id']); 
                         }
                     }                    
             }
