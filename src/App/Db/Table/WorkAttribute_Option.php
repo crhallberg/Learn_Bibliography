@@ -84,10 +84,46 @@ class WorkAttribute_Option extends \Zend\Db\TableGateway\TableGateway
 		$select = $this->sql->select();
 		$select->where->equalTo('workattribute_id', $wkat_id);
 		$paginatorAdapter = new DbSelect($select, $this->adapter);
-		//$paginator = new Paginator($paginatorAdapter);
-		//$allItems = $paginator->getTotalItemCount();
-		//echo "rows count is $allItems <br />";
-		//return $paginator;
+
 		return new Paginator($paginatorAdapter);
+	}
+	
+	public function addOption($wkat_id,$title,$val)
+    {
+        $this->insert(
+            [
+			'workattribute_id' => $wkat_id,
+			'title' => $title,
+            'value' => $val,            
+            ]
+        );
+    }
+	
+	public function findRecordById($id)
+	{
+		$rowset = $this->select(array('id' => $id));
+        $row = $rowset->current();
+        return($row);
+	}
+	
+	public function updateOption($id,$title,$val)
+    {
+        $this->update(
+            [
+                'title' => $title,
+				'value' => $val,
+            ],
+            ['id' => $id]
+        );
+    }
+	
+	public function deleteOption($wkat_id,$id)
+	{
+		$this->delete(
+			[
+				'workattribute_id' => $wkat_id,
+				'id' => $id
+			]
+		);
 	}
 }

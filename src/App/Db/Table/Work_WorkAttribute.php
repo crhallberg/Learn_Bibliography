@@ -78,4 +78,16 @@ class Work_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 			$this->delete($callback);
 		}
 	}
+	
+	public function countRecordsByAttributeOption($wkat_id, $id)
+    {
+      $select = $this->sql->select()->where(['workattribute_id' => $wkat_id, 'value' => $id]);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    } 
+	
+	public function deleteRecordByValue($wkat_id,$val)
+	{
+		$this->delete(['workattribute_id' => $wkat_id,'value' => $val]);
+	}
 }

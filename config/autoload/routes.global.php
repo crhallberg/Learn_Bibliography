@@ -28,6 +28,9 @@ return [
 			App\Action\WorkType\EditAttributeAction::class => App\Action\WorkType\EditAttributeFactory::class,
 			App\Action\WorkType\DeleteAttributeAction::class => App\Action\WorkType\DeleteAttributeFactory::class,
 			App\Action\WorkType\AttributeManageOptionsAction::class => App\Action\WorkType\AttributeManageOptionsFactory::class,
+			App\Action\WorkType\NewOptionAction::class => App\Action\WorkType\NewOptionFactory::class,
+			App\Action\WorkType\EditOptionAction::class => App\Action\WorkType\EditOptionFactory::class,
+			App\Action\WorkType\DeleteOptionAction::class => App\Action\WorkType\DeleteOptionFactory::class,
             
 			App\Action\Classification\NewClassificationAction::class => App\Action\Classification\NewClassificationFactory::class,
 			App\Action\Classification\ManageClassificationAction::class => App\Action\Classification\ManageClassificationFactory::class,
@@ -236,6 +239,36 @@ return [
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\WorkType\AttributeManageOptionsAction::class,
+            ],
+            'allowed_methods' => ['GET','POST'],
+        ],
+		
+		[
+            'name' => 'new_option',
+		    'path' => '/WorkType/new_option',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\WorkType\NewOptionAction::class,
+            ],
+            'allowed_methods' => ['GET','POST'],
+        ],
+		
+		[
+            'name' => 'edit_option',
+		    'path' => '/WorkType/edit_option',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\WorkType\EditOptionAction::class,
+            ],
+            'allowed_methods' => ['GET','POST'],
+        ],
+		
+		[
+            'name' => 'delete_option',
+		    'path' => '/WorkType/delete_option',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\WorkType\DeleteOptionAction::class,
             ],
             'allowed_methods' => ['GET','POST'],
         ],

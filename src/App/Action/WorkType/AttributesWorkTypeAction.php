@@ -42,34 +42,34 @@ class AttributesWorkTypeAction
             }
 			//edit attribute
             if($post['action'] == "edit"){
-                    if ($post['submitt'] == "Save") {
-                        if(!is_null($post['id'])) {                           
-                            $table = new \App\Db\Table\WorkAttribute($this->adapter);
-                            $table->updateRecord($post['id'], $post['edit_attribute']);                            
-                        }
-                    }                     
+                if ($post['submitt'] == "Save") {
+                    if(!is_null($post['id'])) {                           
+                        $table = new \App\Db\Table\WorkAttribute($this->adapter);
+                        $table->updateRecord($post['id'], $post['edit_attribute']);                            
+                    }
+                }                     
             }
 			//delete attribute
             if($post['action'] == "delete"){
-                    if ($post['submitt'] == "Delete") {
-                        if(!is_null($post['id'])) {
-							//no
-							$table = new \App\Db\Table\Work_WorkAttribute($this->adapter);
-							$table->deleteWorkAttributeFromWork($post['id']);
+                if ($post['submitt'] == "Delete") {
+                    if(!is_null($post['id'])) {
+						//no
+						$table = new \App\Db\Table\Work_WorkAttribute($this->adapter);
+						$table->deleteWorkAttributeFromWork($post['id']);
 							
-							//yes
-                            $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-                            $table->deleteAttributeFromAllWorkTypes($post['id']);
+						//yes
+                        $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+                        $table->deleteAttributeFromAllWorkTypes($post['id']);
 							
-							//yes
-							$table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
-							$table->deleteWorkAttributeOptions($post['id']);
+						//yes
+						$table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
+						$table->deleteWorkAttributeOptions($post['id']);
 							
-							//no
-                            $table = new \App\Db\Table\WorkAttribute($this->adapter);
-                            $table->deleteRecord($post['id']); 
-                        }
-                    }                    
+						//no
+                        $table = new \App\Db\Table\WorkAttribute($this->adapter);
+                        $table->deleteRecord($post['id']); 
+                    }
+                }                    
             }
             //Cancel add\edit\delete
             if ($post['submitt'] == "Cancel") {
