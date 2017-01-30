@@ -16,6 +16,7 @@ class EditOptionFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new EditOptionAction($router, $template, $adapter);
+        //return new EditOptionAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::worktype::edit_option', $router, $template, $adapter);
     }
 }

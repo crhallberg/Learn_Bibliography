@@ -16,6 +16,7 @@ class NewLanguageFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new NewLanguageAction($router, $template, $adapter);
+        //return new NewLanguageAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::language::new_language', $router, $template, $adapter);
     }
 }

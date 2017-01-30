@@ -16,6 +16,7 @@ class EditAgentFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new EditAgentAction($router, $template, $adapter);
+        //return new EditAgentAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::agent::edit_agent', $router, $template, $adapter);
     }
 }

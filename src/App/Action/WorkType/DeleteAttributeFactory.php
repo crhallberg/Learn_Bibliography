@@ -16,6 +16,7 @@ class DeleteAttributeFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new DeleteAttributeAction($router, $template, $adapter);
+        //return new DeleteAttributeAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::worktype::delete_attribute', $router, $template, $adapter);
     }
 }

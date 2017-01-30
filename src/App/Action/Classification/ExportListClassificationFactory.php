@@ -16,6 +16,7 @@ class ExportListClassificationFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new ExportListClassificationAction($router, $template, $adapter);
+        //return new ExportListClassificationAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::classification::exportlist_classification', $router, $template, $adapter);
     }
 }

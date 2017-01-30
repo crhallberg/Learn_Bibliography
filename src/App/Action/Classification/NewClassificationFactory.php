@@ -16,6 +16,7 @@ class NewClassificationFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new NewClassificationAction($router, $template, $adapter);
+        //return new NewClassificationAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::classification::new_classification', $router, $template, $adapter);
     }
 }

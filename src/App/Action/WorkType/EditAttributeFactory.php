@@ -16,6 +16,7 @@ class EditAttributeFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new EditAttributeAction($router, $template, $adapter);
+        //return new EditAttributeAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::worktype::edit_attribute', $router, $template, $adapter);
     }
 }

@@ -29,11 +29,13 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Db\Adapter\Adapter;
 use Zend\Paginator\Paginator;
+
 /**
  * Table Definition for record
  *
@@ -58,25 +60,25 @@ class WorkAgent extends \Zend\Db\TableGateway\TableGateway
     {
         $this->delete(['agenttype_id' => $id]);
         //$this->tableGateway->delete(['id' => $id]);
-    }   
+    }
     
     public function deleteRecordByAgentId($id)
     {
         $this->delete(['agent_id' => $id]);
         //$this->tableGateway->delete(['id' => $id]);
-    }  
+    }
     
     public function countRecordsByAgentType($id)
     {
-      $select = $this->sql->select()->where(['agenttype_id' => $id]);
+        $select = $this->sql->select()->where(['agenttype_id' => $id]);
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
-    } 
+    }
     
     public function countRecordsByAgent($id)
     {
-      $select = $this->sql->select()->where(['agent_id' => $id]);
+        $select = $this->sql->select()->where(['agent_id' => $id]);
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
-    } 
+    }
 }

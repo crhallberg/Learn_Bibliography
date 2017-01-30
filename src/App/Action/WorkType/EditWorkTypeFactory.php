@@ -16,6 +16,7 @@ class EditWorkTypeFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new EditWorkTypeAction($router, $template, $adapter);
+        //return new EditWorkTypeAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::worktype::edit_worktype', $router, $template, $adapter);
     }
 }

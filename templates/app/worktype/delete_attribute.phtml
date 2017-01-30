@@ -11,7 +11,7 @@
                     $action = $params['action'];
                     $id = $params['id'];
                     //fetch name based on id
-                    $table = new \App\Db\Table\WorkAttribute($adapter);
+                    $table = new \App\Db\Table\WorkAttribute($this->adapter);
                     $row = $table->findRecordById($id);
                     $field = $row['field'];
                     echo "<p>$field</p>";

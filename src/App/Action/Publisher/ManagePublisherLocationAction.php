@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\Publisher;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -22,61 +23,59 @@ class ManagePublisherLocationAction
         $this->adapter  = $adapter;
     }
     
-    protected function getPaginator($query,$post)
-    {   
-    //echo $post['action']
+    protected function getPaginator($query, $post)
+    {
+        //echo $post['action']
         //add location based on action query parameter
-        if(!empty($post['action'])){
+        if (!empty($post['action'])) {
             //add a new publisher
-            if($post['action'] == "new"){
-                    if ($post['submitt'] == "Save") {
-                        $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                        $table->addPublisherLocation($query['id'],$post['add_publisherloc']);
-                    }                     
-            }  
+            if ($post['action'] == "new") {
+                if ($post['submitt'] == "Save") {
+                    $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                    $table->addPublisherLocation($query['id'], $post['add_publisherloc']);
+                }
+            }
             //delete a location for a publisher */
-            if($post['action'] == "delete"){
-                    if ($post['submitt'] == "Delete") {
-                        if(!is_null($post['id']) && ((count($post['locs'])) >= 0)) {
-                            //var_dump($post['locids']);
+            if ($post['action'] == "delete") {
+                if ($post['submitt'] == "Delete") {
+                    if (!is_null($post['id']) && ((count($post['locs'])) >= 0)) {
+                        //var_dump($post['locids']);
                            $table = new \App\Db\Table\WorkPublisher($this->adapter);
-                           $table->updatePublisherLocation($query['id'], $post['locids']);
-                           $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                           $table->deletePublisherRecord($post['id'],$post['locs']);     
-                        }
-                    }                    
-            } 
+                        $table->updatePublisherLocation($query['id'], $post['locids']);
+                        $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                        $table->deletePublisherRecord($post['id'], $post['locs']);
+                    }
+                }
+            }
             //Merge publisher locations */
-            if($post['action'] == "merge"){
-                    if ($post['submitt'] == "Merge") {
-                        if(!is_null($post['id'])) {
-
+            if ($post['action'] == "merge") {
+                if ($post['submitt'] == "Merge") {
+                    if (!is_null($post['id'])) {
+                        $table = new \App\Db\Table\WorkPublisher($this->adapter);
+                        $table->updatePublisherLocationId($query['id'], $post['sourceids'], $post['destid']);
                           
-                          $table = new \App\Db\Table\WorkPublisher($this->adapter);
-                          $table->updatePublisherLocationId($query['id'], $post['sourceids'], $post['destid']);
-                          
-                          $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                          $table->deletePublisherRecordById($query['id'], $post['sourceids']); 
-                        }
-                    }                    
-            } 
+                        $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                        $table->deletePublisherRecordById($query['id'], $post['sourceids']);
+                    }
+                }
+            }
             //Cancel
             if ($post['submitt'] == "Cancel") {
-                        $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                        $paginator = $table->findPublisherLocations($query['id']);      
-            } 
+                $table = new \App\Db\Table\PublisherLocation($this->adapter);
+                $paginator = $table->findPublisherLocations($query['id']);
+            }
         }
         // default: blank/missing search
         $table = new \App\Db\Table\PublisherLocation($this->adapter);
-        $paginator = $table->findPublisherLocations($query['id']);        
+        $paginator = $table->findPublisherLocations($query['id']);
         return $paginator;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        $query = $request->getqueryParams();        
+        $query = $request->getqueryParams();
 
-        if($query['count']==4) {
+        if ($query['count']==4) {
             $table = new \App\Db\Table\PublisherLocation($this->adapter);
             $row = $table->findPublisherId($query['id']);
             $query['id'] = $row['publisher_id'];
@@ -85,7 +84,7 @@ class ManagePublisherLocationAction
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
         }
-        $paginator = $this->getPaginator($query,$post);
+        $paginator = $this->getPaginator($query, $post);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
@@ -96,16 +95,13 @@ class ManagePublisherLocationAction
         }
         $paginator->setCurrentPageNumber($currentPage);
 
-        if($currentPage == $countPages) {
+        if ($currentPage == $countPages) {
             $next = $currentPage;
             $previous = $currentPage - 1;
-        }
-        else if($currentPage == 1) {
+        } elseif ($currentPage == 1) {
             $next = $currentPage + 1;
             $previous = 1;
-        }
-        else
-        {
+        } else {
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }

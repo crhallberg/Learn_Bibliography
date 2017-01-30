@@ -29,6 +29,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
@@ -65,57 +66,57 @@ class WorkAttribute extends \Zend\Db\TableGateway\TableGateway
      * @param string $rawData Raw data from source
      *
      * @return Updated or newly added record
-     */    
-	
-	public function displayAttributes()
-	{
-		$select = $this->sql->select();
+     */
+    
+    public function displayAttributes()
+    {
+        $select = $this->sql->select();
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
-	}
-	
-	public function displayAttributes1($id)
-	{
-		$wtwa = new WorkType_WorkAttribute($this->adapter);
-		$subselect = $wtwa->getWorkAttributeQuery($id);
-		
-		$callback = function($select) use ($subselect) {
-			$select->columns(['id','field']);
-			$select->where->notIn('field',$subselect);
-		};
-		$rows = $this->select($callback)->toArray();				
-		return $rows;		
-	}
-	
-	public function addAttribute($field,$type)
+    }
+    
+    public function displayAttributes1($id)
+    {
+        $wtwa = new WorkType_WorkAttribute($this->adapter);
+        $subselect = $wtwa->getWorkAttributeQuery($id);
+        
+        $callback = function ($select) use ($subselect) {
+            $select->columns(['id','field']);
+            $select->where->notIn('field', $subselect);
+        };
+        $rows = $this->select($callback)->toArray();
+        return $rows;
+    }
+    
+    public function addAttribute($field, $type)
     {
         $this->insert(
             [
-			'field' => $field,
-            'type' => $type,            
+            'field' => $field,
+            'type' => $type,
             ]
         );
     }
-	
-	public function findRecordById($id)
-	{
-		$rowset = $this->select(array('id' => $id));
+    
+    public function findRecordById($id)
+    {
+        $rowset = $this->select(array('id' => $id));
         $row = $rowset->current();
         return($row);
-	}
-	
-	public function updateRecord($id, $field)
-	{
-		$this->update(
+    }
+    
+    public function updateRecord($id, $field)
+    {
+        $this->update(
             [
                 'field' => $field,
             ],
             ['id' => $id]
         );
-	}
-	
-	public function deleteRecord($id) 
-	{
-		$this->delete(['id' => $id]);
-	}
+    }
+    
+    public function deleteRecord($id)
+    {
+        $this->delete(['id' => $id]);
+    }
 }

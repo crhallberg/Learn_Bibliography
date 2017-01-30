@@ -44,6 +44,7 @@ return [
 			'app::worktype::new_option' => 'templates/app/worktype/new_option.phtml',
 			'app::worktype::edit_option' => 'templates/app/worktype/edit_option.phtml',
 			'app::worktype::delete_option' => 'templates/app/worktype/delete_option.phtml',
+			'app::worktype::merge_duplicate_option' => 'templates/app/worktype/merge_duplicate_values.phtml',
             //classification
             'app::classification::new_classification' => 'templates/app/classification/new.phtml',
             'app::classification::manage_classification' => 'templates/app/classification/manage.phtml',

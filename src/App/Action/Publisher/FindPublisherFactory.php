@@ -16,6 +16,7 @@ class FindPublisherFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new FindPublisherAction($router, $template, $adapter);
+        //return new FindPublisherAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::publisher::find_publisher', $router, $template, $adapter);
     }
 }

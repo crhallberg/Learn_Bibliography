@@ -16,6 +16,7 @@ class AddPublisherLocationFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new AddPublisherLocationAction($router, $template, $adapter);
+        //return new AddPublisherLocationAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::publisher::add_publisher_location', $router, $template, $adapter);
     }
 }

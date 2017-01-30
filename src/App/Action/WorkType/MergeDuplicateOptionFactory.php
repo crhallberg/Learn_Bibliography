@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Action\AgentType;
+namespace App\Action\WorkType;
 
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 use Zend\Db\Adapter\Adapter;
 
-class NewAgentTypeFactory
+class MergeDuplicateOptionFactory
 {
     public function __invoke(ContainerInterface $container)
     {
@@ -16,7 +16,7 @@ class NewAgentTypeFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        //return new NewAgentTypeAction($router, $template, $adapter);
-        return new \App\Action\SimpleRenderAction('app::agenttype::new_agenttype', $router, $template, $adapter);
+        //return new MergeDuplicateOptionAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::worktype::merge_duplicate_option', $router, $template, $adapter);
     }
 }

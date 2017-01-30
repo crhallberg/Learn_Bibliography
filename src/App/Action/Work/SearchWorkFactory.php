@@ -16,6 +16,7 @@ class SearchWorkFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new SearchWorkAction($router, $template, $adapter);
+        //return new SearchWorkAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::work::search_work', $router, $template, $adapter);
     }
 }

@@ -16,6 +16,7 @@ class NewOptionFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new NewOptionAction($router, $template, $adapter);
+        //return new NewOptionAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::worktype::new_option', $router, $template, $adapter);
     }
 }

@@ -1,0 +1,46 @@
+<?php $this->headTitle('Merge Duplicate Values'); ?>
+<?php //$this->layout()->instructions = ""; ?>
+<div class="col-xs-4">
+       <form method="post" action="<?=$this->url('attributes_worktype')?>">
+       
+        <?php                                       
+                $id;
+                if ($request->getqueryParams('id') !== null) 
+                {   
+                    $params = $request->getqueryParams();
+                    $action = $params['action'];
+                    $id = $params['id'];
+					//fetch the duplicate options for given id
+					$table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
+					$paginator = $table->getDuplicateOptions($id);
+					$cnt = $paginator->getTotalItemCount();
+					if($cnt > 0) {
+		?>
+						<p>Duplicates to merge:</p> 
+		<?php
+						$escaper = new Zend\Escaper\Escaper('utf-8'); 
+						foreach($paginator as $row) :
+		?>
+						<ul>
+						<li>
+						<?php echo $escaper->escapeHtml($row['title']); ?>
+						</li>
+						<?php endforeach; ?>
+						</ul>
+                   
+        <?php   
+					} else {
+		?>
+						<p>No duplicates to merge</p>
+		<?php		
+					}
+				}
+        ?>
+        <ul>
+        <input type="hidden" name="id" value="<?=$id?>">
+        <input type="hidden" name="action" value="<?=$action?>">
+        </ul>
+        <input type="submit" name="submitt" value="Delete"> 
+        <input type="submit" name="submitt" value="Cancel">
+       </form>
+   </div>

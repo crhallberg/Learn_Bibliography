@@ -16,6 +16,7 @@ class DeleteLanguageFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new DeleteLanguageAction($router, $template, $adapter);
+        //return new DeleteLanguageAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::language::delete_language', $router, $template, $adapter);
     }
 }

@@ -16,6 +16,7 @@ class ReviewWorkFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new ReviewWorkAction($router, $template, $adapter);
+        //return new ReviewWorkAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::work::review_work', $router, $template, $adapter);
     }
 }

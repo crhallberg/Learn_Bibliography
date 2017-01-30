@@ -16,6 +16,7 @@ class EditPublisherFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new EditPublisherAction($router, $template, $adapter);
+        //return new EditPublisherAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::publisher::edit_publisher', $router, $template, $adapter);
     }
 }

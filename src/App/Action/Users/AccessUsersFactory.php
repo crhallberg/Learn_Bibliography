@@ -16,6 +16,7 @@ class AccessUsersFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new AccessUsersAction($router, $template, $adapter);
+        //return new AccessUsersAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::users::access_users', $router, $template, $adapter);
     }
 }

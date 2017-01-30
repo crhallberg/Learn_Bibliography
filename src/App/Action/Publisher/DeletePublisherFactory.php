@@ -16,6 +16,7 @@ class DeletePublisherFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new DeletePublisherAction($router, $template, $adapter);
+        //return new DeletePublisherAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::publisher::delete_publisher', $router, $template, $adapter);
     }
 }

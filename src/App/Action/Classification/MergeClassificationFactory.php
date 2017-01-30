@@ -16,6 +16,7 @@ class MergeClassificationFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new MergeClassificationAction($router, $template, $adapter);
+        //return new MergeClassificationAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::classification::merge_classification', $router, $template, $adapter);
     }
 }

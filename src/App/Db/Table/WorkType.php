@@ -29,6 +29,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
@@ -67,23 +68,23 @@ class WorkType extends \Zend\Db\TableGateway\TableGateway
      * @return Updated or newly added record
      */
     
-	public function insertRecords($type)
+    public function insertRecords($type)
     {
         $this->insert(
             [
-            'type' => $type,            
+            'type' => $type,
             ]
         );
     }
-	
-	public function findRecordById($id)
+    
+    public function findRecordById($id)
     {
         $rowset = $this->select(array('id' => $id));
         $row = $rowset->current();
         return($row);
     }
-	
-	public function updateRecord($id, $type)
+    
+    public function updateRecord($id, $type)
     {
         $this->update(
             [
@@ -92,8 +93,8 @@ class WorkType extends \Zend\Db\TableGateway\TableGateway
             ['id' => $id]
         );
     }
-	
-	public function deleteRecord($id)
+    
+    public function deleteRecord($id)
     {
         $this->delete(['id' => $id]);
     }

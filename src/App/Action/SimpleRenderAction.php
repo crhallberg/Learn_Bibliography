@@ -1,27 +1,25 @@
 <?php
 
-namespace App\Action\WorkType;
+namespace App\Action;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Router;
 use Zend\Expressive\Template;
 use Zend\Db\Adapter\Adapter;
+use Zend\Paginator\Paginator;
 
-class NewWorkTypeAction
+class SimpleRenderAction
 {
     private $router;
-
     private $template;
-    
+    private $templateName;
     private $adapter;
-    
-    
-    //private $dbh;
-    //private $qstmt;
 
-    public function __construct(Router\RouterInterface $router, Template\TemplateRendererInterface $template = null, Adapter $adapter)
+    public function __construct($templateName, Router\RouterInterface $router, Template\TemplateRendererInterface $template = null, Adapter $adapter)
     {
+        $this->templateName = $templateName;
         $this->router   = $router;
         $this->template = $template;
         $this->adapter  = $adapter;
@@ -29,8 +27,6 @@ class NewWorkTypeAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-		return new HtmlResponse($this->template->render('app::worktype::new_worktype', ['request' => $request]));
+        return new HtmlResponse($this->template->render($this->templateName, ['request' => $request, 'adapter' => $this->adapter]));
     }
-     
-     
 }

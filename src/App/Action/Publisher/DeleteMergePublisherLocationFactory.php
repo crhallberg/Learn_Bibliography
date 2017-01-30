@@ -16,6 +16,7 @@ class DeleteMergePublisherLocationFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new DeleteMergePublisherLocationAction($router, $template, $adapter);
+        //return new DeleteMergePublisherLocationAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::publisher::delete_merge_publisher_location', $router, $template, $adapter);
     }
 }

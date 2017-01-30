@@ -16,6 +16,7 @@ class DeleteOptionFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new DeleteOptionAction($router, $template, $adapter);
+        //return new DeleteOptionAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::worktype::delete_option', $router, $template, $adapter);
     }
 }

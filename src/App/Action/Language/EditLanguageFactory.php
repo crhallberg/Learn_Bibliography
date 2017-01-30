@@ -16,6 +16,7 @@ class EditLanguageFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new EditLanguageAction($router, $template, $adapter);
+        //return new EditLanguageAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::language::edit_language', $router, $template, $adapter);
     }
 }

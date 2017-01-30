@@ -29,6 +29,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
@@ -67,18 +68,18 @@ class Work extends \Zend\Db\TableGateway\TableGateway
      * @return Updated or newly added record
      */
     
-	public function countRecordsByWorkType($id)
+    public function countRecordsByWorkType($id)
     {
-      $select = $this->sql->select()->where(['type_id' => $id]);
+        $select = $this->sql->select()->where(['type_id' => $id]);
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
-    } 
-	
-	public function updateWorkTypeId($id)
+    }
+    
+    public function updateWorkTypeId($id)
     {
         $this->update(
             [
-                'type_id' => NULL,
+                'type_id' => null,
             ],
             ['type_id' => $id]
         );

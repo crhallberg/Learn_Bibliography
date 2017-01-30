@@ -16,6 +16,7 @@ class NewWorkTypeFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new NewWorkTypeAction($router, $template, $adapter);
+        //return new NewWorkTypeAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::worktype::new_worktype', $router, $template, $adapter);
     }
 }

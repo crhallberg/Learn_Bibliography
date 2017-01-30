@@ -16,6 +16,7 @@ class FindAgentFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new FindAgentAction($router, $template, $adapter);
+        //return new FindAgentAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::agent::find_agent', $router, $template, $adapter);
     }
 }

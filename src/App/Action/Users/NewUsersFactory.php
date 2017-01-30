@@ -16,6 +16,7 @@ class NewUsersFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new NewUsersAction($router, $template, $adapter);
+        //return new NewUsersAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::users::new_users', $router, $template, $adapter);
     }
 }

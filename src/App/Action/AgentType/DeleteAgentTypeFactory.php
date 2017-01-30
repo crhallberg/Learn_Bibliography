@@ -16,6 +16,7 @@ class DeleteAgentTypeFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new DeleteAgentTypeAction($router, $template, $adapter);
+        //return new DeleteAgentTypeAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::agenttype::delete_agenttype', $router, $template, $adapter);
     }
 }

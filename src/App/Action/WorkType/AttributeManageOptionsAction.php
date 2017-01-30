@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\WorkType;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -21,64 +22,64 @@ class AttributeManageOptionsAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
-	
-	protected function getPaginator($query, $post)
-    {   
-        if(!empty($post['action'])){
+    
+    protected function getPaginator($query, $post)
+    {
+        if (!empty($post['action'])) {
             //add new option
-            if($post['action'] == "new"){
+            if ($post['action'] == "new") {
                 if ($post['submitt'] == "Save") {
-					$table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
-					$table->addOption($post['id'],$post['new_option'],$post['option_value']);
-                }                     
+                    $table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
+                    $table->addOption($post['id'], $post['new_option'], $post['option_value']);
+                }
             }
-			//edit option
-            if($post['action'] == "edit"){
+            //edit option
+            if ($post['action'] == "edit") {
                 if ($post['submitt'] == "Save") {
-					if(!is_null($post['id'])) {                           
+                    if (!is_null($post['id'])) {
                         $table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
-                        $table->updateOption($post['id'], $post['edit_option'], $post['edit_value']);                            
+                        $table->updateOption($post['id'], $post['edit_option'], $post['edit_value']);
                     }
-                }                     
+                }
             }
-			//delete option
-            if($post['action'] == "delete"){
+            //delete option
+            if ($post['action'] == "delete") {
                 if ($post['submitt'] == "Delete") {
-                    if(!is_null($post['id'])) {
+                    if (!is_null($post['id'])) {
                         $table = new \App\Db\Table\Work_Workattribute($this->adapter);
-                        $table->deleteRecordByValue($query['id'],$post['id']);
+                        $table->deleteRecordByValue($query['id'], $post['id']);
                         $table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
-                        $table->deleteOption($query['id'],$post['id']); 
+                        $table->deleteOption($query['id'], $post['id']);
                     }
-                }                    
+                }
             }
-			//Cancel add\edit\delete
+            //Cancel add\edit\delete
             if ($post['submitt'] == "Cancel") {
-				$table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
-				$paginator = $table->displayAttributeOptions($query['id']);
-				return $paginator;
-            } 
-		}
-		// default: blank for listing in manage
+                $table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
+                $paginator = $table->displayAttributeOptions($query['id']);
+                return $paginator;
+            }
+        }
+        // default: blank for listing in manage
         $table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
-		$paginator = $table->displayAttributeOptions($query['id']);
-		return $paginator;
+        $paginator = $table->displayAttributeOptions($query['id']);
+        return $paginator;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-		$countPages = 0;
-		$query = $request->getqueryParams();
-		if(!empty($query['action'])) {
-			$action = $query['action'];
-		}
+        $countPages = 0;
+        $query = $request->getqueryParams();
+        if (!empty($query['action'])) {
+            $action = $query['action'];
+        }
         $post = [];
         if ($request->getMethod() == "POST") {
-            $post = $request->getParsedBody();  			
-		}
+            $post = $request->getParsedBody();
+        }
         $paginator = $this->getPaginator($query, $post);
-		$paginator->setDefaultItemCountPerPage(10);
-		$allItems = $paginator->getTotalItemCount();
+        $paginator->setDefaultItemCountPerPage(10);
+        $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
 
         $currentPage = isset($query['page']) ? $query['page'] : 1;
@@ -87,25 +88,22 @@ class AttributeManageOptionsAction
         }
         $paginator->setCurrentPageNumber($currentPage);
 
-        if($currentPage == $countPages) {
+        if ($currentPage == $countPages) {
             $next = $currentPage;
             $previous = $currentPage - 1;
-        }
-        else if($currentPage == 1) {
+        } elseif ($currentPage == 1) {
             $next = $currentPage + 1;
             $previous = 1;
-        }
-        else
-        {
+        } else {
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }
-		
-		$searchParams = [];
+        
+        $searchParams = [];
         if (!empty($query['id'])) {
             $searchParams[] = 'id=' . urlencode($query['id']);
-        }       
-		
+        }
+        
         return new HtmlResponse(
             $this->template->render(
                 'app::worktype::manage_attribute_options',
@@ -114,11 +112,11 @@ class AttributeManageOptionsAction
                     'previous' => $previous,
                     'next' => $next,
                     'countp' => $countPages,
-					'searchParams' => implode('&', $searchParams),
-					'request' => $request,
-					'adapter' => $this->adapter,
+                    'searchParams' => implode('&', $searchParams),
+                    'request' => $request,
+                    'adapter' => $this->adapter,
                 ]
             )
         );
-    }          
+    }
 }

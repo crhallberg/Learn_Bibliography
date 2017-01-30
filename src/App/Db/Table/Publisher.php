@@ -29,6 +29,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
@@ -36,6 +37,7 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Paginator\Paginator;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Expression;
+
 /**
  * Table Definition for record
  *
@@ -77,8 +79,8 @@ class Publisher extends \Zend\Db\TableGateway\TableGateway
     public function findRecords($name)
     {
         $select = $this->sql->select();
-		$select->where->like('name', $name.'%');
-		//->where(['name' => $name]);
+        $select->where->like('name', $name.'%');
+        //->where(['name' => $name]);
         $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
     }
@@ -109,7 +111,7 @@ class Publisher extends \Zend\Db\TableGateway\TableGateway
     public function findInitialLetter()
     {
         $callback = function ($select) {
-                $select->columns(
+            $select->columns(
                     [
                         'letter' => new Expression(
                             'DISTINCT(substring(?, 1, 1))',
@@ -128,8 +130,7 @@ class Publisher extends \Zend\Db\TableGateway\TableGateway
     {
         $select = $this->sql->select();
         $select->where->like('name', $letter.'%');
-       $paginatorAdapter = new DbSelect($select, $this->adapter);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
     }
-    
 }

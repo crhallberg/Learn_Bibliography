@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -14,7 +15,7 @@ class DefaultPageAction
 
     private $template;
     
-     private $adapter;
+    private $adapter;
 
     public function __construct(Router\RouterInterface $router, Template\TemplateRendererInterface $template = null, Adapter $adapter)
     {
@@ -25,20 +26,19 @@ class DefaultPageAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-       /* $query = $request->getqueryParams();
-        $post = [];        
+        /* $query = $request->getqueryParams();
+        $post = [];
         if ($request->getMethod() == "POST") {
                 $post = $request->getParsedBody();
         if($query['action'] == 'new'){
         if ($post['submitt'] == "Save") {
                         $table = new \App\Db\Table\UserTest($this->adapter);
                         $table->insertRecords($post['user_name'], $post['user_pwd'], $post['role']);
-                    }  
+                    }
         //return new HtmlResponse($this->template->render('app::default', $this));
         }
        } */
        var_dump("HELLO");
         return new HtmlResponse($this->template->render('app::default', ['request' => $request, 'adapter' => $this->adapter]));
-
     }
 }

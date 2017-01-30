@@ -16,6 +16,7 @@ class NewAttributeFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new NewAttributeAction($router, $template, $adapter);
+        //return new NewAttributeAction($router, $template, $adapter);
+        return new \App\Action\SimpleRenderAction('app::worktype::new_attribute', $router, $template, $adapter);
     }
 }

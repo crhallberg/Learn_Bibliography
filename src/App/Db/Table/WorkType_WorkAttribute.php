@@ -29,6 +29,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
@@ -65,199 +66,199 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
      * @param string $rawData Raw data from source
      *
      * @return Updated or newly added record
-     */    
-	
-	public function displayRanks($id)
-	{		
-		$select = $this->sql->select();
-		$select->join('workattribute', 'worktype_workattribute.workattribute_id = workattribute.id', array('field'), 'inner');
-		$select->where(['worktype_id' => $id]);
-		$select->order('rank');
+     */
+    
+    public function displayRanks($id)
+    {
+        $select = $this->sql->select();
+        $select->join('workattribute', 'worktype_workattribute.workattribute_id = workattribute.id', array('field'), 'inner');
+        $select->where(['worktype_id' => $id]);
+        $select->order('rank');
 
         $paginatorAdapter = new Paginator(new DbSelect($select, $this->adapter));
-		$cnt = $paginatorAdapter->getTotalItemCount();
+        $cnt = $paginatorAdapter->getTotalItemCount();
 
-		return $paginatorAdapter;
-	}
-	
-	public function getWorkAttributeQuery($id)
-	{
-		//echo $id;
-		$subselect = $this->sql->select();
-		$subselect->join('workattribute', 'worktype_workattribute.workattribute_id = workattribute.id', array('field'), 'inner');
-		$subselect->where(['worktype_id' => $id]);
-		$subselect->order('rank');
-		
-		$paginatorAdapter = new Paginator(new DbSelect($subselect, $this->adapter));
-		$cnt = $paginatorAdapter->getTotalItemCount();
-		//echo "selected field count is $cnt <br />";
-		$paginatorAdapter->setDefaultItemCountPerPage($cnt);
-		$fieldRows = [];
-		foreach($paginatorAdapter as $row) :
-				$fieldRows[] = $row['field'];
-		endforeach;
-		//print_r($fieldRows);
-		return $fieldRows;
-	}
-	
-	public function darrowUpdate($wkt_id,$wat_id,$wkt_wkat_rank,$wkat_field) 
-	{  
+        return $paginatorAdapter;
+    }
+    
+    public function getWorkAttributeQuery($id)
+    {
+        //echo $id;
+        $subselect = $this->sql->select();
+        $subselect->join('workattribute', 'worktype_workattribute.workattribute_id = workattribute.id', array('field'), 'inner');
+        $subselect->where(['worktype_id' => $id]);
+        $subselect->order('rank');
+        
+        $paginatorAdapter = new Paginator(new DbSelect($subselect, $this->adapter));
+        $cnt = $paginatorAdapter->getTotalItemCount();
+        //echo "selected field count is $cnt <br />";
+        $paginatorAdapter->setDefaultItemCountPerPage($cnt);
+        $fieldRows = [];
+        foreach ($paginatorAdapter as $row) :
+                $fieldRows[] = $row['field'];
+        endforeach;
+        //print_r($fieldRows);
+        return $fieldRows;
+    }
+    
+    public function darrowUpdate($wkt_id, $wat_id, $wkt_wkat_rank, $wkat_field)
+    {
         $this->update(
             [
                 'rank' => new Expression('rank - 1'),
             ],
             ['worktype_id' => $wkt_id, 'rank' => $wkt_wkat_rank+1]
         );
-		$this->update(
-			[
-				'rank' => new Expression('rank + 1'),
-			],
-			['worktype_id' => $wkt_id, 'workattribute_id' => $wat_id]
-		);
-	}
-	
-	public function uarrowUpdate($wkt_id,$wat_id,$wkt_wkat_rank,$wkat_field) 
-	{
+        $this->update(
+            [
+                'rank' => new Expression('rank + 1'),
+            ],
+            ['worktype_id' => $wkt_id, 'workattribute_id' => $wat_id]
+        );
+    }
+    
+    public function uarrowUpdate($wkt_id, $wat_id, $wkt_wkat_rank, $wkat_field)
+    {
         $this->update(
             [
                 'rank' => new Expression('rank + 1'),
             ],
             ['worktype_id' => $wkt_id, 'rank' => $wkt_wkat_rank-1]
         );
-		$this->update(
-			[
-				'rank' => new Expression('rank - 1'),
-			],
-			['worktype_id' => $wkt_id, 'workattribute_id' => $wat_id]
-		);
-	}
-	
-	public function UpdateWorkTypeAttributeRank($wkt_id,$wkat_ids,$selected_wkat)
-	{
-		//print_r($ranks);
-		$callback = function($select) use ($wkt_id,$ranks) {
-			$select->columns(['*']);
-			//$select->where->in('rank', $ranks);
-			$select->where->equalTo('worktype_id', $wkt_id);
-			$select->order('rank');
-		};
-		$rows = $this->select($callback)->toArray();
-		//echo '<pre>';print_r($rows);echo '</pre>';
-		$cnt = count($rows);
-		//echo "no of attributes added to worktype - $cnt <br />";
-		$count = count($wkat_ids);
-		//echo "selected attributes to add - $count <br />";
-		
-		//echo "id of attribute(s) selected to add";
-		//echo '<pre>';print_r($wkat_ids);echo '</pre>';
-		
-		//echo "selected_wkat ids is";
-		//echo '<pre>';print_r($selected_wkat);echo '</pre>';
-		for($i=0;$i<$cnt;$i++) {
-			$this->update(
+        $this->update(
+            [
+                'rank' => new Expression('rank - 1'),
+            ],
+            ['worktype_id' => $wkt_id, 'workattribute_id' => $wat_id]
+        );
+    }
+    
+    public function UpdateWorkTypeAttributeRank($wkt_id, $wkat_ids, $selected_wkat)
+    {
+        //print_r($ranks);
+        $callback = function ($select) use ($wkt_id, $ranks) {
+            $select->columns(['*']);
+            //$select->where->in('rank', $ranks);
+            $select->where->equalTo('worktype_id', $wkt_id);
+            $select->order('rank');
+        };
+        $rows = $this->select($callback)->toArray();
+        //echo '<pre>';print_r($rows);echo '</pre>';
+        $cnt = count($rows);
+        //echo "no of attributes added to worktype - $cnt <br />";
+        $count = count($wkat_ids);
+        //echo "selected attributes to add - $count <br />";
+        
+        //echo "id of attribute(s) selected to add";
+        //echo '<pre>';print_r($wkat_ids);echo '</pre>';
+        
+        //echo "selected_wkat ids is";
+        //echo '<pre>';print_r($selected_wkat);echo '</pre>';
+        for ($i=0;$i<$cnt;$i++) {
+            $this->update(
             [
                 'rank' => new Expression('rank + ' . $count),
             ],
-			['workattribute_id' => $selected_wkat[$i]]
-			); 
-			//echo "$i id is $selected_wkat[$i] <br />";
-		}
-	}
-	
-	public function addAttributeToWorkType($wkt_id,$wkat_ids)
-	{
-		$cnt = count($wkat_ids);
-		for($i=0;$i<$cnt;$i++) {
-			$this->insert(
+            ['workattribute_id' => $selected_wkat[$i]]
+            );
+            //echo "$i id is $selected_wkat[$i] <br />";
+        }
+    }
+    
+    public function addAttributeToWorkType($wkt_id, $wkat_ids)
+    {
+        $cnt = count($wkat_ids);
+        for ($i=0;$i<$cnt;$i++) {
+            $this->insert(
             [
-				'worktype_id' => $wkt_id,
-				'workattribute_id' => $wkat_ids[$i],
-				'rank' => $i,
+                'worktype_id' => $wkt_id,
+                'workattribute_id' => $wkat_ids[$i],
+                'rank' => $i,
             ]
-			); 
-		}
-	}
-	
-	public function deleteAttributeFromWorkType($wkt_id,$wkat_ids)
+            );
+        }
+    }
+    
+    public function deleteAttributeFromWorkType($wkt_id, $wkat_ids)
     {
         /*echo "from delete func: worktype id is $wkt_id <br />";
-		echo "from del function: work attrs to delete: <br />";
-		echo '<pre>';print_r($wkat_ids);echo '</pre>'; */
-		$callback = function($select) use ($wkt_id, $wkat_ids) {
+        echo "from del function: work attrs to delete: <br />";
+        echo '<pre>';print_r($wkat_ids);echo '</pre>'; */
+        $callback = function ($select) use ($wkt_id, $wkat_ids) {
             $select->where->in('workattribute_id', $wkat_ids);
             $select->where->equalTo('worktype_id', $wkt_id);
-			//$select->order('rank');
-        };     
+            //$select->order('rank');
+        };
         $rows = $this->select($callback)->toArray();
-		/*echo "from del func - retrieved rows: <br />";
-		echo '<pre>';print_r($rows);echo '</pre>';*/
+        /*echo "from del func - retrieved rows: <br />";
+        echo '<pre>';print_r($rows);echo '</pre>';*/
         $cnt = count($rows);
-        for($i=0;$i<$cnt;$i++) {
+        for ($i=0;$i<$cnt;$i++) {
             $this->delete($callback);
         }
     }
-	
-	public function updateWorkTypeAttributeRank_Remove($wkt_id)
-	{
-		//echo "from update func: worktype id is $wkt_id <br />";
-		$callback = function($select) use ($wkt_id) {            
+    
+    public function updateWorkTypeAttributeRank_Remove($wkt_id)
+    {
+        //echo "from update func: worktype id is $wkt_id <br />";
+        $callback = function ($select) use ($wkt_id) {
             $select->where->equalTo('worktype_id', $wkt_id);
-			$select->order('rank');
-        };     
+            $select->order('rank');
+        };
         $rows = $this->select($callback)->toArray();
-		/*echo "from update func - retrieved rows: <br />";
-		echo '<pre>';print_r($rows);echo '</pre>';*/
+        /*echo "from update func - retrieved rows: <br />";
+        echo '<pre>';print_r($rows);echo '</pre>';*/
         $cnt = count($rows);
-        for($i=0;$i<$cnt;$i++) {
-			$this->update(
+        for ($i=0;$i<$cnt;$i++) {
+            $this->update(
             [
                 'rank' => $i,
             ],
-			['rank' => $rows[$i]['rank']]			
-			); 
-			//echo "rank to be updated is " . $rows[$i]['rank'] . "<br />";
-			//echo "rank will be updated to: $i <br />";
+            ['rank' => $rows[$i]['rank']]
+            );
+            //echo "rank to be updated is " . $rows[$i]['rank'] . "<br />";
+            //echo "rank will be updated to: $i <br />";
         }
-	}
-	
-	public function countWorkTypesByWorkAttributes($wkat_id)
-	{		
-		$callback = function ($select) use($wkat_id){
-                $select->columns(
-				[
-					'count_worktypes' => new Expression(
+    }
+    
+    public function countWorkTypesByWorkAttributes($wkat_id)
+    {
+        $callback = function ($select) use ($wkat_id) {
+            $select->columns(
+                [
+                    'count_worktypes' => new Expression(
                     'COUNT(?)', ['worktype_id'],
                     [Expression::TYPE_IDENTIFIER]
-					)
-				]
-				);			
-				$select->where->equalTo('workattribute_id', $wkat_id);
+                    )
+                ]
+                );
+            $select->where->equalTo('workattribute_id', $wkat_id);
         };
 
         return $this->select($callback)->toArray();
-	}
-	
-	public function deleteRecordByWorkType($wkt_id)
-	{
-		$callback = function($select) use($wkt_id) {
-			$select->where->equalTo('worktype_id', $wkt_id);
-		};
-		$rows = $this->select($callback)->toArray();
-		$cnt = count($rows);
-		for($i=0;$i<$cnt;$i++) {
-			$this->delete($callback);
-		}
-	}
-	
-	public function deleteAttributeFromAllWorkTypes($wkat_id)
-	{
-		$callback = function($select) use($wkat_id) {
-			$select->where->equalTo('workattribute_id', $wkat_id);
-		};
-		$rows = $this->select($callback)->toArray();
-		$cnt = count($rows);
-		for($i=0;$i<$cnt;$i++) {
-			$this->delete($callback);
-		}
-	}
+    }
+    
+    public function deleteRecordByWorkType($wkt_id)
+    {
+        $callback = function ($select) use ($wkt_id) {
+            $select->where->equalTo('worktype_id', $wkt_id);
+        };
+        $rows = $this->select($callback)->toArray();
+        $cnt = count($rows);
+        for ($i=0;$i<$cnt;$i++) {
+            $this->delete($callback);
+        }
+    }
+    
+    public function deleteAttributeFromAllWorkTypes($wkat_id)
+    {
+        $callback = function ($select) use ($wkat_id) {
+            $select->where->equalTo('workattribute_id', $wkat_id);
+        };
+        $rows = $this->select($callback)->toArray();
+        $cnt = count($rows);
+        for ($i=0;$i<$cnt;$i++) {
+            $this->delete($callback);
+        }
+    }
 }

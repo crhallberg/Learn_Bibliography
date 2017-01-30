@@ -29,6 +29,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace App\Db\Table;
+
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Paginator\Adapter\DbSelect;
@@ -65,65 +66,78 @@ class WorkAttribute_Option extends \Zend\Db\TableGateway\TableGateway
      * @param string $rawData Raw data from source
      *
      * @return Updated or newly added record
-     */    
-	
-	public function deleteWorkAttributeOptions($wkat_id)
-	{
-		$callback = function($select) use($wkat_id) {
-			$select->where->equalTo('workattribute_id', $wkat_id);
-		};
-		$rows = $this->select($callback)->toArray();
-		$cnt = count($rows);
-		for($i=0;$i<$cnt;$i++) {
-			$this->delete($callback);
-		}
-	}
-	
-	public function displayAttributeOptions($wkat_id)
-	{
-		$select = $this->sql->select();
-		$select->where->equalTo('workattribute_id', $wkat_id);
-		$paginatorAdapter = new DbSelect($select, $this->adapter);
+     */
+    
+    public function deleteWorkAttributeOptions($wkat_id)
+    {
+        $callback = function ($select) use ($wkat_id) {
+            $select->where->equalTo('workattribute_id', $wkat_id);
+        };
+        $rows = $this->select($callback)->toArray();
+        $cnt = count($rows);
+        for ($i=0;$i<$cnt;$i++) {
+            $this->delete($callback);
+        }
+    }
+    
+    public function displayAttributeOptions($wkat_id)
+    {
+        $select = $this->sql->select();
+        $select->where->equalTo('workattribute_id', $wkat_id);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
 
-		return new Paginator($paginatorAdapter);
-	}
-	
-	public function addOption($wkat_id,$title,$val)
+        return new Paginator($paginatorAdapter);
+    }
+    
+    public function addOption($wkat_id, $title, $val)
     {
         $this->insert(
             [
-			'workattribute_id' => $wkat_id,
-			'title' => $title,
-            'value' => $val,            
+            'workattribute_id' => $wkat_id,
+            'title' => $title,
+            'value' => $val,
             ]
         );
     }
-	
-	public function findRecordById($id)
-	{
-		$rowset = $this->select(array('id' => $id));
+    
+    public function findRecordById($id)
+    {
+        $rowset = $this->select(array('id' => $id));
         $row = $rowset->current();
         return($row);
-	}
-	
-	public function updateOption($id,$title,$val)
+    }
+    
+    public function updateOption($id, $title, $val)
     {
         $this->update(
             [
                 'title' => $title,
-				'value' => $val,
+                'value' => $val,
             ],
             ['id' => $id]
         );
     }
-	
-	public function deleteOption($wkat_id,$id)
-	{
-		$this->delete(
-			[
-				'workattribute_id' => $wkat_id,
-				'id' => $id
-			]
-		);
-	}
+    
+    public function deleteOption($wkat_id, $id)
+    {
+        $this->delete(
+            [
+                'workattribute_id' => $wkat_id,
+                'id' => $id
+            ]
+        );
+    }
+    
+    public function getDuplicateOptions($wkat_id)
+    {       
+        $select = $this->sql->select();
+        $select->where->equalTo('workattribute_id', $wkat_id);
+        $select->group('title');
+        $select->having('count(title) > 1');
+        
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        //$cnt = $paginatorAdapter->getTotalItemCount();
+        //echo $cnt;
+        return new Paginator($paginatorAdapter);
+    }
 }

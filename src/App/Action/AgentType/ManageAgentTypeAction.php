@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Action\AgentType;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -29,42 +30,41 @@ class ManageAgentTypeAction
     }
 
     protected function getPaginator($post)
-    {        
+    {
         //edit, delete actions on agenttype
-        if(!empty($post['action'])){
+        if (!empty($post['action'])) {
             //add a new agent type
-            if($post['action'] == "new"){
-                    if ($post['submitt'] == "Save") {
-                        $table = new \App\Db\Table\AgentType($this->adapter);
-                        $table->insertRecords($post['new_agenttype']);
-                    }                     
-            }  
+            if ($post['action'] == "new") {
+                if ($post['submitt'] == "Save") {
+                    $table = new \App\Db\Table\AgentType($this->adapter);
+                    $table->insertRecords($post['new_agenttype']);
+                }
+            }
             //edit an agent type
-            if($post['action'] == "edit"){
-                    if ($post['submitt'] == "Save") {
-                        if(!is_null($post['id'])) {
-                            
-                            $table = new \App\Db\Table\AgentType($this->adapter);
-                            $table->updateRecord($post['id'], $post['edit_agenttype']);                            
-                        }
-                    }                     
-            }               
+            if ($post['action'] == "edit") {
+                if ($post['submitt'] == "Save") {
+                    if (!is_null($post['id'])) {
+                        $table = new \App\Db\Table\AgentType($this->adapter);
+                        $table->updateRecord($post['id'], $post['edit_agenttype']);
+                    }
+                }
+            }
             //delete an agent type
-            if($post['action'] == "delete"){
-                    if ($post['submitt'] == "Delete") {
-                        if(!is_null($post['id'])) {
-                            $table = new \App\Db\Table\WorkAgent($this->adapter);
-                            $table->deleteRecordByAgentTypeId($post['id']);
-                            $table = new \App\Db\Table\AgentType($this->adapter);
-                            $table->deleteRecord($post['id']); 
-                        }
-                    }                    
+            if ($post['action'] == "delete") {
+                if ($post['submitt'] == "Delete") {
+                    if (!is_null($post['id'])) {
+                        $table = new \App\Db\Table\WorkAgent($this->adapter);
+                        $table->deleteRecordByAgentTypeId($post['id']);
+                        $table = new \App\Db\Table\AgentType($this->adapter);
+                        $table->deleteRecord($post['id']);
+                    }
+                }
             }
             //Cancel edit\delete
             if ($post['submitt'] == "Cancel") {
-                        $table = new \App\Db\Table\AgentType($this->adapter);
-                        return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));        
-            } 
+                $table = new \App\Db\Table\AgentType($this->adapter);
+                return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+            }
         }
         // default: blank for listing in manage
         $table = new \App\Db\Table\AgentType($this->adapter);
@@ -89,16 +89,13 @@ class ManageAgentTypeAction
         }
         $paginator->setCurrentPageNumber($currentPage);
 
-        if($currentPage == $countPages) {
+        if ($currentPage == $countPages) {
             $next = $currentPage;
             $previous = $currentPage - 1;
-        }
-        else if($currentPage == 1) {
+        } elseif ($currentPage == 1) {
             $next = $currentPage + 1;
             $previous = 1;
-        }
-        else
-        {
+        } else {
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }
@@ -114,5 +111,5 @@ class ManageAgentTypeAction
                 ]
             )
         );
-    }          
+    }
 }

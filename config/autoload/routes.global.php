@@ -31,6 +31,7 @@ return [
 			App\Action\WorkType\NewOptionAction::class => App\Action\WorkType\NewOptionFactory::class,
 			App\Action\WorkType\EditOptionAction::class => App\Action\WorkType\EditOptionFactory::class,
 			App\Action\WorkType\DeleteOptionAction::class => App\Action\WorkType\DeleteOptionFactory::class,
+			App\Action\WorkType\MergeDuplicateOptionAction::class => App\Action\WorkType\MergeDuplicateOptionFactory::class,
             
 			App\Action\Classification\NewClassificationAction::class => App\Action\Classification\NewClassificationFactory::class,
 			App\Action\Classification\ManageClassificationAction::class => App\Action\Classification\ManageClassificationFactory::class,
@@ -269,6 +270,16 @@ return [
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\WorkType\DeleteOptionAction::class,
+            ],
+            'allowed_methods' => ['GET','POST'],
+        ],
+		
+		[
+            'name' => 'merge_duplicate_option',
+		    'path' => '/WorkType/merge_duplicate_option',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\WorkType\MergeDuplicateOptionAction::class,
             ],
             'allowed_methods' => ['GET','POST'],
         ],

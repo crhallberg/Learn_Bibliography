@@ -18,6 +18,7 @@ class ClassifyWorkFactory
             : null;
         $adapter = $container->get(Adapter::class);
         $helper = $container->get(ServerUrlHelper::class);
-        return new ClassifyWorkAction($router, $template, $adapter, $helper);
+        //return new ClassifyWorkAction($router, $template, $adapter, $helper);
+        return new \App\Action\SimpleRenderAction('app::work::classify_work', $router, $template, $adapter);
     }
 }

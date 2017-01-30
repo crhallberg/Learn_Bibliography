@@ -1,5 +1,6 @@
 <?php
 namespace App\View\Helper;
+
 use Zend\View\Helper\ViewModel;
 
 class ViewModelFactory
