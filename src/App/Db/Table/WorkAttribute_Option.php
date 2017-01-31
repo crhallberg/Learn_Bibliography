@@ -129,15 +129,26 @@ class WorkAttribute_Option extends \Zend\Db\TableGateway\TableGateway
     }
     
     public function getDuplicateOptions($wkat_id)
-    {       
+    {
         $select = $this->sql->select();
         $select->where->equalTo('workattribute_id', $wkat_id);
         $select->group('title');
         $select->having('count(title) > 1');
         
         $paginatorAdapter = new DbSelect($select, $this->adapter);
-        //$cnt = $paginatorAdapter->getTotalItemCount();
-        //echo $cnt;
         return new Paginator($paginatorAdapter);
+    }
+    
+    public function getDuplicateOptionRecords($wkat_id, $option_dup_title, $option_dup_id)
+    {
+        $callback = function ($select) use ($wkat_id, $option_dup_title, $option_dup_id) {
+            $select->where->equalTo('title', $option_dup_title);
+            $select->where->equalTo('workattribute_id', $wkat_id);
+            $select->where->notEqualTo('id', $option_dup_id);
+        };
+        $rows = $this->select($callback)->toArray();
+        //echo "no od dup rows is" . count($rows);
+        //echo "<pre>"; print_r($rows); echo "</pre>";
+        return $rows;
     }
 }

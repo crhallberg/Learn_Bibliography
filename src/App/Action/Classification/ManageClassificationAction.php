@@ -28,15 +28,38 @@ class ManageClassificationAction
         $this->adapter  = $adapter;
     }
     
+	protected function getPaginator($query,$post)
+    {
+        if (!empty($query['action'])) {
+            //export classification
+            if ($query['action'] == "export_classification") {
+				echo "export folder";
+                /*if ($post['submitt'] == "Save") {
+                    $table = new \App\Db\Table\WorkType($this->adapter);
+                    $table->insertRecords($post['new_worktype']);
+                }*/
+            }
+            
+        }
+        // default: blank for listing in manage
+        $table = new \App\Db\Table\Folder($this->adapter);
+		$paginator = $table->findParent();
+        return $paginator;
+    }
+
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        $table = new \App\Db\Table\Folder($this->adapter);
-        $paginator = $table->findParent();
-        
+        $query = $request->getqueryParams();
+		//print_r($query);
+        $post = [];
+        if ($request->getMethod() == "POST") {
+            $post = $request->getParsedBody();
+        }
+        $paginator = $this->getPaginator($query,$post);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
-
+        
         $currentPage = isset($query['page']) ? $query['page'] : 1;
         if ($currentPage < 1) {
             $currentPage = 1;
@@ -53,7 +76,6 @@ class ManageClassificationAction
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }
-        
         return new HtmlResponse(
             $this->template->render(
                 'app::classification::manage_classification',

@@ -91,4 +91,21 @@ class Work_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
     {
         $this->delete(['workattribute_id' => $wkat_id,'value' => $val]);
     }
+    
+    public function updateWork_WorkAttributeValue($wkat_id, $option_first_id, $val)
+    {
+        $callback = function ($select) use ($wkat_id, $val) {
+            $select->where->equalTo('workattribute_id', $wkat_id);
+            $select->where->equalTo('value', $val);
+        };
+        $rows = $this->select($callback)->toArray();
+        for ($i=0;$i<count($rows);$i++) {
+            $this->update(
+                [
+                    'value' => $option_first_id,
+                ],
+                ['value' => $rows[$i]['value']]
+            );
+        }
+    }
 }

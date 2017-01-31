@@ -53,6 +53,24 @@ class AttributeManageOptionsAction
                     }
                 }
             }
+            if ($post['action'] == "merge") {
+                if ($post['submitt'] == "Merge") {
+                    if (!is_null($post['workattribute_id'])) {
+                        for ($i=0;$i<count($post['option_title']);$i++) {
+                            $table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
+                            $rows = $table->getDuplicateOptionRecords($post['workattribute_id'], $post['option_title'][$i], $post['option_id'][$i]);
+
+                            for ($j=0;$j<count($rows);$j++) {
+                                $table = new \App\Db\Table\Work_Workattribute($this->adapter);
+                                $table->updateWork_WorkAttributeValue($post['workattribute_id'], $post['option_id'][$i], $rows[$j]['id']);
+                                
+                                $table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
+                                $table->deleteOption($post['workattribute_id'], $rows[$j]['id']);
+                            }
+                        }
+                    }
+                }
+            }
             //Cancel add\edit\delete
             if ($post['submitt'] == "Cancel") {
                 $table = new \App\Db\Table\WorkAttribute_Option($this->adapter);
