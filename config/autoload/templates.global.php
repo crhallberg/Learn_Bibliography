@@ -82,7 +82,7 @@ return [
             'app::users::manage_users' => 'templates/app/users/manage.phtml',
             'app::users::access_users' => 'templates/app/users/access.phtml',
             //preferences
-            'app::preferences::changepassword_preferences' => 'templates/app/preferences/changepassword.phtml',
+            'app::preferences::changepassword_preferences' => 'templates/app/preferences/changepassword_preferences.phtml',
         ],
         'paths' => [
             'app'    => ['templates/app'],
