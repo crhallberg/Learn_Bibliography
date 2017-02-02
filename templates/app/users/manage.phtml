@@ -20,9 +20,9 @@
 			<?php echo $escaper->escapeHtml($row['name']); ?>
 		</td>
         <td>			             
-            <a href="#">Edit</a>        
+            <a href="<?=$this->url('edit_user')?><?='?id='. $row['id']. '&action=edit'?>">Edit</a>        
             |
-            <a href="#">Delete</a>   			
+            <a href="<?=$this->url('delete_user')?><?='?id='. $row['id']. '&action=delete'?>">Delete</a>   			
         </td>
 		<td>
 			<?php 

@@ -65,8 +65,10 @@ return [
             App\Action\Language\EditLanguageAction::class => App\Action\Language\EditLanguageFactory::class,
             App\Action\Language\DeleteLanguageAction::class => App\Action\Language\DeleteLanguageFactory::class,
             
-			App\Action\Users\NewUsersAction::class => App\Action\Users\NewUsersFactory::class,
+			App\Action\Users\NewUserAction::class => App\Action\Users\NewUserFactory::class,
 			App\Action\Users\ManageUsersAction::class => App\Action\Users\ManageUsersFactory::class,
+			App\Action\Users\EditUserAction::class => App\Action\Users\EditUserFactory::class,
+			App\Action\Users\DeleteUserAction::class => App\Action\Users\DeleteUserFactory::class,
 			App\Action\Users\AccessUsersAction::class => App\Action\Users\AccessUsersFactory::class,
             
 			App\Action\Preferences\ChangePasswordPreferencesAction::class => App\Action\Preferences\ChangePasswordPreferencesFactory::class,
@@ -555,11 +557,11 @@ return [
         ],
         
 		[
-            'name' => 'new_users',
+            'name' => 'new_user',
 		    'path' => '/Users/new',
             'middleware' => [
                 BodyParamsMiddleware::class,
-                App\Action\Users\NewUsersAction::class,
+                App\Action\Users\NewUserAction::class,
             ],
             'allowed_methods' => ['GET','POST'],
         ],
@@ -570,6 +572,26 @@ return [
             'middleware' => [
                 BodyParamsMiddleware::class,
                 App\Action\Users\ManageUsersAction::class,
+            ],
+            'allowed_methods' => ['GET','POST'],
+        ],
+		
+		[
+            'name' => 'edit_user',
+		    'path' => '/Users/edit',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\Users\EditUserAction::class,
+            ],
+            'allowed_methods' => ['GET','POST'],
+        ],
+		
+		[
+            'name' => 'delete_user',
+		    'path' => '/Users/delete',
+            'middleware' => [
+                BodyParamsMiddleware::class,
+                App\Action\Users\DeleteUserAction::class,
             ],
             'allowed_methods' => ['GET','POST'],
         ],

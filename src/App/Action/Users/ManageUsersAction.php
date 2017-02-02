@@ -44,17 +44,19 @@ class ManageUsersAction
        if (!empty($post['action'])) {
             //add new user
             if ($post['action'] == "new") {
-                if ($post['submitt'] == "Save") {
+                if ($post['submit_Save'] == "Save") {
+					//echo "<pre>";print_r($post);echo"</pre>";
                     $table = new \App\Db\Table\User($this->adapter);
-                    $table->insertRecords($post['new_worktype']);
+                    $table->insertRecords($post['newuser_name'], $post['new_username'], md5($post['new_user_pwd']), $post['access_level']);
                 }
             }
             //edit a work type
             if ($post['action'] == "edit") {
-                if ($post['submitt'] == "Save") {
+                if ($post['submit_Save'] == "Save") {
                     if (!is_null($post['id'])) {
-                        $table = new \App\Db\Table\WorkType($this->adapter);
-                        $table->updateRecord($post['id'], $post['edit_worktype']);
+						echo "edit";
+                        //$table = new \App\Db\Table\WorkType($this->adapter);
+                        //$table->updateRecord($post['id'], $post['edit_worktype']);
                     }
                 }
             }
@@ -62,17 +64,14 @@ class ManageUsersAction
             if ($post['action'] == "delete") {
                 if ($post['submitt'] == "Delete") {
                     if (!is_null($post['id'])) {
-                        $table = new \App\Db\Table\Work($this->adapter);
-                        $table->updateWorkTypeId($post['id']);
-                        $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-                        $table->deleteRecordByWorkType($post['id']);
-                        $table = new \App\Db\Table\WorkType($this->adapter);
+                        echo "delete";
+						$table = new \App\Db\Table\User($this->adapter);
                         $table->deleteRecord($post['id']);
                     }
                 }
             }
             //Cancel add\edit\delete
-            if ($post['submitt'] == "Cancel") {
+            if ($post['submit_Cancel'] == "Cancel") {
                 $table = new \App\Db\Table\WorkType($this->adapter);
                 return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
             }

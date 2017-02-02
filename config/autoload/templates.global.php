@@ -78,8 +78,10 @@ return [
             'app::language::edit_language' => 'templates/app/language/edit.phtml',
             'app::language::delete_language' => 'templates/app/language/delete.phtml',           
             //users
-            'app::users::new_users' => 'templates/app/users/new.phtml',
+            'app::users::new_user' => 'templates/app/users/new.phtml',
             'app::users::manage_users' => 'templates/app/users/manage.phtml',
+			'app::users::edit_user' => 'templates/app/users/edit.phtml',
+			'app::users::delete_user' => 'templates/app/users/delete.phtml',
             'app::users::access_users' => 'templates/app/users/access.phtml',
             //preferences
             'app::preferences::changepassword_preferences' => 'templates/app/preferences/changepassword_preferences.phtml',

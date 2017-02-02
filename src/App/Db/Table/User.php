@@ -66,4 +66,28 @@ class User extends \Zend\Db\TableGateway\TableGateway
      *
      * @return Updated or newly added record
      */
+	 
+	 public function insertRecords($newuser_name, $new_username, $new_user_pwd, $access_level)
+    {	   
+	    $this->insert(
+            [
+            'name' => $newuser_name,
+			'username' => $new_username,
+			'password' => $new_user_pwd,
+			'level' => $access_level,
+            ]
+        );
+    }
+	
+	public function findRecordById($id)
+    {
+        $rowset = $this->select(array('id' => $id));
+        $row = $rowset->current();
+        return($row);
+    }
+	
+	public function deleteRecord($id)
+    {
+        $this->delete(['id' => $id]);
+    }
 }
