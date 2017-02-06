@@ -28,15 +28,6 @@ class ManageUsersAction
         $this->template = $template;
         $this->adapter  = $adapter;
     }
-
-    /*public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
-    {
-        //$displaystr = "Coming Soon";
-        $sth = $this->adapter->query("select * from agenttype");
-        $rows = $sth->execute();
-        //var_dump($this);
-        return new HtmlResponse($this->template->render('app::users::manage_users', ['rows' => $rows]));
-    }*/
 	
 	protected function getPaginator($post)
     {
@@ -54,9 +45,14 @@ class ManageUsersAction
             if ($post['action'] == "edit") {
                 if ($post['submit_Save'] == "Save") {
                     if (!is_null($post['id'])) {
-						echo "edit";
-                        //$table = new \App\Db\Table\WorkType($this->adapter);
-                        //$table->updateRecord($post['id'], $post['edit_worktype']);
+						if(empty($post['edit_user_pwd'])) {
+							$pwd = null;
+						} else {
+							$pwd = md5($post['edit_user_pwd']);
+						}
+                        $table = new \App\Db\Table\User($this->adapter);
+                        $table->updateRecord($post['id'], $post['edituser_name'], $post['edit_username'], $pwd, 
+						                    $post['access_level']);
                     }
                 }
             }
@@ -64,7 +60,7 @@ class ManageUsersAction
             if ($post['action'] == "delete") {
                 if ($post['submitt'] == "Delete") {
                     if (!is_null($post['id'])) {
-                        echo "delete";
+                        //echo "delete";
 						$table = new \App\Db\Table\User($this->adapter);
                         $table->deleteRecord($post['id']);
                     }
@@ -72,8 +68,8 @@ class ManageUsersAction
             }
             //Cancel add\edit\delete
             if ($post['submit_Cancel'] == "Cancel") {
-                $table = new \App\Db\Table\WorkType($this->adapter);
-                return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
+				$table = new \App\Db\Table\User($this->adapter);
+				return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
             }
         }
         // default: blank for listing in manage

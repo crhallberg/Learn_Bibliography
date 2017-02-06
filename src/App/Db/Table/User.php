@@ -90,4 +90,31 @@ class User extends \Zend\Db\TableGateway\TableGateway
     {
         $this->delete(['id' => $id]);
     }
+	
+	public function updateRecord($id, $name, $username, $pwd, $level)
+    {
+		//echo "pwd is " . $pwd;
+        if(is_null($pwd)) {
+			//echo "if pwd is empty ".$pwd;
+			$this->update(
+            [
+                'name' => $name,
+				'username' => $username,
+				'level' => $level,
+            ],
+            ['id' => $id]
+			);
+		} else {
+			//echo "else if pwd not empty ".$pwd;
+			$this->update(
+            [
+                'name' => $name,
+				'username' => $username,
+				'password' => $pwd,
+				'level' => $level,
+            ],
+            ['id' => $id]
+			);
+		}
+    }
 }

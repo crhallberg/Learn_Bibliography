@@ -48,8 +48,15 @@ class ManageWorkTypeAttributeAction
                 $table->uarrowUpdate($query['id'], $query['workattribute_id'], $query['rank'], $query['field']);
             }
         }
-        //add, remove attributes to worktype
+        //add, remove attributes to work type
         if (!empty($post['action'])) {
+			if($post['action'] == "sortable") {
+				echo "action is sortable";
+				if ($post['submit_add'] == "Add") {
+					echo "add clicked";
+					echo "<pre>";print_r($post);echo "</pre>";
+				}
+			}
             //add attribute(s) new work type
             if ($post['action'] == "add_attribute") {
                 if ($post['submit_add'] == "Add") {

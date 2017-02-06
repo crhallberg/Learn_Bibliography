@@ -1,10 +1,84 @@
 <?php $this->headTitle('New Work'); ?>
 <?php //$this->layout()->instructions = "Never use double quotes in the title, instead use single quotes when needed."; ?>
-<div class="row">
+<!--<div class="row">
     <div class="col-md-4">
         <h2>
                 Coming Soon
         </h2>
        
     </div>
+</div>-->
+<div class="col-md-9">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+  #sortable1, #sortable2 {
+    border: 1px solid #eee;
+    width: 142px;
+    min-height: 20px;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0 0 0;
+    float: left;
+    margin-right: 10px;
+  }
+  #sortable1 li, #sortable2 li {
+    margin: 0 5px 5px 5px;
+    padding: 5px;
+    font-size: 1.2em;
+    width: 120px;
+  }
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#sortable1, #sortable2" ).sortable({
+		connectWith: ".connectedSortable",
+		update : function () 
+        { 
+            var sort1 = $('#sortable1').sortable('toArray', { attribute: 'predmet-id' });
+			alert(sort1);
+			$('#sort_order').val(sort1);
+			
+        } 
+    }).disableSelection();
+  } );
+  </script>
+<form class="form-horizontal" method="post" action="<?=$this->url('manage_worktypeattribute')?><?='?action=sortable'?>">
+<input type="hidden" name="action" id="action_param" value="sortable">
+<input type="hidden" name="sort_order" id="sort_order" value="">
+<ul id="sortable1" class="list-group connectedSortable">
+<?php
+		$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+		$paginator = $table->displayRanks(16);
+		$paginator->setDefaultItemCountPerPage(20);
+		$allItems = $paginator->getTotalItemCount();
+
+		$escaper = new Zend\Escaper\Escaper('utf-8');
+		foreach($paginator as $row) :
+			$output = (array)$row;
+            $params = implode(', ', $output); 
+?>
+  <li class="list-group-item ui-state-default" predmet-id="id_.<?=$row['workattribute_id']?>"><?=$escaper->escapeHtml($row['field'])?></li>
+<?php
+	endforeach;
+?>
+</ul>
+ 
+<ul id="sortable2" class="list-group connectedSortable">
+  <li class="list-group-item ui-state-default" predmet-id="entry_0">Item 1</li>
+  <li class="list-group-item ui-state-default" predmet-id="entry_1">Item 2</li>
+  <li class="list-group-item ui-state-default" predmet-id="entry_2">Item 3</li>
+  <li class="list-group-item ui-state-default" predmet-id="entry_3">Item 4</li>
+  <li class="list-group-item ui-state-default" predmet-id="entry_4">Item 5</li>
+</ul>
+
+<div class="form-group">
+<div class="col-sm-offset-2 col-sm-10">
+    <input type="submit" class="btn btn-default" id="submit_add" name="submit_add" value="Add"/>
+	<input type="submit" class="btn btn-default" id = "submit_cancel" name="submit_cancel" value="Cancel"/>
 </div>
+</div>
+</form>
+ </div>
