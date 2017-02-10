@@ -1,21 +1,45 @@
 <?php $this->headTitle('Manage WorkType Attributes'); ?>
 <?php //$this->layout()->instructions = ""; ?>
-<script>
-function set_action_add()
-{
-	document.getElementById("action_param").value = "add_attribute";
-}
-function set_action_remove()
-{
-	document.getElementById("action_param").value = "remove_attribute";
-}
-function set_action_cancel()
-{
-	document.getElementById("action_param").value = "cancel_attributes";
-}
-</script>
 <div class="col-md-9">
-<?php                                       
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+  #sortable1, #sortable2 {
+    border: 1px solid #eee;
+    width: 142px;
+    min-height: 20px;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0 0 0;
+    float: left;
+    margin-right: 10px;
+  }
+  #sortable1 li, #sortable2 li {
+    margin: 0 5px 5px 5px;
+    padding: 5px;
+    font-size: 1.2em;
+    width: 120px;
+  }
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#sortable1, #sortable2" ).sortable({
+		connectWith: ".connectedSortable",
+		update : function () 
+        { 
+            var sort1 = $('#sortable1').sortable('toArray', { attribute: 'predmet-id' });
+			var sort2 = $('#sortable2').sortable('toArray', { attribute: 'predmet-id' });
+			//alert(typeof(sort1));
+			$('#sort_order').val(sort1);
+			$('#remove_attr').val(sort2);
+			
+        } 
+    }).disableSelection();
+  } );
+  </script>
+  <?php                                       
         $id;
         if ($request->getqueryParams() !== null) 
         {   
@@ -33,139 +57,59 @@ function set_action_cancel()
             echo '<b>Attributes for: </b>'.$type.'<br/>'; 
 			
 			//test if any attributes are attached to a work type
-			$table = new \App\Db\Table\WorkType_WorkAttribute($adapter);
+			/*$table = new \App\Db\Table\WorkType_WorkAttribute($adapter);
 			$paginator = $table->displayRanks($id);
-			$allItems = $paginator->getTotalItemCount();
+			$allItems = $paginator->getTotalItemCount();*/
+		}
 ?>
-			Used attributes are checked <input type="checkbox" checked disabled>
-<?php	}
+<form class="form-horizontal" method="post" action="<?=$this->url('manage_worktypeattribute')?><?='?id=' . $id . '&action=sortable'?>">
+<input type="hidden" name="id" value="<?=$id?>">
+<input type="hidden" name="action" id="action_param" value="sortable">
+<input type="hidden" name="sort_order" id="sort_order" value="">
+<input type="hidden" name="remove_attr" id="remove_attr" value="">
+<ul id="sortable1" class="list-group connectedSortable">
+<?php
+		$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+		$paginator = $table->displayRanks($id);
+		$paginator->setDefaultItemCountPerPage(20);
+		$allItems = $paginator->getTotalItemCount();
+
+		$escaper = new Zend\Escaper\Escaper('utf-8');
+		foreach($paginator as $row) :
+			$output = (array)$row;
+            $params = implode(', ', $output); 
 ?>
-<form class="form-horizontal" method="post" action="<?=$this->url('manage_worktypeattribute')?><?='?id=' . $id . '&action=add_remove'?>">
-<input type="hidden" name="action" id="action_param" value="">
-<input type="hidden" name="type_id" value="<?=trim($id)?>">
-<table class="table table-striped table-condensed" style="font-size:10pt;">
-     <thead>
-         <tr>
-             <th></th>
-             <th>Order</th>
-             <th>Attribute</th>
-         </tr>
-     </thead>
-     <tbody>
-		<form>
-		<?php //check if any attributes are attached to a work type
-		if($allItems >= 1) { 
-			//echo "frst:attributes attached to worktype <br />";
-	 		$escaper = new Zend\Escaper\Escaper('utf-8');
+  <li class="list-group-item ui-state-default" predmet-id="id_<?=$row['workattribute_id']?>"><?=$escaper->escapeHtml($row['field'])?></li>
+<?php
+	endforeach;
+?>
+</ul>
+ 
+<ul id="sortable2" class="list-group connectedSortable">
+<?php
+$escaper = new Zend\Escaper\Escaper('utf-8');
 			//display attributes not attached to a work type
 			$table = new \App\Db\Table\WorkAttribute($adapter);
 			$rows = $table->displayAttributes1($id);
 			$cnt = count($rows);
 			for($i=0;$i<$cnt;$i++) {
-		?>
-		<tr>
-            <td>
-                 <div class="checkbox">
-                    <label><input type="checkbox" id='select_notadded' name="selectchk_notadded[]" 
-					onchange="document.getElementById('submit_add').disabled = !this.checked;"
-					value=<?=$escaper->escapeHtml($rows[$i]['id'])?>>                   
-                    </label>
-                 </div>
-            </td>
-			<td>
-			</td>
-            <td>
-                <?php echo $escaper->escapeHtml($rows[$i]['field']); ?>
-            </td>            
-         </tr>
-		<?php } 
-		} else {
-				//echo "scnd else:attributes are not attached to worktype <br />";
-				//display all work attributes if work type has no attributes attached to it
-				$table = new \App\Db\Table\WorkAttribute($this->adapter);
-				$paginator = $table->displayAttributes();
-				$escaper = new Zend\Escaper\Escaper('utf-8');
-				foreach($paginator as $row) : ?>
-				<tr>
-				<td>
-                 <div class="checkbox">
-                    <label><input type="checkbox" id='select_noneadded' name="selectchk_noneadded[]" 
-					onchange="document.getElementById('submit_add').disabled = !this.checked;" 
-					value=<?=$escaper->escapeHtml($row['id'])?>>                   
-                    </label>
-                 </div>
-				</td>
-				<td>
-				</td>
-				<td>
-                <?php echo $escaper->escapeHtml($row['field']); ?>
-				</td>            
-				</tr>
-		<?php			
-				endforeach; 
+?>
+  <li class="list-group-item ui-state-default" predmet-id="nid_<?=$rows[$i]['id']?>"><?=$escaper->escapeHtml($rows[$i]['field'])?></li>
+  <!--<li class="list-group-item ui-state-default" predmet-id="entry_0">Item 1</li>
+  <li class="list-group-item ui-state-default" predmet-id="entry_1">Item 2</li>
+  <li class="list-group-item ui-state-default" predmet-id="entry_2">Item 3</li>
+  <li class="list-group-item ui-state-default" predmet-id="entry_3">Item 4</li>
+  <li class="list-group-item ui-state-default" predmet-id="entry_4">Item 5</li>-->
+<?php
 			}
-			//echo "last:display ranks of attributes attached to worktype <br />";
-			//display attributes attached to work type rank wise
-			$table = new \App\Db\Table\WorkType_WorkAttribute($adapter);
-			$paginator = $table->displayRanks($id);
-			$paginator->setDefaultItemCountPerPage(20);
-			$allItems = $paginator->getTotalItemCount();
-
-			$escaper = new Zend\Escaper\Escaper('utf-8');
-			foreach($paginator as $row) :
-				$output = (array)$row;
-                $params = implode(', ', $output); 
-		?>
-		<tr>
-            <td>
-                 <div class="checkbox">
-                    <label>
-					<input type="checkbox" id='select_added' name="selectchk_added[]" 
-					onchange="document.getElementById('submit_remove').disabled = this.checked;" 
-					value=<?=$escaper->escapeHtml($row['workattribute_id'])?> checked>
-					<input type="hidden" id='all_attributes' name="allAttributes[]" 
-					value=<?=$escaper->escapeHtml($row['workattribute_id'])?>>
-                    </label>
-                 </div>
-            </td>
-			<td>
-			<?php if($row['rank'] == 0) { ?>
-					<a href="<?=$this->url('manage_worktypeattribute')?><?='?id='. $id. '&workattribute_id='. $row['workattribute_id']. 
-					'&rank='. $row['rank']. '&field='. $escaper->escapeHtml($row['field']). '&action=darrow'?>" style="font-weight:900">
-					&darr;
-					</a> <?php echo $escaper->escapeHtml($row['rank']); ?>
-			<?php } elseif($row['rank'] == ($allItems - 1)) { ?>
-					<a href="<?=$this->url('manage_worktypeattribute')?><?='?id='. $id. '&workattribute_id='. $row['workattribute_id']. 
-					'&rank='. $row['rank']. '&field='. $escaper->escapeHtml($row['field']). '&action=uarrow'?>" style="font-weight:900">
-					&uarr;
-					</a> 
-					<?php echo $escaper->escapeHtml($row['rank']); ?>
-			<?php } else { ?>
-					<a href="<?=$this->url('manage_worktypeattribute')?><?='?id='. $id. '&workattribute_id='. $row['workattribute_id']. 
-					'&rank='. $row['rank']. '&field='. $escaper->escapeHtml($row['field']). '&action=uarrow'?>" style="font-weight:900">
-					&uarr;
-					</a> 
-					<a href="<?=$this->url('manage_worktypeattribute')?><?='?id='. $id. '&workattribute_id='. $row['workattribute_id']. 
-					'&rank='. $row['rank']. '&field='. $escaper->escapeHtml($row['field']). '&action=darrow'?>" style="font-weight:900">
-					&darr;
-					</a> 
-					<?php echo $escaper->escapeHtml($row['rank']); ?>
-			<?php } ?>
-			</td>
-            <td>
-                <?php echo $escaper->escapeHtml($row['field']); ?>
-            </td>            
-         </tr>
-         <?php endforeach; ?> 
-         </tbody>
-</table>
+?>
+</ul>
 
 <div class="form-group">
 <div class="col-sm-offset-2 col-sm-10">
-    <input type="submit" class="btn btn-default" id="submit_add" name="submit_add" value="Add" disabled onclick="set_action_add()"/>
-    <input type="submit" class="btn btn-default" id="submit_remove" name="submit_remove" value="Remove" disabled onclick="set_action_remove()"/>
-	<input type="submit" class="btn btn-default" id = "submit_cancel" name="submit_cancel" value="Cancel" onclick="set_action_cancel()"/>
+    <input type="submit" class="btn btn-default" id="submit_add" name="submit_add" value="Add"/>
+	<input type="submit" class="btn btn-default" id = "submit_cancel" name="submit_cancel" value="Cancel"/>
 </div>
 </div>
 </form>
-</div>
+ </div>

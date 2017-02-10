@@ -33,70 +33,36 @@ class ManageWorkTypeAttributeAction
     }*/
     
     protected function getPaginator($query, $post)
-    {
-        if (!empty($query['action'])) {
-            //decrease the rank
-            if ($query['action'] == "darrow") {
-                //echo "it is darrow<br />";
-                $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-                $table->darrowUpdate($query['id'], $query['workattribute_id'], $query['rank'], $query['field']);
-            }
-            //increase the rank
-            if ($query['action'] == "uarrow") {
-                //echo "it is uarrow<br />";
-                $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-                $table->uarrowUpdate($query['id'], $query['workattribute_id'], $query['rank'], $query['field']);
-            }
-        }
+    {       
         //add, remove attributes to work type
         if (!empty($post['action'])) {
 			if($post['action'] == "sortable") {
-				echo "action is sortable";
+				//echo "action is sortable";
 				if ($post['submit_add'] == "Add") {
-					echo "add clicked";
-					echo "<pre>";print_r($post);echo "</pre>";
-				}
-			}
-            //add attribute(s) new work type
-            if ($post['action'] == "add_attribute") {
-                if ($post['submit_add'] == "Add") {
-                    $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-                    $paginator = $table->displayRanks($post['type_id']);
-                    $cnt = $paginator->getTotalItemCount();
-
-                    $ranks = [];
-                    foreach ($paginator as $row) :
-                        $ranks[] = $row['rank'];
-                    endforeach;
-                        
-                    $wkat_ids = [];
-                    if ($post['selectchk_notadded'] != null) {
-                        $wkat_ids = $post['selectchk_notadded'];
-                    }
-                    if ($post['selectchk_noneadded'] != null) {
-                        $wkat_ids = $post['selectchk_noneadded'];
-                    }
-                    $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-                    $table->UpdateWorkTypeAttributeRank($post['type_id'], $wkat_ids, $post['selectchk_added']);
-                    $table->addAttributeToWorkType($post['type_id'], $wkat_ids);
-                }
-            }
-            //remove attribute(s) from worktype
-            if ($post['action'] == "remove_attribute") {
-                if ($post['submit_remove'] == "Remove") {
-                    $ranks_remove = [];
-                    $result = array_diff($post['allAttributes'], $post['selectchk_added']);
-                    $cnt = count($result);
-                    foreach ($result as $key=>$value):
-                            $ranks_remove[] = $value;
-                    endforeach;
-                        //echo '<pre>';print_r($ranks_remove);echo '</pre>';
-                        $table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
-                    $table->deleteAttributeFromWorkType($post['type_id'], $ranks_remove);
-                    $table->updateWorkTypeAttributeRank_Remove($post['type_id']);
-                        //echo '<pre>';print_r($post);echo '</pre>';
-                }
-            }
+					if(!empty($post['remove_attr'])) {	
+					preg_match_all('/,id_\d+/', $post['remove_attr'], $matches);
+					foreach($matches[0] as $id) :
+						$attrs_to_remove[] = str_replace(",id_","",$id);
+					endforeach;
+					echo"remove<br />";echo "<pre>";print_r($attrs_to_remove);echo "</pre>";	
+					//remove attributes from a work type
+					$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+                    $table->deleteAttributeFromWorkType($post['id'], $attrs_to_remove);                   
+					}
+					if(!empty($post['sort_order'])) {	
+					preg_match_all('/,nid_\d+/', $post['sort_order'], $matches);
+					foreach($matches[0] as $id) :
+						$attrs_to_add[] = str_replace(",nid_","",$id);
+					endforeach;
+					echo"add<br />";echo "<pre>";print_r($attrs_to_add);echo "</pre>";
+					$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+                    //$table->UpdateWorkTypeAttributeRank($post['type_id'], $wkat_ids, $post['selectchk_added']);
+                    $table->addAttributeToWorkType($post['id'], $attrs_to_add);
+					}
+					//after adding attrs to work type, adjust ranks
+					$table->updateWorkTypeAttributeRank_Remove($post['id']);
+				}												
+			}            
             //Cancel add\edit\delete
             if ($post['action'] == "cancel_attributes") {
                 if ($post['submit_cancel'] == "Cancel") {
@@ -161,7 +127,7 @@ class ManageWorkTypeAttributeAction
             )
             );
         }
-        if ($action == "add_remove") {
+        if ($action == "sortable") {
             return new HtmlResponse(
             $this->template->render(
                 'app::worktype::manage_worktypeattribute',
@@ -176,6 +142,7 @@ class ManageWorkTypeAttributeAction
             )
         );
         } else {
+			//echo "entered last else <br />";
             return new HtmlResponse($this->template->render(
             'app::worktype::manage_worktypeattribute',
             ['request' => $request, 'adapter' => $this->adapter]
