@@ -99,81 +99,17 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
         endforeach;
         //print_r($fieldRows);
         return $fieldRows;
-    }
-    
-    public function darrowUpdate($wkt_id, $wat_id, $wkt_wkat_rank, $wkat_field)
-    {
-        $this->update(
-            [
-                'rank' => new Expression('rank - 1'),
-            ],
-            ['worktype_id' => $wkt_id, 'rank' => $wkt_wkat_rank+1]
-        );
-        $this->update(
-            [
-                'rank' => new Expression('rank + 1'),
-            ],
-            ['worktype_id' => $wkt_id, 'workattribute_id' => $wat_id]
-        );
-    }
-    
-    public function uarrowUpdate($wkt_id, $wat_id, $wkt_wkat_rank, $wkat_field)
-    {
-        $this->update(
-            [
-                'rank' => new Expression('rank + 1'),
-            ],
-            ['worktype_id' => $wkt_id, 'rank' => $wkt_wkat_rank-1]
-        );
-        $this->update(
-            [
-                'rank' => new Expression('rank - 1'),
-            ],
-            ['worktype_id' => $wkt_id, 'workattribute_id' => $wat_id]
-        );
-    }
-    
-    public function UpdateWorkTypeAttributeRank($wkt_id, $wkat_ids, $selected_wkat)
-    {
-        //print_r($ranks);
-        $callback = function ($select) use ($wkt_id, $ranks) {
-            $select->columns(['*']);
-            //$select->where->in('rank', $ranks);
-            $select->where->equalTo('worktype_id', $wkt_id);
-            $select->order('rank');
-        };
-        $rows = $this->select($callback)->toArray();
-        //echo '<pre>';print_r($rows);echo '</pre>';
-        $cnt = count($rows);
-        //echo "no of attributes added to worktype - $cnt <br />";
-        $count = count($wkat_ids);
-        //echo "selected attributes to add - $count <br />";
-        
-        //echo "id of attribute(s) selected to add";
-        //echo '<pre>';print_r($wkat_ids);echo '</pre>';
-        
-        //echo "selected_wkat ids is";
-        //echo '<pre>';print_r($selected_wkat);echo '</pre>';
-        for ($i=0;$i<$cnt;$i++) {
-            $this->update(
-            [
-                'rank' => new Expression('rank + ' . $count),
-            ],
-            ['workattribute_id' => $selected_wkat[$i]]
-            );
-            //echo "$i id is $selected_wkat[$i] <br />";
-        }
-    }
+    }   
     
     public function addAttributeToWorkType($wkt_id, $wkat_ids)
     {
-        $cnt = count($wkat_ids);
+		$cnt = count($wkat_ids);
         for ($i=0;$i<$cnt;$i++) {
             $this->insert(
             [
                 'worktype_id' => $wkt_id,
                 'workattribute_id' => $wkat_ids[$i],
-                'rank' => $i,
+                'rank' => new Expression('999+' . $i),
             ]
             );
         }
@@ -181,43 +117,47 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
     
     public function deleteAttributeFromWorkType($wkt_id, $wkat_ids)
     {
-        /*echo "from delete func: worktype id is $wkt_id <br />";
-        echo "from del function: work attrs to delete: <br />";
-        echo '<pre>';print_r($wkat_ids);echo '</pre>'; */
-        $callback = function ($select) use ($wkt_id, $wkat_ids) {
+		$callback = function ($select) use ($wkt_id, $wkat_ids) {
             $select->where->in('workattribute_id', $wkat_ids);
             $select->where->equalTo('worktype_id', $wkt_id);
             //$select->order('rank');
         };
         $rows = $this->select($callback)->toArray();
-        /*echo "from del func - retrieved rows: <br />";
-        echo '<pre>';print_r($rows);echo '</pre>';*/
         $cnt = count($rows);
         for ($i=0;$i<$cnt;$i++) {
             $this->delete($callback);
         }
     }
     
-    public function updateWorkTypeAttributeRank_Remove($wkt_id)
+    public function updateWorkTypeAttributeRank($wkt_id,$wkatids)
     {
-        //echo "from update func: worktype id is $wkt_id <br />";
-        $callback = function ($select) use ($wkt_id) {
+        $wkat_ids = explode(",",$wkatids);
+	    foreach($wkat_ids as $id) :
+			$sort_wkatids[] = (int)preg_replace("/^\w{2,3}_/", "", $id);
+		endforeach;
+		$callback = function ($select) use ($wkt_id) {
             $select->where->equalTo('worktype_id', $wkt_id);
-            $select->order('rank');
+			$select->order('rank');
         };
         $rows = $this->select($callback)->toArray();
-        /*echo "from update func - retrieved rows: <br />";
-        echo '<pre>';print_r($rows);echo '</pre>';*/
+		//var_dump($rows);
         $cnt = count($rows);
+		//to avoid primary key conflicts, set records rank wise first
+		for($i=0;$i<$cnt;$i++) {
+			$this->update(
+			[
+				'rank' => new Expression('1999+' . $i),
+			],
+			['workattribute_id' => $sort_wkatids[$i]]
+			);
+		}
         for ($i=0;$i<$cnt;$i++) {
             $this->update(
             [
                 'rank' => $i,
             ],
-            ['rank' => $rows[$i]['rank']]
+            ['workattribute_id' => $sort_wkatids[$i]]
             );
-            //echo "rank to be updated is " . $rows[$i]['rank'] . "<br />";
-            //echo "rank will be updated to: $i <br />";
         }
     }
     
@@ -260,5 +200,21 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
         for ($i=0;$i<$cnt;$i++) {
             $this->delete($callback);
         }
+    }
+	
+	public function findRecordById($wkt_id)
+    {
+        /*$rowset = $this->select(array('worktype_id' => $wkt_id));
+        $row = $rowset->current();
+		var_dump($row);
+        //return($row);*/
+		$callback = function ($select) use ($wkt_id) {
+			$select->columns(['*']);
+            $select->where->equalTo('worktype_id', $wkt_id);
+        };
+        $rows = $this->select($callback)->toArray();
+		//var_dump(count($rows));
+		return $rows;
+		//var_dump($rows);
     }
 }

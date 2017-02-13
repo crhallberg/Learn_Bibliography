@@ -28,34 +28,33 @@ class ManageClassificationAction
         $this->adapter  = $adapter;
     }
     
-	protected function getPaginator($query,$post)
+    protected function getPaginator($query, $post)
     {
         if (!empty($query['action'])) {
             //export classification
             if ($query['action'] == "export_classification") {
-				echo "export folder";
+                echo "export folder";
                 /*if ($post['submitt'] == "Save") {
                     $table = new \App\Db\Table\WorkType($this->adapter);
                     $table->insertRecords($post['new_worktype']);
                 }*/
             }
-            
         }
         // default: blank for listing in manage
         $table = new \App\Db\Table\Folder($this->adapter);
-		$paginator = $table->findParent();
+        $paginator = $table->findParent();
         return $paginator;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
         $query = $request->getqueryParams();
-		//print_r($query);
+        //print_r($query);
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
         }
-        $paginator = $this->getPaginator($query,$post);
+        $paginator = $this->getPaginator($query, $post);
         $paginator->setDefaultItemCountPerPage(7);
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();

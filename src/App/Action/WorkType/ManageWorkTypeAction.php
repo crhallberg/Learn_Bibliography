@@ -62,6 +62,47 @@ class ManageWorkTypeAction
                     }
                 }
             }
+			//add, remove attributes to work type
+            if ($post['action'] == "sortable") {
+                if ($post['submit_add'] == "Save") {
+					//var_dump($post);
+                    if (!empty($post['remove_attr'])) {						
+                        preg_match_all('/,id_\d+/', $post['remove_attr'], $matches);
+                        foreach ($matches[0] as $id) :
+                            $attrs_to_remove[] = (int)str_replace(",id_", "", $id);
+                        endforeach;
+						if(!is_null($attrs_to_remove)) {
+							if(count($attrs_to_remove)!= 0) {
+								//remove attributes from a work type
+								$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+								$table->deleteAttributeFromWorkType($post['id'], $attrs_to_remove);
+							}
+						}
+                    }
+                    if (!empty($post['sort_order'])) {
+                        $add_wkat_ids = explode(",",$post['sort_order']);
+						foreach($add_wkat_ids as $id) :
+							$attrs_to_add[] = (int)preg_replace("/^\w{2,3}_/", "", $id);
+						endforeach;
+						//var_dump($attrs_to_add);
+						/*preg_match_all('/,?nid_\d+/', $post['sort_order'], $matches);						
+                        foreach ($matches[0] as $id) :
+                        $attrs_to_add[] = (int)str_replace(",nid_", "", $id);
+                        endforeach;
+						var_dump($attrs_to_add);*/
+						if(!is_null($attrs_to_add)) {
+							if(count($attrs_to_add) != 0) {
+								//Add attributes to work type
+								$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+								$table->addAttributeToWorkType($post['id'], $attrs_to_add);
+							}
+						}
+                    }
+                    //after adding attrs to work type, adjust ranks
+					$table = new \App\Db\Table\WorkType_WorkAttribute($this->adapter);
+                    $table->updateWorkTypeAttributeRank($post['id'],$post['sort_order']);
+                }
+            }
             //Cancel add\edit\delete
             if ($post['submitt'] == "Cancel") {
                 $table = new \App\Db\Table\WorkType($this->adapter);
@@ -101,6 +142,21 @@ class ManageWorkTypeAction
             $next = $currentPage + 1;
             $previous = $currentPage - 1;
         }
+		if ($post['action'] == "sortable" && $post['submit_add'] == "Save") {
+            return new HtmlResponse(
+            $this->template->render(
+                'app::worktype::manage_worktypeattribute',
+                [
+                    'rows' => $paginator,
+                    'previous' => $previous,
+                    'next' => $next,
+                    'countp' => $countPages,
+                    'request' => $request,
+                    'adapter' => $this->adapter,
+                ]
+            )
+        );
+		} else {
         return new HtmlResponse(
             $this->template->render(
                 'app::worktype::manage_worktype',
@@ -112,5 +168,6 @@ class ManageWorkTypeAction
                 ]
             )
         );
+		}
     }
 }

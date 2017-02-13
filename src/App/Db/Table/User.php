@@ -37,6 +37,7 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Paginator\Paginator;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Expression;
+
 /**
  * Table Definition for record
  *
@@ -66,55 +67,55 @@ class User extends \Zend\Db\TableGateway\TableGateway
      *
      * @return Updated or newly added record
      */
-	 
-	 public function insertRecords($newuser_name, $new_username, $new_user_pwd, $access_level)
-    {	   
-	    $this->insert(
+     
+     public function insertRecords($newuser_name, $new_username, $new_user_pwd, $access_level)
+     {
+         $this->insert(
             [
             'name' => $newuser_name,
-			'username' => $new_username,
-			'password' => $new_user_pwd,
-			'level' => $access_level,
+            'username' => $new_username,
+            'password' => $new_user_pwd,
+            'level' => $access_level,
             ]
         );
-    }
-	
-	public function findRecordById($id)
+     }
+    
+    public function findRecordById($id)
     {
         $rowset = $this->select(array('id' => $id));
         $row = $rowset->current();
         return($row);
     }
-	
-	public function deleteRecord($id)
+    
+    public function deleteRecord($id)
     {
         $this->delete(['id' => $id]);
     }
-	
-	public function updateRecord($id, $name, $username, $pwd, $level)
+    
+    public function updateRecord($id, $name, $username, $pwd, $level)
     {
-		//echo "pwd is " . $pwd;
-        if(is_null($pwd)) {
-			//echo "if pwd is empty ".$pwd;
-			$this->update(
+        //echo "pwd is " . $pwd;
+        if (is_null($pwd)) {
+            //echo "if pwd is empty ".$pwd;
+            $this->update(
             [
                 'name' => $name,
-				'username' => $username,
-				'level' => $level,
+                'username' => $username,
+                'level' => $level,
             ],
             ['id' => $id]
-			);
-		} else {
-			//echo "else if pwd not empty ".$pwd;
-			$this->update(
+            );
+        } else {
+            //echo "else if pwd not empty ".$pwd;
+            $this->update(
             [
                 'name' => $name,
-				'username' => $username,
-				'password' => $pwd,
-				'level' => $level,
+                'username' => $username,
+                'password' => $pwd,
+                'level' => $level,
             ],
             ['id' => $id]
-			);
-		}
+            );
+        }
     }
 }

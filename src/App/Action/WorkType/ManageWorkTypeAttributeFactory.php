@@ -16,6 +16,7 @@ class ManageWorkTypeAttributeFactory
             ? $container->get(TemplateRendererInterface::class)
             : null;
         $adapter = $container->get(Adapter::class);
-        return new ManageWorkTypeAttributeAction($router, $template, $adapter);
+        //return new ManageWorkTypeAttributeAction($router, $template, $adapter);
+		return new \App\Action\SimpleRenderAction('app::worktype::manage_worktypeattribute', $router, $template, $adapter);
     }
 }
