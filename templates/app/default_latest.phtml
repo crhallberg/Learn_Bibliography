@@ -32,7 +32,7 @@
                    /* $table = new \App\Db\Table\UserTest($adapter);
                     $row = $table->findRecordByUser($user);
                     $role = $row['role']; */
-                    echo "came to layout"
+                    //echo "came to layout"
         
 ?>
     <div class="navbar navbar-default" role="navigation">
@@ -62,7 +62,7 @@
 				 <li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Work Type<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
-                <li><a href="<?php echo $this->url('new_worktype') ?>">New</a></li>
+                <li><a href="<?php echo $this->url('new_worktype') ?><?='?action=new'?>">New</a></li>
                 <li><a href="<?php echo $this->url('manage_worktype') ?>">Manage</a></li>
 				<li><a href="<?php echo $this->url('attributes_worktype') ?>">Attributes</a></li>
               </ul>
@@ -74,14 +74,14 @@
                 <li><a href="<?php echo $this->url('new_classification') ?>">New</a></li>
                 <li><a href="<?php echo $this->url('manage_classification') ?>">Manage</a></li>
 				<li><a href="<?php echo $this->url('merge_classification') ?>">Merge</a></li>
-				<li><a href="<?php echo $this->url('exportlist_classification') ?>">Export List</a></li>
+				<li><a href="<?php echo $this->url('manage_classification') ?><?='?action=export_classification'?>">Export List</a></li>
               </ul>
             </li>  			
             
 			<li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Agent<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
-                <li><a href="<?php echo $this->url('new_agent') ?>">New</a></li>
+                <li><a href="<?php echo $this->url('new_agent') ?><?='?action=new'?>">New</a></li>
                 <li><a href="<?php echo $this->url('find_agent') ?>">Find</a></li>
 				<li><a href="<?php echo $this->url('manage_agent') ?>">Manage</a></li>
 				<li><a href="<?php echo $this->url('merge_agent') ?>">Merge</a></li>
@@ -117,19 +117,19 @@
 			<li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Users<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
-                <li><a href="<?php echo $this->url('new_users') ?>">New</a></li>
+                <li><a href="<?php echo $this->url('new_user') ?><?='?action=new'?>">New</a></li>
 				<li><a href="<?php echo $this->url('manage_users') ?>">Manage</a></li>
 				<li><a href="<?php echo $this->url('access_users') ?>">Access</a></li>
               </ul>
             </li> 
-			<?php if ($request->getqueryParams('role') !== 'user') { echo 'role is admin';?>
-        <li class="dropdown">           
+			
+			<li class="dropdown">           
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Preferences<b class="caret"></b></a>
 				 <ul class="dropdown-menu">
                 <li><a href="<?php echo $this->url('changepassword_preferences') ?>">Change Password</a></li>
               </ul>
             </li> 
-			<?php } ?>
+			
           </ul>
         </div><!--/.nav-collapse -->
       </div>

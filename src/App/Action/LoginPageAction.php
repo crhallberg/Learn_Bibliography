@@ -29,7 +29,7 @@ class LoginPageAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        $query = $request->getqueryParams();
+        /*$query = $request->getqueryParams();
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
@@ -40,7 +40,7 @@ class LoginPageAction
                 }
                 return new HtmlResponse($this->template->render('app::default', $this));
             }
-        }
-        return new HtmlResponse($this->template->render('app::login', ['request' => $request, 'adapter' => $this->adapter]));
+        }*/
+        return new $next(HtmlResponse($this->template->render('app::login', ['request' => $request, 'adapter' => $this->adapter])));
     }
 }

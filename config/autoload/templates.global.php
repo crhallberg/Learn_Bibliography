@@ -23,7 +23,7 @@ return [
             //html templates
             //for login
             'app::default' => 'templates/app/default_latest.phtml',
-            //'app::login' => 'templates/app/login-page.phtml',
+            'app::login' => 'templates/app/login-page.phtml',
             //work
             'app::work::new_work' => 'templates/app/work/new.phtml',
             'app::work::manage_work' => 'templates/app/work/manage.phtml',

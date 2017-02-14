@@ -42,8 +42,6 @@
         $id;
         if ($request->getqueryParams() !== null) 
         {   
-            /*$queryString = implode('',$request->getqueryParams());
-            $params = explode(',',$queryString); */
             $params = $request->getqueryParams();
             $id = $params['id'];           
         } 
@@ -58,7 +56,7 @@
 ?>
 <form class="form-horizontal" method="post" action="<?=$this->url('manage_worktype')?><?='?id=' . $id . '&action=sortable'?>">
 <input type="hidden" name="id" value="<?=$id?>">
-<input type="hidden" name="action" id="action_param" value="sortable">
+<input type="hidden" name="action" id="action" value="sortable">
 <input type="hidden" name="sort_order" id="sort_order" value="">
 <input type="hidden" name="remove_attr" id="remove_attr" value="">
 <p>Used Attributes                       Unused Attributes</p>

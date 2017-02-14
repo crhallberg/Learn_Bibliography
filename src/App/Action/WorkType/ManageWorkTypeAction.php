@@ -17,10 +17,6 @@ class ManageWorkTypeAction
     private $template;
     
     private $adapter;
-    
-    
-    //private $dbh;
-    //private $qstmt;
 
     public function __construct(Router\RouterInterface $router, Template\TemplateRendererInterface $template = null, Adapter $adapter)
     {
@@ -65,11 +61,10 @@ class ManageWorkTypeAction
 			//add, remove attributes to work type
             if ($post['action'] == "sortable") {
                 if ($post['submit_add'] == "Save") {
-					//var_dump($post);
                     if (!empty($post['remove_attr'])) {						
-                        preg_match_all('/,id_\d+/', $post['remove_attr'], $matches);
+                        preg_match_all('/,?id_\d+/', $post['remove_attr'], $matches);
                         foreach ($matches[0] as $id) :
-                            $attrs_to_remove[] = (int)str_replace(",id_", "", $id);
+                            $attrs_to_remove[] = (int)preg_replace("/^,?\w{2,3}_/", "", $id);
                         endforeach;
 						if(!is_null($attrs_to_remove)) {
 							if(count($attrs_to_remove)!= 0) {
@@ -80,16 +75,10 @@ class ManageWorkTypeAction
 						}
                     }
                     if (!empty($post['sort_order'])) {
-                        $add_wkat_ids = explode(",",$post['sort_order']);
-						foreach($add_wkat_ids as $id) :
-							$attrs_to_add[] = (int)preg_replace("/^\w{2,3}_/", "", $id);
-						endforeach;
-						//var_dump($attrs_to_add);
-						/*preg_match_all('/,?nid_\d+/', $post['sort_order'], $matches);						
+						preg_match_all('/,?nid_\d+/', $post['sort_order'], $matches);					
                         foreach ($matches[0] as $id) :
-                        $attrs_to_add[] = (int)str_replace(",nid_", "", $id);
+							$attrs_to_add[] = (int)preg_replace("/^,?\w{2,3}_/", "", $id);
                         endforeach;
-						var_dump($attrs_to_add);*/
 						if(!is_null($attrs_to_add)) {
 							if(count($attrs_to_add) != 0) {
 								//Add attributes to work type

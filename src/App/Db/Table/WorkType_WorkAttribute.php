@@ -109,7 +109,7 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
             [
                 'worktype_id' => $wkt_id,
                 'workattribute_id' => $wkat_ids[$i],
-                'rank' => new Expression('999+' . $i),
+                'rank' => new Expression('999' . $i),
             ]
             );
         }
@@ -140,17 +140,17 @@ class WorkType_WorkAttribute extends \Zend\Db\TableGateway\TableGateway
 			$select->order('rank');
         };
         $rows = $this->select($callback)->toArray();
-		//var_dump($rows);
         $cnt = count($rows);
 		//to avoid primary key conflicts, set records rank wise first
 		for($i=0;$i<$cnt;$i++) {
 			$this->update(
 			[
-				'rank' => new Expression('1999+' . $i),
+				'rank' => new Expression('1999' . $i),
 			],
 			['workattribute_id' => $sort_wkatids[$i]]
 			);
 		}
+		//update ranks
         for ($i=0;$i<$cnt;$i++) {
             $this->update(
             [

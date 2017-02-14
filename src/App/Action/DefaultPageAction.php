@@ -38,7 +38,7 @@ class DefaultPageAction
         //return new HtmlResponse($this->template->render('app::default', $this));
         }
        } */
-       var_dump("HELLO");
+       //var_dump("HELLO");
         return new HtmlResponse($this->template->render('app::default', ['request' => $request, 'adapter' => $this->adapter]));
     }
 }
