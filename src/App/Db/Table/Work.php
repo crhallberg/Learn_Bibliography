@@ -84,4 +84,22 @@ class Work extends \Zend\Db\TableGateway\TableGateway
             ['type_id' => $id]
         );
     }
+	
+	public function findInitialLetter()
+    {
+        $callback = function ($select) {
+            $select->columns(
+                    [
+                        'letter' => new Expression(
+                            'DISTINCT(substring(?, 1, 1))',
+                            ['title'],
+                            [Expression::TYPE_IDENTIFIER]
+                        )
+                    ]
+                );
+            $select->order('title');
+        };
+        
+        return $this->select($callback)->toArray();
+    }
 }

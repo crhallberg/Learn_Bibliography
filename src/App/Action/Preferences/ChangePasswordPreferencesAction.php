@@ -16,10 +16,6 @@ class ChangePasswordPreferencesAction
     private $template;
     
     private $adapter;
-    
-    
-    //private $dbh;
-    //private $qstmt;
 
     public function __construct(Router\RouterInterface $router, Template\TemplateRendererInterface $template = null, Adapter $adapter)
     {
@@ -30,10 +26,6 @@ class ChangePasswordPreferencesAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
     {
-        //$displaystr = "Coming Soon";
-        $sth = $this->adapter->query("select * from agenttype");
-        $rows = $sth->execute();
-        //var_dump($this);
-        return new HtmlResponse($this->template->render('app::preferences::changepassword_preferences', ['rows' => $rows]));
+        return new HtmlResponse($this->template->render('app::preferences::changepassword_preferences', ['request' => $request, 'adapter' => $this->adapter]));
     }
 }
