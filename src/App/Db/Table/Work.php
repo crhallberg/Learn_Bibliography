@@ -102,4 +102,94 @@ class Work extends \Zend\Db\TableGateway\TableGateway
         
         return $this->select($callback)->toArray();
     }
+	
+	public function findInitialLetterReview()
+    {
+        $callback = function ($select) {
+            $select->columns(
+                    [
+                        'letter' => new Expression(
+                            'DISTINCT(substring(?, 1, 1))',
+                            ['title'],
+                            [Expression::TYPE_IDENTIFIER]
+                        )
+                    ]
+                );
+			$select->where->equalTo('status', 0);
+            $select->order('title');
+        };
+        
+        return $this->select($callback)->toArray();
+    }
+	
+	public function findInitialLetterClassify()
+    {
+		$wid = new Work_Folder($this->adapter);
+        $subselect = $wid->getWorkFolder();
+		
+        $callback = function ($select) use($subselect) {
+            $select->columns(
+                    [
+                        'letter' => new Expression(
+                            'DISTINCT(substring(?, 1, 1))',
+                            ['title'],
+                            [Expression::TYPE_IDENTIFIER]
+                        )
+                    ]
+                );
+			$select->where->notIn('id', $subselect);
+            $select->order('title');
+        };
+        
+        return $this->select($callback)->toArray();
+    }
+	
+	public function displayRecordsByName($letter)
+    {
+        $select = $this->sql->select();
+        $select->where->like('title', $letter.'%');
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    }
+	
+	public function displayReviewRecordsByLetter($letter)
+    {
+        $select = $this->sql->select();
+        $select->where->like('title', $letter.'%');
+		$select->where->equalTo('status', 0);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    }
+	
+	public function displayClassifyRecordsByLetter($letter)
+    {
+        $wid = new Work_Folder($this->adapter);
+        $subselect = $wid->getWorkFolder();
+		
+		$select = $this->sql->select();
+		$select->where->notIn('id', $subselect);
+        $select->where->like('title', $letter.'%');
+
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    }
+	
+	public function fetchReviewRecords()
+    {
+        $select = $this->sql->select()->where(['status' => 0]);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    }
+	
+	public function fetchClassifyRecords()
+	{
+        $wid = new Work_Folder($this->adapter);
+        $subselect = $wid->getWorkFolder();
+		
+		$select = $this->sql->select();
+		$select->where->notIn('id', $subselect);
+
+		$paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+	}
 }

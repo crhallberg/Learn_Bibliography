@@ -54,8 +54,8 @@
                 <li><a href="<?php echo $this->url('new_work') ?>">New</a></li>
                 <li><a href="<?php echo $this->url('search_work') ?>">Search</a></li>
 				<li><a href="<?php echo $this->url('manage_work') ?>">Manage</a></li>
-				<li><a href="<?php echo $this->url('review_work') ?>">Review</a></li>
-				<li><a href="<?php echo $this->url('classify_work') ?>">Classify</a></li>
+				<li><a href="<?php echo $this->url('manage_work') ?><?= '?action=review' ?>">Review</a></li>
+				<li><a href="<?php echo $this->url('manage_work') ?><?= '?action=classify' ?>">Classify</a></li>
 				</ul>
 				</li>
 				<li class="divider-vertical"></li>

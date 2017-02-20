@@ -34,67 +34,43 @@ class ManageWorkAction
 	
 	protected function getPaginator($params, $post)
     {
-       /* $locs = [];
-        // search by name
-        if (!empty($params['name'])) {
-            $table = new \App\Db\Table\Publisher($this->adapter);
-            return $table->findRecords($params['name']);
-        }
-        // search by location
-        if (!empty($params['location'])) {
-            $table = new \App\Db\Table\PublisherLocation($this->adapter);
-            return $table->findRecords($params['location']);
-        }
         // search by letter
         if (!empty($params['letter'])) {
-            $table = new \App\Db\Table\Publisher($this->adapter);
-            return $table->displayRecordsByName($params['letter']);
+			//review records
+			if($params['action'] == 'review') {
+				$table = new \App\Db\Table\Work($this->adapter);
+				return $table->displayReviewRecordsByLetter($params['letter']);
+			}
+			//classify records
+			else if($params['action'] == 'classify') {
+				$table = new \App\Db\Table\Work($this->adapter);
+				return $table->displayClassifyRecordsByLetter($params['letter']);
+				
+			}
+			else {
+				$table = new \App\Db\Table\Work($this->adapter);
+				return $table->displayRecordsByName($params['letter']);
+			}
         }
-        //edit, delete actions on publisher
-        if (!empty($post['action'])) {
-            //add a new publisher
-            if ($post['action'] == "new") {
-                if ($post['submitt'] == "Save") {
-                    $table = new \App\Db\Table\Publisher($this->adapter);
-                    $table->insertRecords($post['name_publisher']);
-                }
-            }
-            //edit a publisher
-            if ($post['action'] == "edit") {
-                if ($post['submitt'] == "Save") {
-                    if (!is_null($post['id'])) {
-                        $table = new \App\Db\Table\Publisher($this->adapter);
-                        $table->updateRecord($_POST['id'], $_POST['publisher_newname']);
-                    }
-                }
-            }
-            //delete a publisher 
-            if ($post['action'] == "delete") {
-                if ($post['submitt'] == "Delete") {
-                    if (!is_null($post['id'])) {
-                        $table = new \App\Db\Table\WorkPublisher($this->adapter);
-                        $table->deleteRecordByPub($post['id']);
-                            
-                        $table = new \App\Db\Table\PublisherLocation($this->adapter);
-                        $table->deletePublisherRecord($post['id'], $locs);
-                            
-                        $table = new \App\Db\Table\Publisher($this->adapter);
-                        $table->deleteRecord($post['id']);
-                    }
-                }
-            }
-             //Merge publisher
-            if ($post['action'] == "merge_publisher") {
-                if ($post['submitt'] == "Find_Source") {
-                    $table = new \App\Db\Table\Publisher($this->adapter);
-                    return $table->findRecords($post['source_publisher']);
-                }
-            }
-            //Cancel edit\delete
-            if ($post['submitt'] == "Cancel") {
-                $table = new \App\Db\Table\Publisher($this->adapter);
-                return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
-            }
+		
+		if(!empty($params['action'])) {
+			//Display works which need review
+			if ($params['action'] == "review") {
+				$table = new \App\Db\Table\Work($this->adapter);
+				$paginator = $table->fetchReviewRecords();
+				return $paginator;
+			}
+			//Display works which are t be classified under folders
+			if($params['action'] == "classify") {
+				$table = new \App\Db\Table\Work($this->adapter);
+				$paginator = $table->fetchClassifyRecords();
+				return $paginator;
+			}
+		}
+        //Cancel edit\delete
+        /*if ($post['submitt'] == "Cancel") {
+            $table = new \App\Db\Table\Publisher($this->adapter);
+            return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
         }*/
         // default: blank/missing search
         $table = new \App\Db\Table\Work($this->adapter);
@@ -102,11 +78,21 @@ class ManageWorkAction
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
-    {
-        $table = new \App\Db\Table\Work($this->adapter);
-        $characs = $table->findInitialLetter();
-        
+    {        
         $query = $request->getqueryParams();
+		if($query['action'] == 'review') {
+			$table = new \App\Db\Table\Work($this->adapter);
+			$characs = $table->findInitialLetterReview();
+		} 
+		else if ($query['action'] == 'classify') {
+			$table = new \App\Db\Table\Work($this->adapter);
+			$characs = $table->findInitialLetterClassify();
+		}
+		else 
+		{
+			$table = new \App\Db\Table\Work($this->adapter);
+			$characs = $table->findInitialLetter();
+		}
         $post = [];
         if ($request->getMethod() == "POST") {
             $post = $request->getParsedBody();
@@ -138,28 +124,64 @@ class ManageWorkAction
         if (!empty($query['name'])) {
             $searchParams[] = 'name=' . urlencode($query['name']);
         }
-        /*if (!empty($query['location'])) {
+        if (!empty($query['location'])) {
             $searchParams[] = 'location=' . urlencode($query['location']);
         }
-        if (!empty($query['letter'])) {
-            $searchParams[] = 'letter=' . urlencode($query['letter']);
-        }*/
+        if (!empty($query['letter']) && $query['action'] == 'alphasearch') {			
+				$searchParams[] = 'letter=' . urlencode($query['letter']);	
+        }
+		if ($query['action'] == 'review') {
+			if(!empty($query['letter'])) {
+				$searchParams[] = 'action=' . urlencode($query['action']) . '&letter=' .urlencode($query['letter']);
+			}
+			else {
+				$searchParams[] = 'action=' . urlencode($query['action']);
+			}
+        }
+		if ($query['action'] == 'classify') {
+			if(!empty($query['letter'])) {
+				$searchParams[] = 'action=' . urlencode($query['action']) . '&letter=' .urlencode($query['letter']);
+			}
+			else {
+				$searchParams[] = 'action=' . urlencode($query['action']);
+			}
+        }
 
-       /* if ($post['action'] == "merge_publisher") {
+       if ($query['action'] == "review") {
             return new HtmlResponse(
             $this->template->render(
-                'app::publisher::merge_publisher',
+                'app::work::review_work',
                 [
                     'rows' => $paginator,
                     'previous' => $previous,
                     'next' => $next,
                     'countp' => $countPages,
                     'searchParams' => implode('&', $searchParams),
-                    'adapter' => $this->adapter,
+                    'carat' => $characs,
+					'request' => $request, 
+					'adapter' => $this->adapter,
                 ]
             )
-        );
-        } else { */
+			);
+        } 
+		else if ($query['action'] == "classify") {
+			return new HtmlResponse(
+            $this->template->render(
+                'app::work::classify_work',
+                [
+                    'rows' => $paginator,
+                    'previous' => $previous,
+                    'next' => $next,
+                    'countp' => $countPages,
+                    'searchParams' => implode('&', $searchParams),
+                    'carat' => $characs,
+					'request' => $request, 
+					'adapter' => $this->adapter,
+                ]
+            )
+			);
+		}
+		else { 
             return new HtmlResponse(
             $this->template->render(
                 'app::work::manage_work',
@@ -174,7 +196,7 @@ class ManageWorkAction
 					'adapter' => $this->adapter,
                 ]
             )
-        );
-		//}
+			);
+		}
 	}
 }
