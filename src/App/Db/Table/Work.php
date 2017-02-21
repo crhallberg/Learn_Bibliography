@@ -192,4 +192,13 @@ class Work extends \Zend\Db\TableGateway\TableGateway
 		$paginatorAdapter = new DbSelect($select, $this->adapter);
         return new Paginator($paginatorAdapter);
 	}
+	
+	public function findRecords($title)
+    {
+		$select = $this->sql->select();
+        $select->where->like('title', $title.'%');
+        //->where(['name' => $name]);
+        $paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+    }
 }

@@ -52,7 +52,13 @@ class ManageWorkAction
 				return $table->displayRecordsByName($params['letter']);
 			}
         }
-		
+		// Work Lookup
+        if (!empty($params['find_worktitle'])) {
+			//echo "name is " . $params['find_worktitle'];
+            $table = new \App\Db\Table\Work($this->adapter);
+            $paginator = $table->findRecords($params['find_worktitle']);
+			return $paginator;
+        }
 		if(!empty($params['action'])) {
 			//Display works which need review
 			if ($params['action'] == "review") {
@@ -60,7 +66,7 @@ class ManageWorkAction
 				$paginator = $table->fetchReviewRecords();
 				return $paginator;
 			}
-			//Display works which are t be classified under folders
+			//Display works which are to be classified under folders
 			if($params['action'] == "classify") {
 				$table = new \App\Db\Table\Work($this->adapter);
 				$paginator = $table->fetchClassifyRecords();
@@ -68,10 +74,10 @@ class ManageWorkAction
 			}
 		}
         //Cancel edit\delete
-        /*if ($post['submitt'] == "Cancel") {
-            $table = new \App\Db\Table\Publisher($this->adapter);
+        if ($post['submit_cancel'] == "Cancel") {
+            $table = new \App\Db\Table\Work($this->adapter);
             return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
-        }*/
+        }
         // default: blank/missing search
         $table = new \App\Db\Table\Work($this->adapter);
         return new Paginator(new \Zend\Paginator\Adapter\DbTableGateway($table));
@@ -99,7 +105,7 @@ class ManageWorkAction
         }
         
         $paginator = $this->getPaginator($query, $post);
-        $paginator->setDefaultItemCountPerPage(20);
+        $paginator->setDefaultItemCountPerPage(20);		
         $allItems = $paginator->getTotalItemCount();
         $countPages = $paginator->count();
         
@@ -121,11 +127,8 @@ class ManageWorkAction
         }
 
         $searchParams = [];
-        if (!empty($query['name'])) {
-            $searchParams[] = 'name=' . urlencode($query['name']);
-        }
-        if (!empty($query['location'])) {
-            $searchParams[] = 'location=' . urlencode($query['location']);
+        if (!empty($query['find_worktitle'])) {
+            $searchParams[] = 'find_worktitle=' . urlencode($query['find_worktitle']);
         }
         if (!empty($query['letter']) && $query['action'] == 'alphasearch') {			
 				$searchParams[] = 'letter=' . urlencode($query['letter']);	
@@ -148,6 +151,7 @@ class ManageWorkAction
         }
 
        if ($query['action'] == "review") {
+		   echo "entered if";
             return new HtmlResponse(
             $this->template->render(
                 'app::work::review_work',
@@ -165,6 +169,7 @@ class ManageWorkAction
 			);
         } 
 		else if ($query['action'] == "classify") {
+			echo "entered else if";
 			return new HtmlResponse(
             $this->template->render(
                 'app::work::classify_work',
@@ -182,10 +187,11 @@ class ManageWorkAction
 			);
 		}
 		else { 
+		echo "entered else";
             return new HtmlResponse(
             $this->template->render(
                 'app::work::manage_work',
-                [
+                [					
                     'rows' => $paginator,
                     'previous' => $previous,
                     'next' => $next,

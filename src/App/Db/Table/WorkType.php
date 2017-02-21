@@ -98,4 +98,11 @@ class WorkType extends \Zend\Db\TableGateway\TableGateway
     {
         $this->delete(['id' => $id]);
     }
+	
+	public function fetchAllWorkTypes()
+	{
+		$select = $this->sql->select();
+		$paginatorAdapter = new DbSelect($select, $this->adapter);
+        return new Paginator($paginatorAdapter);
+	}
 }
